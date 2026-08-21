@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>«Контакты» — вариации</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@200;300;400&family=Manrope:wght@300;400;500&display=swap">
+<style>
+body { margin: 0; background: #eeeae5; font-family: "Manrope", -apple-system, Arial, sans-serif; color: #262320; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 40px 24px 90px; }
+h1.page { font-family: "Jost", sans-serif; font-weight: 300; font-size: 25px; letter-spacing: .12em;
+          text-transform: uppercase; margin: 0 0 8px; }
+h2.fam { font-family: "Jost", sans-serif; font-weight: 300; font-size: 17px; letter-spacing: .16em;
+         text-transform: uppercase; margin: 48px 0 6px; padding-top: 30px; border-top: 1px solid #d8d1c9; }
+.page-sub, .fam-sub { font-size: 14px; color: #55504a; margin: 0 0 40px; line-height: 1.65; max-width: 78ch; }
+.card { margin-bottom: 50px; }
+.card__head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 5px; flex-wrap: wrap; }
+.card__no { font-family: "Jost", sans-serif; font-weight: 400; font-size: 12px; letter-spacing: .16em;
+            background: #262320; color: #faf8f6; padding: 4px 9px; }
+.card__no.is-old { background: #a39a91; }
+.card__name { font-family: "Jost", sans-serif; font-weight: 400; font-size: 18px; letter-spacing: .04em; }
+.card__note { font-size: 13.5px; line-height: 1.62; color: #55504a; margin: 0 0 13px; max-width: 80ch; }
+
+.screen { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #faf8f6;
+          display: flex; flex-direction: column; box-shadow: 0 18px 40px rgba(0,0,0,.10); }
+.bar { height: 40px; flex: none; display: flex; align-items: center; padding: 0 28px; gap: 17px;
+       font-family: "Jost", sans-serif; font-weight: 300; font-size: 10px; letter-spacing: .05em;
+       color: #55504a; position: relative; z-index: 3; }
+.bar .on { color: #262320; }
+.bar b { margin-left: auto; font-family: "Cormorant Garamond", Georgia, serif; font-weight: 400;
+         font-size: 13px; letter-spacing: .2em; color: #262320; }
+.stage { flex: 1; min-height: 0; position: relative; display: flex; }
+.foot { flex: none; display: flex; flex-direction: column; align-items: center; gap: 7px;
+        padding: 0 0 16px; font-size: 9px; color: #a39a91; position: relative; z-index: 3; }
+.foot .ic { display: flex; gap: 13px; }
+.foot .ic i { width: 13px; height: 13px; border: 1px solid #bdb4aa; border-radius: 3px; display: block; }
+
+/* --- общие детали --- */
+.ch { display: grid; gap: 11px; }
+.ch span { font-family: "Jost", sans-serif; font-weight: 300; font-size: 15px; letter-spacing: .03em; color: #262320; }
+.ch--lead span { font-size: 18px; }
+.ch--tight { gap: 8px; }
+.ch--light span { color: #faf8f6; }
+.ch-row { display: flex; align-items: baseline; gap: 11px; }
+.ch-row span { font-family: "Jost", sans-serif; font-weight: 300; font-size: 15px; letter-spacing: .03em; color: #262320; }
+.ch-row i { font-style: normal; color: #bdb4aa; }
+.ch-row--sm span { font-size: 13px; }
+
+.fx p { margin: 0 0 17px; display: grid; gap: 3px; }
+.fx p:last-child { margin-bottom: 0; }
+.fx b { font-family: "Jost", sans-serif; font-weight: 300; font-size: 15px; letter-spacing: .02em; color: #262320; }
+.fx span { font-size: 11px; color: #a39a91; }
+.fx--sm b { font-size: 13px; }
+.fx--sm span { font-size: 10px; }
+
+.st { flex: 1; min-height: 0; display: flex; }
+.a-mid  { align-items: center; justify-content: center; }
+.a-left { align-items: center; padding-left: clamp(30px, 7%, 84px); }
+.a-pair { display: flex; align-items: flex-start; gap: 72px; }
+.a-pair--tight { gap: 56px; }
+.a-stack { display: grid; gap: 30px; justify-items: start; }
+
+/* --- семья Б --- */
+.b-inset { position: relative; }
+.b-inset img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.b-over { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+          background: linear-gradient(180deg, rgba(20,18,16,.22), rgba(20,18,16,.52)); }
+
+/* Фон всей страницы: кадр лежит под шапкой и футером, плашки растворяются. */
+.screen.bleed { background: #14120f; }
+.screen.bleed .bg { position: absolute; inset: 0; z-index: 0; }
+.screen.bleed .bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.screen.bleed .bg::after { content: ""; position: absolute; inset: 0;
+        background: linear-gradient(180deg, rgba(20,18,16,.42) 0%, rgba(20,18,16,.16) 38%, rgba(20,18,16,.55) 100%); }
+.screen.bleed.nofade .bg::after { display: none; }
+.screen.bleed .bar { color: rgba(250,248,246,.72); }
+.screen.bleed .bar .on { color: #faf8f6; }
+.screen.bleed .bar b { color: #faf8f6; }
+.screen.bleed .foot { color: rgba(250,248,246,.6); }
+.screen.bleed .foot .ic i { border-color: rgba(250,248,246,.5); }
+
+.b-mid    { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; }
+.b-corner { flex: 1; min-height: 0; display: flex; align-items: flex-end; position: relative; z-index: 2;
+            padding: 0 0 26px clamp(28px, 6%, 70px); }
+.b-right  { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: flex-end;
+            position: relative; z-index: 2; padding-right: clamp(30px, 8%, 96px); }
+.b-low    { flex: 1; min-height: 0; display: flex; align-items: flex-end; justify-content: center;
+            position: relative; z-index: 2; padding-bottom: 30px; }
+
+.b-half { gap: 0; }
+.b-half__txt { flex: 1; display: flex; align-items: center; padding-left: clamp(30px, 8%, 96px); }
+.b-half__img { flex: none; width: 50%; }
+.b-half__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+</style></head>
+<body><div class="wrap">
+<h1 class="page">«Контакты» — вариации</h1>
+<p class="page-sub">Два направления, которые вы отметили. В первом каналы уменьшены до кегля фактов и разрыв между колонками задан явно, а не распоркой на всю ширину. Во втором меняется только положение кадра и текста — фотография во всех вариантах одна и та же, чтобы сравнивать раскладку, а не снимок; сам кадр выберем отдельно.</p>
+
+<h2 class="fam">Семья А — от третьего варианта</h2>
+<p class="fam-sub">Правый текст был 25px, стал 15px — вровень с фактами. Отступ между колонками задан числом (56–72px) вместо распорки по краям экрана.</p>
+<div class="card">
+  <div class="card__head"><span class="card__no">А1</span><span class="card__name">Узкий разворот по центру</span></div>
+  <p class="card__note">Обе колонки собраны к центру, между ними ровно один отступ, а не половина экрана. Каналы того же кегля, что факты, но в полный тон — они и так читаются как ссылки.</p>
+  <div class="screen "><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span class="on">Контакты</span><b>SOFIA FILATOVA</b></div><div class="st a-mid"><div class="a-pair"><div class="fx "><p><b>Москва и Лиссабон</b><span>съёмки в обоих городах</span></p><p><b>Съёмка по записи</b><span>даты — по запросу</span></p><p><b>Отвечаю в течение дня</b><span>в любом из мессенджеров</span></p></div><div class="ch "><span>Telegram</span><span>WhatsApp</span><span>Instagram</span></div></div></div><div class="foot"><div class="ic"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">А2</span><span class="card__name">Одна колонка</span></div>
+  <p class="card__note">Второй колонки нет вовсе: факты, под ними каналы. Разрыв исчезает по определению, страница читается сверху вниз одной мыслью.</p>
+  <div class="screen "><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span class="on">Контакты</span><b>SOFIA FILATOVA</b></div><div class="st a-left"><div class="a-stack"><div class="fx "><p><b>Москва и Лиссабон</b><span>съёмки в обоих городах</span></p><p><b>Съёмка по записи</b><span>даты — по запросу</span></p><p><b>Отвечаю в течение дня</b><span>в любом из мессенджеров</span></p></div><div class="ch "><span>Telegram</span><span>WhatsApp</span><span>Instagram</span></div></div></div><div class="foot"><div class="ic"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">А3</span><span class="card__name">Каналы строкой под фактами</span></div>
+  <p class="card__note">Факты столбиком, а связь — одной мелкой строкой под ними. Каналы перестают спорить с фактами по весу и работают как подпись.</p>
+  <div class="screen "><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span class="on">Контакты</span><b>SOFIA FILATOVA</b></div><div class="st a-left"><div class="a-stack"><div class="fx "><p><b>Москва и Лиссабон</b><span>съёмки в обоих городах</span></p><p><b>Съёмка по записи</b><span>даты — по запросу</span></p><p><b>Отвечаю в течение дня</b><span>в любом из мессенджеров</span></p></div><div class="ch-row ch-row--sm"><span>Telegram</span><i>·</i><span>WhatsApp</span><i>·</i><span>Instagram</span></div></div></div><div class="foot"><div class="ic"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">А4</span><span class="card__name">Две колонки вплотную, слева</span></div>
+  <p class="card__note">Тот же двухколоночник, что в третьем варианте, но обе колонки прижаты к левому полю и стоят рядом. Правая половина экрана остаётся воздухом — намеренно.</p>
+  <div class="screen "><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span class="on">Контакты</span><b>SOFIA FILATOVA</b></div><div class="st a-left"><div class="a-pair a-pair--tight"><div class="fx "><p><b>Москва и Лиссабон</b><span>съёмки в обоих городах</span></p><p><b>Съёмка по записи</b><span>даты — по запросу</span></p><p><b>Отвечаю в течение дня</b><span>в любом из мессенджеров</span></p></div><div class="ch "><span>Telegram</span><span>WhatsApp</span><span>Instagram</span></div></div></div><div class="foot"><div class="ic"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">А5</span><span class="card__name">Каналы первыми, факты справа</span></div>
+  <p class="card__note">Зеркально: связь получает первое слово и чуть больший кегль, факты уходят во вторую колонку мелким. Полезно, если цель — чтобы написали, а не прочитали.</p>
+  <div class="screen "><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span class="on">Контакты</span><b>SOFIA FILATOVA</b></div><div class="st a-mid"><div class="a-pair"><div class="ch ch--lead"><span>Telegram</span><span>WhatsApp</span><span>Instagram</span></div><div class="fx fx--sm"><p><b>Москва и Лиссабон</b><span>съёмки в обоих городах</span></p><p><b>Съёмка по записи</b><span>даты — по запросу</span></p><p><b>Отвечаю в течение дня</b><span>в любом из мессенджеров</span></p></div></div></div><div class="foot"><div class="ic"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div>
+</div>
+
+<h2 class="fam">Семья Б — от четвёртого варианта</h2>
+<p class="fam-sub">Первым — оригинал под серым номером, как он вам понравился. Дальше кадр становится фоном всей страницы: верхняя плашка растворяется, от неё остаётся только текст меню, лежащий прямо на фотографии.</p>
+<div class="card">
+  <div class="card__head"><span class="card__no is-old">Б0</span><span class="card__name">Оригинал — как в четвёртом варианте</span></div>
+  <p class="card__note">То, что понравилось, без изменений: фотография занимает рабочую область, шапка и футер остаются на своих плашках, каналы по центру поверх кадра.</p>
+  <div class="screen orig"><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span class="on">Контакты</span><b>SOFIA FILATOVA</b></div><div class="st b-inset"><img src="contact-flowers.jpg" alt=""><div class="b-over"><div class="ch ch--light"><span>Telegram</span><span>WhatsApp</span><span>Instagram</span></div></div></div><div class="foot"><div class="ic"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">Б1</span><span class="card__name">Фото фоном всей страницы, шапки нет</span></div>
+  <p class="card__note">Кадр уходит под меню и под футер — фон всей страницы. Плашка сверху растворяется, от неё остаётся только текст, лежащий прямо на фотографии светлым.</p>
+  <div class="screen bleed"><div class="bg"><img src="../assets/img/love/03.jpg" alt=""></div><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span class="on">Контакты</span><b>SOFIA FILATOVA</b></div><div class="b-mid"><div class="ch ch--light"><span>Telegram</span><span>WhatsApp</span><span>Instagram</span></div></div><div class="foot"><div class="ic"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">Б2</span><span class="card__name">Фон, каналы в нижнем углу</span></div>
+  <p class="card__note">Тот же фон без шапки, но связь прижата к левому нижнему углу. Кадр открыт целиком, текст не стоит у него на лице.</p>
+  <div class="screen bleed"><div class="bg"><img src="../assets/img/love/03.jpg" alt=""></div><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span class="on">Контакты</span><b>SOFIA FILATOVA</b></div><div class="b-corner"><div class="ch ch--light ch--tight"><span>Telegram</span><span>WhatsApp</span><span>Instagram</span></div></div><div class="foot"><div class="ic"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">Б3</span><span class="card__name">Фон, каналы колонкой справа</span></div>
+  <p class="card__note">Связь собрана в правой трети, левые две трети кадра открыты. Композиция перестаёт быть симметричной — смотрится современнее.</p>
+  <div class="screen bleed"><div class="bg"><img src="../assets/img/love/03.jpg" alt=""></div><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span class="on">Контакты</span><b>SOFIA FILATOVA</b></div><div class="b-right"><div class="ch ch--light"><span>Telegram</span><span>WhatsApp</span><span>Instagram</span></div></div><div class="foot"><div class="ic"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">Б4</span><span class="card__name">Фон без затемнения</span></div>
+  <p class="card__note">Ни градиента, ни вуали: читаемость даёт сама фотография — текст ставится на тёмную часть кадра. Самый чистый вариант и самый требовательный к кадру.</p>
+  <div class="screen bleed nofade"><div class="bg"><img src="../assets/img/love/03.jpg" alt=""></div><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span class="on">Контакты</span><b>SOFIA FILATOVA</b></div><div class="b-low"><div class="ch ch--light"><span>Telegram</span><span>WhatsApp</span><span>Instagram</span></div></div><div class="foot"><div class="ic"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">Б5</span><span class="card__name">Фото в правой половине до края</span></div>
+  <p class="card__note">Кадр не под текстом, а рядом: правая половина экрана целиком, слева на фоне сайта — каналы. Фотография не приглушается ничем.</p>
+  <div class="screen half"><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span class="on">Контакты</span><b>SOFIA FILATOVA</b></div><div class="st b-half"><div class="b-half__txt"><div class="ch "><span>Telegram</span><span>WhatsApp</span><span>Instagram</span></div></div><div class="b-half__img"><img src="contact-street.jpg" alt=""></div></div><div class="foot"><div class="ic"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div>
+</div>
+</div></body></html>

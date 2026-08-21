@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>«Обо мне» — семь раскладок</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@200;300;400&family=Manrope:wght@300;400;500&display=swap">
+<style>
+body { margin: 0; background: #eeeae5; font-family: "Manrope", -apple-system, Arial, sans-serif; color: #262320; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 40px 24px 90px; }
+h1.page { font-family: "Jost", sans-serif; font-weight: 300; font-size: 25px; letter-spacing: .12em;
+          text-transform: uppercase; margin: 0 0 8px; }
+.page-sub { font-size: 14px; color: #55504a; margin: 0 0 42px; line-height: 1.65; max-width: 76ch; }
+.card { margin-bottom: 52px; }
+.card__head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 5px; flex-wrap: wrap; }
+.card__no { font-family: "Jost", sans-serif; font-weight: 400; font-size: 12px; letter-spacing: .18em;
+            background: #262320; color: #faf8f6; padding: 4px 9px; }
+.card__name { font-family: "Jost", sans-serif; font-weight: 400; font-size: 18px; letter-spacing: .04em; }
+.card__ar { font-family: "Jost", sans-serif; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #a39a91; }
+.card__note { font-size: 13.5px; line-height: 1.62; color: #55504a; margin: 0 0 13px; max-width: 80ch; }
+
+/* Экран ноутбука. Всё внутри обрезается — так же, как на сайте. */
+.screen { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #faf8f6;
+          box-shadow: 0 18px 40px rgba(0,0,0,.10); }
+.bar { position: absolute; inset: 0 0 auto 0; height: 40px; display: flex; align-items: center;
+       padding: 0 28px; gap: 17px; font-family: "Jost", sans-serif; font-weight: 300; font-size: 10px;
+       letter-spacing: .05em; color: #55504a; z-index: 3;
+       background: rgba(250,248,246,.88); backdrop-filter: blur(10px); }
+.bar b { margin-left: auto; font-family: "Cormorant Garamond", Georgia, serif; font-weight: 400;
+         font-size: 13px; letter-spacing: .2em; color: #262320; }
+
+/* container-type: size даёт единицы cqh — от них считается ширина кадра.
+   Без этого пропорцию перебивала бы колонка сетки. */
+.stage { position: absolute; inset: 40px 0 0 0; container-type: size;
+         display: flex; align-items: center; padding: 24px 28px; }
+
+.v-split { width: 100%; height: 100%; display: flex; gap: 38px; align-items: stretch; }
+.v-media { flex: none; height: 100%; width: calc(100cqh * var(--arn)); }
+.v-media img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 55% 38%; }
+.v-text { flex: 1; min-width: 0; align-self: center; }
+
+.v-name { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 400; font-size: 27px;
+          letter-spacing: .01em; margin: 0 0 18px; line-height: 1.08; }
+.v-role { display: block; font-family: "Jost", sans-serif; font-size: 8px; font-weight: 300;
+          letter-spacing: .3em; text-transform: uppercase; color: #a39a91; margin-top: 7px; }
+.v-text p { font-size: 10.5px; line-height: 1.7; color: #453f3a; margin: 0 0 10px; }
+.v-text p:last-child { margin-bottom: 0; }
+.v-lead { margin-bottom: 15px; }
+
+/* 2 — кадр упирается в левый край окна */
+.stage:has(.v-bleed) { padding-left: 0; }
+
+/* 6 — фотография во всю высоту экрана, уходит под меню */
+.stage:has(.v-full) { inset: 0; padding: 0; }
+.v-full { gap: 0; }
+.v-full .v-media--fill { width: 46%; }
+.v-full .v-text { padding: 54px 46px 28px; }
+
+/* 7 — три колонки */
+.v-three { gap: 30px; }
+.v-three .v-text--half { flex: 1; }
+</style></head>
+<body><div class="wrap">
+<h1 class="page">«Обо мне» — семь раскладок</h1>
+<p class="page-sub">Каждый экран — пропорции ноутбука, всё умещается без прокрутки. Исходный кадр квадратный (1800×1800), поэтому вертикальная колонна всегда означает срез по бокам: чем уже вариант, тем сильнее срез. Лицо при этом остаётся в кадре — она стоит правее и выше центра. Назовите номер.</p>
+<div class="card">
+  <div class="card__head"><span class="card__no">1</span><span class="card__name">Колонна 2:3 слева</span><span class="card__ar">2:3</span></div>
+  <p class="card__note">Фотография в полях страницы. Ближе всего к тому, что стоит на сайте прямо сейчас — кадр уже стал вытянутым, но остаётся в общей сетке полей.</p>
+  <div class="screen"><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span style="color:#262320">Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="stage"><div class="v-split"><div class="v-media " style="--arn:0.667"><img src="../assets/img/sofia.jpg" alt=""></div><div class="v-text "><h2 class="v-name">София Филатова<span class="v-role">фотограф и кинорежиссёр</span></h2><p class="v-lead">Снимаю в Москве и Лиссабоне.</p><p>Я фотографирую более семи лет. Окончила ВГИК с отличием по специальности «Режиссер». Именно режиссура сформировала мой взгляд на фотографию: я вижу в каждом портрете сцену из кино, а в каждом человеке историю, которую хочется рассказать.</p><p>Я дважды финалист чемпионата «ArtMasters» в компетенции «фотограф». Мои работы публиковались в таких журналах как ELLE, Forbes и «Кинорепортёр». Вхожу в топ-10 фотографов России в возрасте до 35 лет.</p><p>У каждого есть своя история. Давайте расскажем её вместе через фотографию.</p></div></div></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">2</span><span class="card__name">Колонна 2:3 до края экрана</span><span class="card__ar">2:3, без левого поля</span></div>
+  <p class="card__note">То же соотношение, но кадр упирается в левый край окна. При той же высоте читается крупнее и весомее — разворот становится журнальным.</p>
+  <div class="screen"><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span style="color:#262320">Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="stage"><div class="v-split v-bleed"><div class="v-media " style="--arn:0.667"><img src="../assets/img/sofia.jpg" alt=""></div><div class="v-text "><h2 class="v-name">София Филатова<span class="v-role">фотограф и кинорежиссёр</span></h2><p class="v-lead">Снимаю в Москве и Лиссабоне.</p><p>Я фотографирую более семи лет. Окончила ВГИК с отличием по специальности «Режиссер». Именно режиссура сформировала мой взгляд на фотографию: я вижу в каждом портрете сцену из кино, а в каждом человеке историю, которую хочется рассказать.</p><p>Я дважды финалист чемпионата «ArtMasters» в компетенции «фотограф». Мои работы публиковались в таких журналах как ELLE, Forbes и «Кинорепортёр». Вхожу в топ-10 фотографов России в возрасте до 35 лет.</p><p>У каждого есть своя история. Давайте расскажем её вместе через фотографию.</p></div></div></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">3</span><span class="card__name">Узкая полоса 1:2</span><span class="card__ar">1:2</span></div>
+  <p class="card__note">Самый вытянутый вариант: фотография превращается в вертикальную колонну, тексту достаётся больше воздуха. И срезает кадр по бокам сильнее всего — ровно вдвое.</p>
+  <div class="screen"><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span style="color:#262320">Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="stage"><div class="v-split"><div class="v-media " style="--arn:0.5"><img src="../assets/img/sofia.jpg" alt=""></div><div class="v-text "><h2 class="v-name">София Филатова<span class="v-role">фотограф и кинорежиссёр</span></h2><p class="v-lead">Снимаю в Москве и Лиссабоне.</p><p>Я фотографирую более семи лет. Окончила ВГИК с отличием по специальности «Режиссер». Именно режиссура сформировала мой взгляд на фотографию: я вижу в каждом портрете сцену из кино, а в каждом человеке историю, которую хочется рассказать.</p><p>Я дважды финалист чемпионата «ArtMasters» в компетенции «фотограф». Мои работы публиковались в таких журналах как ELLE, Forbes и «Кинорепортёр». Вхожу в топ-10 фотографов России в возрасте до 35 лет.</p><p>У каждого есть своя история. Давайте расскажем её вместе через фотографию.</p></div></div></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">4</span><span class="card__name">Колонна 3:4 слева</span><span class="card__ar">3:4</span></div>
+  <p class="card__note">Мягкий шаг от квадрата: заметно выше, но без резкой обрезки. Самый бережный к кадру вариант из вертикальных.</p>
+  <div class="screen"><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span style="color:#262320">Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="stage"><div class="v-split"><div class="v-media " style="--arn:0.75"><img src="../assets/img/sofia.jpg" alt=""></div><div class="v-text "><h2 class="v-name">София Филатова<span class="v-role">фотограф и кинорежиссёр</span></h2><p class="v-lead">Снимаю в Москве и Лиссабоне.</p><p>Я фотографирую более семи лет. Окончила ВГИК с отличием по специальности «Режиссер». Именно режиссура сформировала мой взгляд на фотографию: я вижу в каждом портрете сцену из кино, а в каждом человеке историю, которую хочется рассказать.</p><p>Я дважды финалист чемпионата «ArtMasters» в компетенции «фотограф». Мои работы публиковались в таких журналах как ELLE, Forbes и «Кинорепортёр». Вхожу в топ-10 фотографов России в возрасте до 35 лет.</p><p>У каждого есть своя история. Давайте расскажем её вместе через фотографию.</p></div></div></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">5</span><span class="card__name">Зеркально: фото справа</span><span class="card__ar">2:3, справа</span></div>
+  <p class="card__note">Та же колонна, но справа. Взгляд идёт от имени к фотографии, а не наоборот — первое слово получает текст.</p>
+  <div class="screen"><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span style="color:#262320">Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="stage"><div class="v-split"><div class="v-text "><h2 class="v-name">София Филатова<span class="v-role">фотограф и кинорежиссёр</span></h2><p class="v-lead">Снимаю в Москве и Лиссабоне.</p><p>Я фотографирую более семи лет. Окончила ВГИК с отличием по специальности «Режиссер». Именно режиссура сформировала мой взгляд на фотографию: я вижу в каждом портрете сцену из кино, а в каждом человеке историю, которую хочется рассказать.</p><p>Я дважды финалист чемпионата «ArtMasters» в компетенции «фотограф». Мои работы публиковались в таких журналах как ELLE, Forbes и «Кинорепортёр». Вхожу в топ-10 фотографов России в возрасте до 35 лет.</p><p>У каждого есть своя история. Давайте расскажем её вместе через фотографию.</p></div><div class="v-media " style="--arn:0.667"><img src="../assets/img/sofia.jpg" alt=""></div></div></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">6</span><span class="card__name">Во всю высоту, под шапку</span><span class="card__ar">половина экрана</span></div>
+  <p class="card__note">Фотография занимает левую половину экрана целиком — от верхнего края до нижнего, уходя под меню. Самый сильный по впечатлению и самый непохожий на нынешний.</p>
+  <div class="screen"><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span style="color:#262320">Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="stage"><div class="v-split v-full"><div class="v-media v-media--fill" style="--arn:0"><img src="../assets/img/sofia.jpg" alt=""></div><div class="v-text "><h2 class="v-name">София Филатова<span class="v-role">фотограф и кинорежиссёр</span></h2><p class="v-lead">Снимаю в Москве и Лиссабоне.</p><p>Я фотографирую более семи лет. Окончила ВГИК с отличием по специальности «Режиссер». Именно режиссура сформировала мой взгляд на фотографию: я вижу в каждом портрете сцену из кино, а в каждом человеке историю, которую хочется рассказать.</p><p>Я дважды финалист чемпионата «ArtMasters» в компетенции «фотограф». Мои работы публиковались в таких журналах как ELLE, Forbes и «Кинорепортёр». Вхожу в топ-10 фотографов России в возрасте до 35 лет.</p><p>У каждого есть своя история. Давайте расскажем её вместе через фотографию.</p></div></div></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">7</span><span class="card__name">Фото по центру, текст по бокам</span><span class="card__ar">2:3, по центру</span></div>
+  <p class="card__note">Колонна посередине: слева имя и первая строка, справа остальное. Симметричный разворот — но текста в каждой колонке остаётся немного.</p>
+  <div class="screen"><div class="bar"><span>Главная</span><span>Портреты</span><span>Улица</span><span>Пары</span><span style="color:#262320">Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="stage"><div class="v-split v-three"><div class="v-text v-text--half"><h2 class="v-name">София Филатова<span class="v-role">фотограф и кинорежиссёр</span></h2><p class="v-lead">Снимаю в Москве и Лиссабоне.</p></div><div class="v-media " style="--arn:0.667"><img src="../assets/img/sofia.jpg" alt=""></div><div class="v-text v-text--half"><p>Я фотографирую более семи лет. Окончила ВГИК с отличием по специальности «Режиссер». Именно режиссура сформировала мой взгляд на фотографию: я вижу в каждом портрете сцену из кино, а в каждом человеке историю, которую хочется рассказать.</p><p>Я дважды финалист чемпионата «ArtMasters» в компетенции «фотограф». Мои работы публиковались в таких журналах как ELLE, Forbes и «Кинорепортёр». Вхожу в топ-10 фотографов России в возрасте до 35 лет. У каждого есть своя история. Давайте расскажем её вместе через фотографию.</p></div></div></div></div>
+</div>
+</div></body></html>

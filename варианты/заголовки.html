@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Заголовки разделов — семь решений</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@200;300;400&family=Manrope:wght@300;400;500&display=swap">
+<style>
+body { margin: 0; background: #eeeae5; font-family: "Manrope", -apple-system, Arial, sans-serif; color: #262320; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 40px 24px 90px; }
+h1.page { font-family: "Jost", sans-serif; font-weight: 300; font-size: 25px; letter-spacing: .12em;
+          text-transform: uppercase; margin: 0 0 8px; }
+.page-sub { font-size: 14px; color: #55504a; margin: 0 0 42px; line-height: 1.65; max-width: 76ch; }
+.card { margin-bottom: 46px; }
+.card__head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 5px; flex-wrap: wrap; }
+.card__no { font-family: "Jost", sans-serif; font-weight: 400; font-size: 12px; letter-spacing: .18em;
+            background: #262320; color: #faf8f6; padding: 4px 9px; }
+.card__no.is-now { background: #a39a91; }
+.card__name { font-family: "Jost", sans-serif; font-weight: 400; font-size: 18px; letter-spacing: .04em; }
+.card__spec { font-family: "Jost", sans-serif; font-size: 11.5px; letter-spacing: .06em; color: #a39a91; }
+.card__note { font-size: 13.5px; line-height: 1.62; color: #55504a; margin: 0 0 13px; max-width: 80ch; }
+
+.screen { background: #faf8f6; padding: 0 0 26px; box-shadow: 0 14px 32px rgba(0,0,0,.09); }
+.bar { height: 40px; display: flex; align-items: center; padding: 0 26px; gap: 16px;
+       font-family: "Jost", sans-serif; font-weight: 300; font-size: 10px; letter-spacing: .05em; color: #55504a; }
+.bar .on { color: #262320; }
+.bar b { margin-left: auto; font-family: "Cormorant Garamond", Georgia, serif; font-weight: 400;
+         font-size: 13px; letter-spacing: .2em; color: #262320; }
+.bar .sect { font-family: "Jost", sans-serif; font-size: 10px; letter-spacing: .22em;
+             text-transform: uppercase; color: #a39a91; margin-left: 14px; }
+.head { padding: 0 26px; }
+.row { display: flex; gap: 4px; padding: 0 26px; margin-top: 22px; }
+.row img { display: block; width: 33.333%; height: 190px; object-fit: cover; }
+
+/* --- сами заголовки --- */
+.h-line { font-family: "Jost", sans-serif; }
+.h-now .h-line  { font-weight: 300; font-size: 22px; letter-spacing: .09em; text-transform: uppercase;
+                  color: #262320; text-align: center; padding: 34px 0 0; }
+.h-1 .h-line    { font-weight: 300; font-size: 13px; letter-spacing: .26em; text-transform: uppercase;
+                  color: #55504a; text-align: center; padding: 30px 0 0; }
+.h-2 .head      { padding-top: 8px; }
+.h-3 .h-line    { font-weight: 300; font-size: 12px; letter-spacing: .24em; text-transform: uppercase;
+                  color: #55504a; text-align: left; padding: 28px 0 0; }
+.h-4 .h-line    { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 300; font-size: 30px;
+                  letter-spacing: .01em; color: #262320; text-align: center; padding: 26px 0 0; }
+.h-5 .h-line    { font-weight: 200; font-size: 34px; letter-spacing: 0; color: #262320;
+                  text-align: left; padding: 24px 0 0; }
+.h-6 .h-line    { font-weight: 300; font-size: 12px; letter-spacing: .2em; text-transform: uppercase;
+                  color: #55504a; text-align: center; padding: 30px 0 0; }
+.h-6 .h-dim     { color: #a39a91; }
+.h-7 .head      { padding-top: 8px; }
+</style></head>
+<body><div class="wrap">
+<h1 class="page">Заголовки разделов — семь решений</h1>
+<p class="page-sub">Строка над галереей: «Портреты», «Улица», «Пары», а также «Прайс» и «Как проходит съёмка». Первым идёт нынешний вид — для сравнения, он под серым номером. Дальше семь вариантов: меняются шрифт, кегль, яркость и место. Фотографии под каждым заголовком настоящие, чтобы масштаб читался в контексте. Назовите номер.</p>
+<div class="card">
+  <div class="card__head"><span class="card__no is-now">0</span><span class="card__name">Как сейчас</span><span class="card__spec">Jost 300 · 22px · разрядка 0.09em · #262320 · по центру</span></div>
+  <p class="card__note">Исходное состояние — для сравнения. Крупно, по центру, в полный тон.</p>
+  <div class="screen h-now"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="head"><div class="h-line">Портреты</div></div><div class="row"><img src="../assets/img/portraits/01@sm.jpg" alt=""><img src="../assets/img/portraits/02@sm.jpg" alt=""><img src="../assets/img/portraits/03@sm.jpg" alt=""></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">1</span><span class="card__name">Тише и мельче</span><span class="card__spec">Jost 300 · 13px · разрядка 0.26em · #55504a · по центру</span></div>
+  <p class="card__note">Тот же шрифт и то же место, но вдвое мельче и приглушённее. Заголовок перестаёт спорить с фотографиями и работает как подпись к развороту.</p>
+  <div class="screen h-1"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="head"><div class="h-line">Портреты</div></div><div class="row"><img src="../assets/img/portraits/01@sm.jpg" alt=""><img src="../assets/img/portraits/02@sm.jpg" alt=""><img src="../assets/img/portraits/03@sm.jpg" alt=""></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">2</span><span class="card__name">Заголовка нет</span><span class="card__spec">—</span></div>
+  <p class="card__note">Раздел уже назван в меню, и там он подсвечен. Строка просто исчезает, фотографии начинаются сразу под шапкой. Самый минималистичный ход.</p>
+  <div class="screen h-2"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="head"></div><div class="row"><img src="../assets/img/portraits/01@sm.jpg" alt=""><img src="../assets/img/portraits/02@sm.jpg" alt=""><img src="../assets/img/portraits/03@sm.jpg" alt=""></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">3</span><span class="card__name">Слева, по краю галереи</span><span class="card__spec">Jost 300 · 12px · разрядка 0.24em · #55504a · слева</span></div>
+  <p class="card__note">Мелко и прижато к левому полю — ровно в ту вертикаль, где начинается первый кадр. Заголовок превращается в служебную метку, а не в вывеску.</p>
+  <div class="screen h-3"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="head"><div class="h-line">Портреты</div></div><div class="row"><img src="../assets/img/portraits/01@sm.jpg" alt=""><img src="../assets/img/portraits/02@sm.jpg" alt=""><img src="../assets/img/portraits/03@sm.jpg" alt=""></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">4</span><span class="card__name">Антиква строчными</span><span class="card__spec">Cormorant 300 · 30px · строчные · #262320 · по центру</span></div>
+  <p class="card__note">Тот же шрифт, что в имени «SOFIA FILATOVA» наверху. Строчные буквы вместо капслока: мягче и дороже, но это второй шрифт на странице.</p>
+  <div class="screen h-4"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="head"><div class="h-line">портреты</div></div><div class="row"><img src="../assets/img/portraits/01@sm.jpg" alt=""><img src="../assets/img/portraits/02@sm.jpg" alt=""><img src="../assets/img/portraits/03@sm.jpg" alt=""></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">5</span><span class="card__name">Крупно, тонко, строчными, слева</span><span class="card__spec">Jost 200 · 34px · без разрядки · #262320 · слева</span></div>
+  <p class="card__note">Заголовок остаётся крупным, но теряет капслок и разрядку — именно они и делали его тяжёлым. Прижат влево, как в референсе.</p>
+  <div class="screen h-5"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="head"><div class="h-line">портреты</div></div><div class="row"><img src="../assets/img/portraits/01@sm.jpg" alt=""><img src="../assets/img/portraits/02@sm.jpg" alt=""><img src="../assets/img/portraits/03@sm.jpg" alt=""></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">6</span><span class="card__name">С числом кадров</span><span class="card__spec">Jost 300 · 12px · разрядка 0.2em · #55504a · по центру</span></div>
+  <p class="card__note">Мелкая строка, но с фактом вместо голого названия. Заодно сообщает, сколько всего работ в разделе.</p>
+  <div class="screen h-6"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="head"><div class="h-line">портреты<span class="h-dim"> · 30 кадров</span></div></div><div class="row"><img src="../assets/img/portraits/01@sm.jpg" alt=""><img src="../assets/img/portraits/02@sm.jpg" alt=""><img src="../assets/img/portraits/03@sm.jpg" alt=""></div></div>
+</div>
+<div class="card">
+  <div class="card__head"><span class="card__no">7</span><span class="card__name">В одну строку с меню</span><span class="card__spec">Jost 300 · 12px · разрядка 0.22em · #a39a91 · в шапке</span></div>
+  <p class="card__note">Отдельной строки нет вовсе: название раздела уходит в шапку, к имени. Экономит целую строку сверху, но заметить его труднее.</p>
+  <div class="screen h-7"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b><span class="sect">Портреты</span></div><div class="head"></div><div class="row"><img src="../assets/img/portraits/01@sm.jpg" alt=""><img src="../assets/img/portraits/02@sm.jpg" alt=""><img src="../assets/img/portraits/03@sm.jpg" alt=""></div></div>
+</div>
+</div></body></html>

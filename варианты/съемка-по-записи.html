@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>«Съёмка по записи» — пять вариантов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@200;300;400&family=Manrope:wght@300;400;500&display=swap">
+<style>
+body { margin: 0; background: #eeeae5; color: #262320; font-family: "Manrope", -apple-system, Arial, sans-serif; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 40px 24px 90px; }
+h1 { margin: 0 0 8px; font: 300 25px/1.2 "Jost", sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+.intro { max-width: 76ch; margin: 0 0 42px; color: #55504a; font-size: 14px; line-height: 1.65; }
+.card { margin-bottom: 50px; }
+.head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; margin-bottom: 5px; }
+.no { padding: 4px 9px; background: #262320; color: #faf8f6; font: 400 12px "Jost", sans-serif; letter-spacing: .18em; }
+.name { font: 400 18px "Jost", sans-serif; letter-spacing: .04em; }
+.spec { color: #a39a91; font: 11.5px "Jost", sans-serif; letter-spacing: .06em; }
+.note { max-width: 80ch; margin: 0 0 13px; color: #55504a; font-size: 13.5px; line-height: 1.62; }
+
+.screen { overflow: hidden; background: #faf8f6; box-shadow: 0 18px 40px rgba(0,0,0,.1); }
+.bar { display: flex; align-items: center; gap: 17px; height: 40px; padding: 0 28px; color: #55504a; font: 300 10px "Jost", sans-serif; letter-spacing: .05em; }
+.bar .on { color: #262320; }.bar b { margin-left: auto; color: #262320; font: 400 13px "Cormorant Garamond", Georgia, serif; letter-spacing: .2em; }
+.gallery { display: grid; grid-template-columns: 1.05fr .85fr 1.1fr; gap: 4px; height: 245px; }
+.gallery div { overflow: hidden; background: #d6d0ca; }.gallery img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.gallery .one img { object-position: 50% 35%; }.gallery .two img { filter: grayscale(100%); object-position: 50% 48%; }.gallery .three img { object-position: 50% 58%; }
+.cue { color: #55504a; font: 300 12px "Jost", sans-serif; letter-spacing: .06em; white-space: nowrap; }
+.cue strong { color: #262320; font-weight: 300; }.cue i { padding: 0 7px; color: #b6ada4; font-style: normal; }
+.cue .arrow { padding-left: 8px; color: #a39a91; }
+.more { color: #a39a91; font: 300 11px "Jost", sans-serif; letter-spacing: .16em; text-transform: uppercase; }
+.foot { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 21px 0 16px; color: #a39a91; font-size: 9px; }.icons { display: flex; gap: 13px; }.icons i { width: 13px; height: 13px; border: 1px solid #bdb4aa; border-radius: 3px; }
+
+/* 1. Сразу под сеткой: продолжает линию последнего ряда. */
+.placement-1 { display: flex; justify-content: space-between; align-items: center; padding: 19px 28px 18px; border-bottom: 1px solid #ede7e0; }
+/* 2. Одна строка с «показать ещё»: оба действия в хвосте галереи. */
+.placement-2 { display: flex; justify-content: center; align-items: center; gap: 26px; padding: 24px 28px 20px; }.placement-2 .line { width: 1px; height: 16px; background: #e2dad1; }
+/* 3. Тихая метка в подписи к серии: запись не отдельный блок, а часть данных. */
+.placement-3 { display: flex; justify-content: space-between; align-items: center; padding: 16px 28px 18px; color: #a39a91; font: 10px "Jost", sans-serif; letter-spacing: .12em; text-transform: uppercase; }.placement-3 .cue { font-size: 11px; letter-spacing: .06em; text-transform: none; }
+/* 4. Входит в футер до иконок: последний жест страницы, но не отдельная секция. */
+.placement-4 { display: flex; justify-content: center; padding: 25px 0 0; }.foot--close { padding-top: 16px; }
+/* 5. Маленькая строчка на последнем кадре; работает как подпись к фотографии. */
+.gallery--overlay { position: relative; }.gallery--overlay .overlay-cue { position: absolute; right: 17px; bottom: 15px; z-index: 1; padding: 7px 10px; background: rgba(250,248,246,.88); font-size: 11px; }.gallery--overlay::after { position: absolute; inset: auto 0 0; height: 42%; content: ""; pointer-events: none; background: linear-gradient(transparent, rgba(0,0,0,.24)); }
+
+@media (max-width: 620px) { .wrap { padding: 28px 16px 70px; }.bar { padding: 0 16px; }.bar span:not(.on) { display: none; }.gallery { height: 180px; }.placement-1, .placement-3 { padding-inline: 16px; }.placement-1 .more, .placement-3 > span:first-child { display: none; }.placement-2 { gap: 14px; }.cue { font-size: 11px; } }
+</style></head>
+<body><main class="wrap">
+<h1>«Съёмка по записи» — пять вариантов</h1>
+<p class="intro">Во всех вариантах текст остаётся маленьким. Меняется только его связь со страницей: продолжает ли он галерею, стоит рядом с «ещё», становится меткой серии, завершает футер или лежит на последнем кадре.</p>
+
+<section class="card"><div class="head"><span class="no">1</span><span class="name">Под галереей, в одной линии</span><span class="spec">самый спокойный и цельный</span></div><p class="note">Строка продолжает край последнего ряда, а счётчик кадров уравновешивает её справа. Это мой фаворит: заметна без отдельного «баннера».</p><div class="screen"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="gallery"><div class="one"><img src="contact-street.jpg" alt=""></div><div class="two"><img src="contact-flowers.jpg" alt=""></div><div class="three"><img src="contact-street.jpg" alt=""></div></div><div class="placement-1"><span class="cue">есть идея? <i>·</i><strong>съёмка по записи</strong><span class="arrow">→</span></span><span class="more">30 кадров</span></div><div class="foot"><div class="icons"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div></section>
+
+<section class="card"><div class="head"><span class="no">2</span><span class="name">Рядом с «показать ещё»</span><span class="spec">два действия — один хвост галереи</span></div><p class="note">Подходит для страниц, где ещё есть скрытые фотографии: запись не висит ниже сама по себе, а логично завершает ту же строку действий.</p><div class="screen"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="gallery"><div class="one"><img src="contact-street.jpg" alt=""></div><div class="two"><img src="contact-flowers.jpg" alt=""></div><div class="three"><img src="contact-street.jpg" alt=""></div></div><div class="placement-2"><span class="more">показать ещё</span><span class="line"></span><span class="cue"><strong>съёмка по записи</strong><span class="arrow">→</span></span></div><div class="foot"><div class="icons"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div></section>
+
+<section class="card"><div class="head"><span class="no">3</span><span class="name">Как данные о серии</span><span class="spec">строго, редакционно</span></div><p class="note">Запись встроена в служебную строку «Портреты · 30 кадров». Получается очень компактно и не выглядит кнопкой вообще, но остаётся читаемой.</p><div class="screen"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="gallery"><div class="one"><img src="contact-street.jpg" alt=""></div><div class="two"><img src="contact-flowers.jpg" alt=""></div><div class="three"><img src="contact-street.jpg" alt=""></div></div><div class="placement-3"><span>Портреты <i>·</i> 30 кадров</span><span class="cue"><strong>съёмка по записи</strong><span class="arrow">→</span></span></div><div class="foot"><div class="icons"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div></section>
+
+<section class="card"><div class="head"><span class="no">4</span><span class="name">В начале футера</span><span class="spec">единый финал страницы</span></div><p class="note">После галереи нет промежуточного блока: запись становится первой строкой футера. Хорошо работает, если футер присутствует на всех разделах одинаково.</p><div class="screen"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="gallery"><div class="one"><img src="contact-street.jpg" alt=""></div><div class="two"><img src="contact-flowers.jpg" alt=""></div><div class="three"><img src="contact-street.jpg" alt=""></div></div><div class="placement-4"><span class="cue"><strong>съёмка по записи</strong><span class="arrow">→</span></span></div><div class="foot foot--close"><div class="icons"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div></section>
+
+<section class="card"><div class="head"><span class="no">5</span><span class="name">Подпись на последнем кадре</span><span class="spec">самый заметный, но всё ещё небольшой</span></div><p class="note">Строка находится непосредственно на фотографии и читается как подпись к развороту. Визуально сильнее остальных, но зависит от каждого конкретного последнего кадра.</p><div class="screen"><div class="bar"><span>Главная</span><span class="on">Портреты</span><span>Улица</span><span>Пары</span><span>Обо мне</span><span>Прайс</span><span>Контакты</span><b>SOFIA FILATOVA</b></div><div class="gallery gallery--overlay"><div class="one"><img src="contact-street.jpg" alt=""></div><div class="two"><img src="contact-flowers.jpg" alt=""></div><div class="three"><img src="contact-street.jpg" alt=""></div><span class="cue overlay-cue"><strong>съёмка по записи</strong><span class="arrow">→</span></span></div><div class="foot"><div class="icons"><i></i><i></i><i></i></div><span>© 2026 Sofia Filatova</span></div></div></section>
+</main></body></html>
