@@ -109,8 +109,7 @@
 </div>
 
 <p class="hint">
-  Внутри — настоящий сайт, всё кликается и листается. Заставка показывается один
-  раз за сессию: чтобы увидеть её снова, нажмите «Показать заставку».
+  Внутри — настоящий сайт, всё кликается и листается.
 </p>
 
 <script>
@@ -138,16 +137,6 @@
     });
     bar.appendChild(b);
   });
-
-  // Заставка помечается в sessionStorage. Тот же origin, поэтому очистить
-  // отметку можно отсюда, и она пропадёт и внутри рамки.
-  var again = document.createElement("button");
-  again.textContent = "Показать заставку";
-  again.addEventListener("click", function () {
-    try { sessionStorage.removeItem("sf-seen"); } catch (e) {}
-    screenEl.src = screenEl.src.split("#")[0] + "?r=" + Date.now();
-  });
-  bar.appendChild(again);
 
   document.getElementById("size").addEventListener("change", function () {
     var wh = this.value.split("x");

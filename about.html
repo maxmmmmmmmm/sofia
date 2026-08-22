@@ -10,34 +10,13 @@
   <meta property="og:type" content="website">
   <meta property="og:image" content="assets/img/portraits/01.jpg">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <script>
-  /* Решение о заставке принимается ДО первой отрисовки. Раньше её прятал
-     основной скрипт — он отрабатывает после разбора страницы, и оставалось
-     окно, в котором полосы успевали разъехаться: имя мелькало двумя
-     половинками. Здесь класс ставится синхронно, до боди, и заставка на
-     повторных заходах просто не рисуется. */
-  try {
-    if (sessionStorage.getItem("sf-seen")) {
-      document.documentElement.className += " sf-seen";
-    }
-  } catch (e) {}
-  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&amp;family=Manrope:wght@300;400;500&amp;family=Jost:wght@300;400&amp;display=swap">
-  <link rel="stylesheet" href="assets/css/style.css?v=1787327612">
+  <link rel="stylesheet" href="assets/css/style.css?v=1787418180">
 </head>
 <body class="sf-body sf-body--fit">
 <div class="sf-root" data-lang="en">
-
-<div class="sf-loader" aria-hidden="true">
-  <div class="sf-loader__band sf-loader__band--top">
-    <div class="sf-loader__inner"><span class="sf-loader__mark">Sofia Filatova</span></div>
-  </div>
-  <div class="sf-loader__band sf-loader__band--bottom">
-    <div class="sf-loader__inner"><span class="sf-loader__mark">Sofia Filatova</span></div>
-  </div>
-</div>
 
 <header class="sf-header">
   <nav class="sf-header__nav" aria-label="Menu">
@@ -72,11 +51,6 @@
   <a class="sf-drawer__link is-active" href="about.html"><span data-l="en">About</span><span data-l="ru">Обо мне</span></a>
   <a class="sf-drawer__link" href="price.html"><span data-l="en">Price</span><span data-l="ru">Прайс</span></a>
   <a class="sf-drawer__link" href="contact.html"><span data-l="en">Contact</span><span data-l="ru">Контакты</span></a>
-  <div class="sf-drawer__foot">
-    <a href="https://t.me/sfxx1" target="_blank" rel="noopener">Telegram</a>
-    <a href="https://instagram.com/sfx.ph" target="_blank" rel="noopener">Instagram</a>
-    <a href="https://wa.me/79263759795" target="_blank" rel="noopener">WhatsApp</a>
-  </div>
 </div>
 
 <main class="sf-main">
@@ -122,6 +96,6 @@
 </footer>
 
 </div>
-<script src="assets/js/main.js?v=1787245685"></script>
+<script src="assets/js/main.js?v=1787418027"></script>
 </body>
 </html>

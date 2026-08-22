@@ -28,7 +28,9 @@
   --sf-ink-nav:     #55504a;
   /* Тон длинного текста — мягче чернил, но заметно темнее серого */
   --sf-ink-text:    #453f3a;
-  --sf-overlay:     rgba(20, 18, 16, 0.94);
+  /* Подложка лайтбокса — тон фона сайта, слегка прозрачный: кадр всплывает
+     на светлом, а не проваливается в темноту. */
+  --sf-overlay:     rgba(250, 248, 246, 0.93);
 
   /* Type */
   --sf-serif: "Cormorant Garamond", Cormorant, Georgia, "Times New Roman", serif;
@@ -304,8 +306,11 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 6px;
-  padding: 0 var(--sf-pad-x) 12vh;
+  /* Пункты по центру и с большим просветом — как в референсе. */
+  align-items: center;
+  text-align: center;
+  gap: clamp(14px, 2.4vh, 26px);
+  padding: 0 var(--sf-pad-x) 10vh;
   background: var(--sf-bg);
   opacity: 0;
   visibility: hidden;
@@ -324,21 +329,16 @@
 
 .sf-drawer__link {
   font-family: var(--sf-serif);
-  font-size: clamp(26px, 8vw, 40px);
-  padding-block: 6px;
+  /* Ещё −7% к прежним 23/7vw/35 (суммарно −19% от исходного размера). */
+  font-size: clamp(21px, 6.5vw, 32px);
+  /* Строчными — через регистр, а не правкой текста: те же подписи служат
+     верхнему меню на компьютере, где они с прописной. */
+  text-transform: lowercase;
+  padding-block: 2px;
   color: var(--sf-ink);
 }
 .sf-drawer__link.is-active { color: var(--sf-ink-faint); }
 
-.sf-drawer__foot {
-  margin-top: 40px;
-  display: flex;
-  gap: 20px;
-  font-size: var(--sf-fs-micro);
-  letter-spacing: var(--sf-track-wide);
-  text-transform: uppercase;
-  color: var(--sf-ink-soft);
-}
 
 @media (max-width: 980px) {
   /* 93px of chrome is a lot of a phone screen — the desktop height is there
@@ -367,7 +367,10 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--sf-gap);
-  padding-inline: var(--sf-pad-x);
+  /* Полей нет: сетка идёт от края до края окна. Деформации это не даёт —
+     ряд выкладывается по пропорциям кадров, и лишние 102px просто делают
+     весь ряд выше на тот же процент. */
+  padding-inline: 0;
 }
 .sf-mosaic__item[hidden] { display: none; }
 
@@ -470,24 +473,36 @@
    из пропорции снимка, а не задаётся. Прошлый вариант выбрасывал треть кадра
    и оттого читался как баннер.
    Ширина вынесена в переменную: 100% — во всю колонку между полями. */
-.sf-opener { padding: 0 var(--sf-pad-x); }
+/* Кадр от края до края окна и во всю высоту под шапкой — как в референсе.
+   Полей нет вовсе, поэтому фотография начинается там же, где кончается меню. */
+.sf-opener { padding: 0; }
 .sf-opener img {
-  /* Ширина всегда во всю колонку — по краям кадр не режется никогда.
-     Срез идёт только сверху и снизу: пропорцию считает сборка из пропорции
-     самого снимка (см. OPENER_KEEP в build.py), поэтому процент не съедет
-     при замене фотографии. */
+  display: block;
   width: 100%;
+  /* На узком экране высота считается из пропорции снимка (см. OPENER_KEEP
+     в build.py): растянуть горизонтальный кадр на весь телефонный экран
+     значит срезать его по бокам почти вдвое. */
   aspect-ratio: var(--sf-opener-ar);
   height: auto;
   object-fit: cover;
   object-position: center;
+}
+@media (min-width: 900px) {
+  /* svh, а не vh: на ноутбуке разницы нет, но в мобильном Safari vh считает
+     высоту без адресной строки, и кадр вылезал бы за экран. */
+  .sf-opener img {
+    aspect-ratio: auto;
+    height: calc(100svh - var(--sf-header-h));
+  }
 }
 /* Три входа в галереи. Кадр 3:4, под ним название — как в референсе. */
 .sf-cards {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--sf-gap);
-  padding: var(--sf-gap) var(--sf-pad-x) 0;
+  /* Полей по бокам нет: карточки идут от края до края, как мозаика в
+     галереях и кадр-заставка над ними. Сверху — отступ от заставки. */
+  padding: clamp(28px, 3vw, 48px) 0 0;
 }
 
 .sf-card { display: block; }
@@ -522,10 +537,60 @@
 }
 .sf-card:hover .sf-card__name { opacity: 0.6; }
 
-@media (max-width: 720px) {
-  .sf-cards { grid-template-columns: 1fr; gap: 26px; }
-  /* На телефоне сужать нечего — там и так узко */
-  .sf-opener img { width: 100%; }
+/* --------------------------------------------------------------------------
+   ГЛАВНАЯ НА ТЕЛЕФОНЕ
+
+   Кадра-заставки здесь нет: он съедал первый экран, а разделы уходили под
+   сгиб. Вместо него сразу три входа стопкой во всю ширину. Название лежит
+   поверх кадра и возникает только под пальцем — при прокрутке кадры
+   остаются чистыми.
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .sf-opener { display: none; }
+
+  .sf-cards {
+    grid-template-columns: 1fr;
+    gap: var(--sf-gap);
+    padding: 0;
+  }
+  .sf-card { position: relative; }
+  /* Пропорция референса. Обложки вертикальные, поэтому object-fit: cover
+     срезает их сверху и снизу — кадр не искажается. */
+  .sf-card__frame { aspect-ratio: 4 / 3; position: relative; }
+
+  /* Вуаль под пальцем: без неё светлая подпись тонет в светлых кадрах.
+     Лежит на рамке, а подпись идёт следующей — та поверх вуали. */
+  .sf-card__frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 18, 16, 0.42);
+    opacity: 0;
+    transition: opacity 0.25s var(--sf-ease);
+    pointer-events: none;
+  }
+  .sf-card.is-touched .sf-card__frame::after { opacity: 1; }
+
+  .sf-card__name {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 19px;
+    letter-spacing: 0.2em;
+    text-shadow: 0 1px 12px rgba(20, 18, 16, 0.45);
+    opacity: 0;
+    transition: opacity 0.5s var(--sf-ease);
+    /* Подпись не должна перехватывать нажатие у самой ссылки. */
+    pointer-events: none;
+  }
+  /* Подпись держится с касания и до касания другой карточки. :active сюда
+     не годится: он снимается на отпускании пальца, и подсветка гасла
+     посреди перехода — это и читалось как подвисшее промежуточное
+     состояние. */
+  .sf-card.is-touched .sf-card__name { opacity: 1; }
 }
 
 /* Two-column: image one side, prose the other */
@@ -556,6 +621,9 @@
   padding: clamp(24px, 3vw, 34px) var(--sf-pad-x) clamp(18px, 2.4vw, 30px);
   text-align: center;
 }
+/* На галереях заголовка нет: раздел уже назван в меню и подсвечен там.
+   Мозаика начинается вплотную к шапке — тем же зазором, что кадр на главной. */
+.sf-main > .sf-mosaic:first-child { margin-top: 0; }
 .sf-pagehead__title {
   font-family: var(--sf-display);
   font-weight: 300;
@@ -606,6 +674,27 @@
 
 .sf-pack__media { aspect-ratio: 4 / 5; overflow: hidden; background: var(--sf-bg-sunk); }
 .sf-pack__media img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Кадр доходит до своего края окна — тем же приёмом, что разворот «Обо мне»:
+   коробка становится шире, а сама фотография не растягивается (object-fit:
+   cover увеличивает её и срезает).
+
+   Левый край пакета от края окна: 50vw − 590px (половина окна минус половина
+   максимальной ширины 1180). Отступы секции в этой формуле сокращаются.
+   На узком окне центрирование не работает и краем становится сам отступ —
+   его и берёт max(). */
+@media (min-width: 900px) {
+  .sf-pack__media { --sf-bleed: max(var(--sf-pad-x), 50vw - 590px); }
+
+  .sf-pack:nth-child(odd) .sf-pack__media {
+    margin-left: calc(-1 * var(--sf-bleed));
+    width: calc(100% + var(--sf-bleed));
+  }
+  .sf-pack:nth-child(even) .sf-pack__media {
+    margin-right: calc(-1 * var(--sf-bleed));
+    width: calc(100% + var(--sf-bleed));
+  }
+}
 
 .sf-pack__body { max-width: 44ch; }
 .sf-pack__name { font-size: clamp(22px, 2.6vw, 30px); }
@@ -677,9 +766,19 @@
   list-style: none;
   margin: 0 auto;
   padding: 0;
-  max-width: 780px;
+  /* Ровно ширина пакетов ниже — блоки становятся в один строй по краям. */
+  max-width: 1180px;
   display: grid;
   gap: clamp(22px, 3vw, 38px);
+}
+@media (min-width: 860px) {
+  /* В одну колонку на 1180px строка вышла бы вдвое длиннее читаемой,
+     поэтому четыре шага садятся попарно. */
+  .sf-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(40px, 5vw, 76px);
+    row-gap: clamp(30px, 3.4vw, 46px);
+  }
 }
 
 .sf-step {
@@ -717,7 +816,12 @@
 
 @media (max-width: 560px) {
   .sf-step { grid-template-columns: 1fr; gap: 6px; }
-  .sf-step__n { font-size: 18px; }
+  /* −17% ко всем трём строкам шага: блок занимал почти весь экран, при этом
+     кегль был крупнее, чем у прайса под ним. */
+  .sf-step__n { font-size: 15px; }
+  .sf-step__name { font-size: 10px; margin-bottom: 0.55em; }
+  .sf-step__text { font-size: 12.5px; line-height: 1.7; }
+  .sf-steps { gap: 20px; }
 }
 
 /* --------------------------------------------------------------------------
@@ -799,17 +903,25 @@
 .sf-contactpage__channels a {
   color: #fff;
   font-family: var(--sf-display);
-  font-size: clamp(14px, 1.2vw, 17px);
+  /* +5% к прежним 14/1.2vw/17. */
+  font-size: clamp(14.7px, 1.26vw, 17.85px);
   font-weight: 300;
   letter-spacing: .01em;
   text-shadow: 0 1px 8px rgba(0,0,0,.28);
   transition: letter-spacing .35s var(--sf-ease), opacity .35s var(--sf-ease);
+  /* Это единственное действие страницы, а сама строка на телефоне высотой
+     всего 26px. Отступ поднимает зону нажатия до ~50px, отрицательное поле
+     возвращает строку в поток: расстояние между каналами не меняется. */
+  padding: 12px 10px;
+  margin: -12px -10px;
 }
-.sf-contactpage__phone { display: none; }
-.sf-root[data-lang="ru"] .sf-contactpage__phone { display: block; }
 @media (hover: hover) {
   .sf-contactpage__channels a:hover { letter-spacing: .07em; }
 }
+
+/* Российский номер — только в русской версии. */
+.sf-contactpage__phone { display: none; }
+.sf-root[data-lang="ru"] .sf-contactpage__phone { display: block; }
 .sf-main:has(.sf-contactpage) + .sf-footer {
   padding: 10px var(--sf-pad-x) 12px;
   gap: 6px;
@@ -827,8 +939,41 @@
 }
 .sf-footer.sf-footer--contact .sf-footer__social { display: none; }
 @media (max-width: 700px) {
-  .sf-contactpage { min-height: calc(100svh - var(--sf-header-h) - 50px); }
+  /* Кадр занимает всё, что осталось от экрана под шапкой.
+
+     Корень по умолчанию считается в 100vh, а секция считалась в 100svh.
+     В мобильном Safari это разные величины: vh меряет экран без панели
+     браузера, svh — с ней. Корень получался выше видимой области, футер
+     садился на его дно, и разница вылезала светлой полосой под кадром.
+     Приводим обе величины к svh и отдаём секции весь остаток по флексу. */
+  /* body.sf-body впереди намеренно: без него правило слабее общего
+     `body.sf-body .sf-root { min-height: 100vh }`, и на iOS vh перебивал бы
+     svh — ровно та полоса, которую чиним. */
+  body.sf-body .sf-root:has(.sf-contactpage) {
+    position: relative;
+    min-height: 100svh;
+    height: 100svh;
+  }
+  .sf-main:has(.sf-contactpage) { display: flex; min-height: 0; }
+  .sf-contactpage { flex: 1; min-height: 0; }
   .sf-contactpage__channels a { font-size: 15px; }
+
+  /* Подпись ложится поверх кадра — тем же светлым, что и каналы, иначе на
+     фотографии её не видно. Футер вынут из потока, чтобы не отодвигать
+     кадр вверх. */
+  .sf-footer.sf-footer--contact {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    min-height: 0;
+    padding-bottom: 16px;
+  }
+  .sf-footer.sf-footer--contact .sf-footer__legal {
+    color: #fff;
+    text-shadow: 0 1px 10px rgba(20, 18, 16, 0.45);
+  }
 }
 
 .sf-reach { text-align: center; }
@@ -907,119 +1052,6 @@
 }
 
 /* --------------------------------------------------------------------------
-   10c. ЗАГРУЗОЧНЫЙ ЭКРАН — раскрывающийся кадр
-   Бумага поделена на две полосы. Имя набрано в каждой, но каждая показывает
-   только свою половину строки: полосы стоят встык, и на шве буквы сходятся в
-   одно целое. Когда полосы расходятся — верхняя вверх, нижняя вниз — имя
-   разрезается пополам и уезжает вместе с ними, открывая фотографии.
-
-   Как это устроено: внутри каждой полосы (высотой 50%) лежит слой высотой
-   100vh с центрированным именем. У верхней полосы он прижат к её верху, у
-   нижней — к низу, поэтому центр обоих слоёв приходится ровно на середину
-   экрана. Полосы обрезают лишнее, и половинки совпадают на шве.
-
-   Движение — только transform, поэтому оно идёт на видеокарте, а картинка
-   под ним всё время резкая. Анимация чисто на CSS: без скрипта доиграет сама.
-   -------------------------------------------------------------------------- */
-
-.sf-loader {
-  position: fixed;
-  inset: 0;
-  z-index: 300;
-  pointer-events: none;
-  animation: sf-loader-done 2.25s linear forwards;
-}
-
-/* Уже видели за этот визит. Класс ставит крошечный скрипт в <head> — до
-   первой отрисовки, поэтому заставка не успевает мелькнуть. display:none,
-   а не прозрачность: так она не участвует ни в раскладке, ни в анимации. */
-.sf-seen .sf-loader { display: none; }
-
-.sf-loader__band {
-  position: absolute;
-  left: 0; right: 0;
-  height: 50%;
-  overflow: hidden;
-  background-color: var(--sf-bg);
-  will-change: transform;
-}
-.sf-loader__band--top {
-  top: 0;
-  animation: sf-band-top 2.25s cubic-bezier(0.76, 0, 0.24, 1) forwards;
-}
-.sf-loader__band--bottom {
-  bottom: 0;
-  animation: sf-band-bottom 2.25s cubic-bezier(0.76, 0, 0.24, 1) forwards;
-}
-
-.sf-loader__inner {
-  position: absolute;
-  left: 0; right: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.sf-loader__band--top .sf-loader__inner { top: 0; }
-.sf-loader__band--bottom .sf-loader__inner { bottom: 0; }
-
-.sf-loader__mark {
-  display: block;
-  width: 100%;
-  padding-inline: var(--sf-pad-x);
-  text-align: center;
-  font-family: var(--sf-serif);
-  font-weight: 300;
-  /* Подобрано замером: строка занимает всю ширину внутри полей страницы */
-  font-size: 10.1vw;
-  line-height: 1;
-  letter-spacing: 0.1em;
-  text-indent: 0.05em;     /* половина трекинга — иначе строка уезжает влево */
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--sf-ink);
-  animation: sf-loader-mark 2.25s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-}
-
-/* На телефоне — вплотную к краям, без полей. 11.7vw подобрано замером:
-   строка занимает 98–99% ширины, по 3–5px с каждой стороны. */
-@media (max-width: 700px) {
-  .sf-loader__mark {
-    padding-inline: 0;
-    font-size: 11.7vw;
-    letter-spacing: 0.055em;
-    text-indent: 0.0275em;
-  }
-}
-
-@keyframes sf-loader-mark {
-  0%   { opacity: 0; }
-  30%  { opacity: 1; }
-  100% { opacity: 1; }
-}
-
-@keyframes sf-band-top {
-  0%, 50% { transform: translateY(0); }
-  100%    { transform: translateY(-100.5%); }
-}
-@keyframes sf-band-bottom {
-  0%, 50% { transform: translateY(0); }
-  100%    { transform: translateY(100.5%); }
-}
-
-/* Убираем слой из-под курсора, когда кадр раскрылся */
-@keyframes sf-loader-done {
-  0%, 99%  { visibility: visible; }
-  100%     { visibility: hidden; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sf-loader,
-  .sf-loader .sf-loader__band,
-  .sf-loader .sf-loader__mark { animation-duration: 0.01ms; }
-}
-
-/* --------------------------------------------------------------------------
    11. LIGHTBOX
    -------------------------------------------------------------------------- */
 
@@ -1033,7 +1065,9 @@
   background: var(--sf-overlay);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.35s var(--sf-ease), visibility 0s 0.35s;
+  /* Открытие плавное, закрытие мгновенное: выход из кадра не должен
+     заставлять ждать — переход здесь ощущается как задержка. */
+  transition: opacity 0s, visibility 0s;
 }
 .sf-lightbox.is-open {
   opacity: 1;
@@ -1057,7 +1091,7 @@
   position: absolute;
   border: 0;
   background: none;
-  color: #f4f0ec;
+  color: var(--sf-ink);
   cursor: pointer;
   padding: 14px;
   line-height: 0;
@@ -1076,8 +1110,8 @@
   bottom: 18px;
   left: 50%;
   transform: translateX(-50%);
-  color: #f4f0ec;
-  opacity: 0.55;
+  color: var(--sf-ink-nav);
+  opacity: 0.75;
   font-size: var(--sf-fs-micro);
   letter-spacing: var(--sf-track-wide);
 }
@@ -1089,7 +1123,7 @@
   left: 0; bottom: 0;
   height: 1px;
   width: 100%;
-  background: rgba(244, 240, 236, 0.5);
+  background: rgba(38, 35, 32, 0.45);
   transform-origin: left;
   transform: scaleX(0);
   opacity: 0;
@@ -1107,6 +1141,36 @@
 .sf-lightbox.is-playing .sf-lightbox__btn { opacity: 0.75; }
 
 .sf-noscroll { overflow: hidden; }
+
+/* --------------------------------------------------------------------------
+   СМЕНА ЭКРАНОВ
+
+   Страница проявляется при загрузке и гаснет перед переходом — в фон сайта,
+   не в черноту. Гасит скрипт, ставя sf-leaving на body и отпуская переход
+   через четверть секунды.
+
+   Действия, которые ничего не открывают (язык, «ещё», города в прайсе),
+   намеренно без затухания: гасить страницу, которая остаётся на месте,
+   значит делать паузу на ровном месте.
+   -------------------------------------------------------------------------- */
+
+@keyframes sf-page-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.sf-root { animation: sf-page-in 0.32s var(--sf-ease) both; }
+
+.sf-body.sf-leaving .sf-root {
+  animation: none;
+  opacity: 0;
+  transition: opacity 0.26s var(--sf-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sf-root { animation: none; }
+  .sf-body.sf-leaving .sf-root { opacity: 1; transition: none; }
+}
 
 /* --------------------------------------------------------------------------
    12. ДВИЖЕНИЕ
@@ -1167,10 +1231,22 @@ html.sf-html { background: #faf8f6; }
      «поместилось» и «уехало за экран». */
   .sf-body--fit .sf-footer { padding-block: 18px 22px; }
 
-  /* width: 100% обязателен: секция стала флекс-контейнером, а флекс-элемент
-     по умолчанию сжимается по содержимому — колонка с фотографией начинала
-     худеть вслед за высотой окна. */
-  .sf-body--fit .sf-split { width: 100%; height: 100%; align-items: stretch; }
+  /* width обязателен: секция стала флекс-контейнером, а флекс-элемент по
+     умолчанию сжимается по содержимому — колонка с фотографией начинала
+     худеть вслед за высотой окна.
+
+     Отрицательное поле слева гасит отступ секции, и разворот начинается от
+     самого края окна. 44.5% на левую колонку — это ровно прежний правый край
+     фотографии: она стала шире, но не сдвинулась, и текст остался на месте. */
+  .sf-body--fit .sf-split {
+    width: calc(100% + var(--sf-pad-x));
+    max-width: none;
+    margin-left: calc(-1 * var(--sf-pad-x));
+    margin-right: 0;
+    grid-template-columns: 44.5% 1fr;
+    height: 100%;
+    align-items: stretch;
+  }
   .sf-body--fit .sf-split__body { align-self: center; }
   .sf-body--fit .sf-split__media { min-height: 0; }
   .sf-body--fit .sf-split__media img {

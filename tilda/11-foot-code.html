@@ -24,23 +24,6 @@
   var root = roots[0];
 
   /* ------------------------------------------------------------------
-     Loading veil — show it once per visit, not on every page click
-     ------------------------------------------------------------------ */
-
-  (function initLoader() {
-    var veil = $(".sf-loader");
-    if (!veil) return;      // повторный заход: её не отрисовали вовсе
-
-    // Помечаем визит, чтобы следующая страница обошлась без заставки.
-    try { sessionStorage.setItem("sf-seen", "1"); } catch (e) { /* private mode */ }
-
-    // Снимаем слой, когда анимация доиграла.
-    window.setTimeout(function () {
-      if (veil.parentNode) veil.parentNode.removeChild(veil);
-    }, 2500);
-  })();
-
-  /* ------------------------------------------------------------------
      Language — RU / EN, remembered between visits
      ------------------------------------------------------------------ */
 
@@ -203,6 +186,40 @@
   })();
 
   /* ------------------------------------------------------------------
+     Главная на телефоне: название раздела проявляется, когда карточка
+     выходит на середину экрана
+     ------------------------------------------------------------------ */
+
+  (function initCardTouch() {
+    var cards = $$(".sf-card");
+    if (!cards.length) return;
+
+    var clearAll = function () {
+      cards.forEach(function (c) { c.classList.remove("is-touched"); });
+    };
+
+    cards.forEach(function (card) {
+      var startY = null;
+
+      card.addEventListener("touchstart", function (e) {
+        startY = e.touches[0].clientY;
+        clearAll();
+        card.classList.add("is-touched");
+      }, { passive: true });
+
+      // Палец поехал — значит это прокрутка, а не выбор раздела.
+      card.addEventListener("touchmove", function (e) {
+        if (startY !== null && Math.abs(e.touches[0].clientY - startY) > 10) clearAll();
+      }, { passive: true });
+
+      // На отпускании подсветку НЕ снимаем: она держится до касания другой
+      // карточки. Иначе на переходе получалось полусостояние — вуали уже
+      // нет, а название ещё не догасло.
+      card.addEventListener("touchcancel", clearAll, { passive: true });
+    });
+  })();
+
+  /* ------------------------------------------------------------------
      Lightbox
      ------------------------------------------------------------------ */
 
@@ -356,6 +373,38 @@
     // back button does not land on a frozen page.
     $$(".sf-booking__row", box).forEach(function (a) {
       a.addEventListener("click", close);
+    });
+  })();
+
+  /* ------------------------------------------------------------------
+     Смена экранов: гасим страницу перед переходом
+     ------------------------------------------------------------------ */
+
+  (function initExitFade() {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    var FADE_MS = 260;
+
+    $$("a[href]").forEach(function (a) {
+      var url = a.getAttribute("href");
+      if (!url) return;
+      // Якоря, внешние ссылки и мессенджеры уводят со страницы сами —
+      // гасить её под ними незачем.
+      if (url.charAt(0) === "#") return;
+      if (a.target === "_blank") return;
+      if (/^[a-z][a-z0-9+.-]*:/i.test(url)) return;
+
+      a.addEventListener("click", function (e) {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        document.body.classList.add("sf-leaving");
+        window.setTimeout(function () { window.location.href = url; }, FADE_MS);
+      });
+    });
+
+    // Возврат «назад» может отдать страницу из кеша уже погашенной.
+    window.addEventListener("pageshow", function () {
+      document.body.classList.remove("sf-leaving");
     });
   })();
 

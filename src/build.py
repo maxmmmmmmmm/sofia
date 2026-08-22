@@ -183,15 +183,9 @@ def header(current):
 
 <div class="sf-drawer">
 %s
-  <div class="sf-drawer__foot">
-    <a href="%s" target="_blank" rel="noopener">Telegram</a>
-    <a href="%s" target="_blank" rel="noopener">Instagram</a>
-    <a href="%s" target="_blank" rel="noopener">WhatsApp</a>
-  </div>
 </div>""" % (
         a(UI["menu"]), nav_links, a(UI["menu"]),
         PAGES["home"]["file"], SITE["wordmark"], drawer_links,
-        SITE["telegram"]["href"], SITE["instagram"]["href"], SITE["whatsapp"]["href"],
     )
 
 
@@ -336,13 +330,14 @@ def about_block():
 
 
 def gallery_block(key):
+    """Только мозаика. Заголовок раздела убран: он дублировал подсвеченный
+    пункт меню, а фотографии из-за него начинались ниже, чем на главной.
+    Название остаётся в <title> и в скрытом h1 — для поиска и читалок."""
     g = C.GALLERIES[key]
-    return """<section class="sf-pagehead">
-  %s
-</section>
+    return """%s
 
 %s""" % (
-        tb(g["title"], "h1", "sf-pagehead__title"),
+        tb(g["title"], "h1", "sf-vh"),
         mosaic(P.GALLERIES[key], "%s — Sofia Filatova" % a(g["title"]), eager=6),
     )
 
@@ -459,8 +454,12 @@ def contact_details():
 
 
 def contact_block():
-    """Контакты поверх одного кадра: каналы остаются короткими и читаемыми,
-    а русский номер показывается только в русской версии страницы."""
+    """Контакты поверх одного кадра.
+
+    «Телефон» стоит последним и показывается только в русской версии: ссылка
+    ведёт на звонок, англоязычному посетителю российский номер бесполезен.
+    Прячет её CSS по data-lang, поэтому переключение языка работает без
+    перезагрузки страницы."""
     return """<section class="sf-contactpage">
   %s
   <img class="sf-contactpage__photo" src="assets/img/home/launch-01.jpg" alt="" width="1200" height="1800" loading="eager" decoding="async">
@@ -492,14 +491,6 @@ FONTS = (
 
 def page(key, body, has_gallery, body_class=""):
     m = C.META[key]
-    loader = """<div class="sf-loader" aria-hidden="true">
-  <div class="sf-loader__band sf-loader__band--top">
-    <div class="sf-loader__inner"><span class="sf-loader__mark">%s</span></div>
-  </div>
-  <div class="sf-loader__band sf-loader__band--bottom">
-    <div class="sf-loader__inner"><span class="sf-loader__mark">%s</span></div>
-  </div>
-</div>""" % (SITE["wordmark"], SITE["wordmark"])
     return """<!doctype html>
 <html lang="en" class="sf-html">
 <head>
@@ -512,25 +503,11 @@ def page(key, body, has_gallery, body_class=""):
   <meta property="og:type" content="website">
   <meta property="og:image" content="%s">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <script>
-  /* Решение о заставке принимается ДО первой отрисовки. Раньше её прятал
-     основной скрипт — он отрабатывает после разбора страницы, и оставалось
-     окно, в котором полосы успевали разъехаться: имя мелькало двумя
-     половинками. Здесь класс ставится синхронно, до боди, и заставка на
-     повторных заходах просто не рисуется. */
-  try {
-    if (sessionStorage.getItem("sf-seen")) {
-      document.documentElement.className += " sf-seen";
-    }
-  } catch (e) {}
-  </script>
   %s
   <link rel="stylesheet" href="%s">
 </head>
 <body class="sf-body%s">
 <div class="sf-root" data-lang="en">
-
-%s
 
 %s
 
@@ -553,7 +530,6 @@ def page(key, body, has_gallery, body_class=""):
         FONTS,
         asset_version("assets/css/style.css"),
         (" " + body_class) if body_class else "",
-        loader,
         header(key), body, footer(" sf-footer--contact" if key == "contact" else ""),
         "\n" + lightbox() if has_gallery else "",
         asset_version("assets/js/main.js"),
@@ -581,7 +557,7 @@ def main():
 
     for key in ("portraits", "street", "love"):
         write(PAGES[key]["file"], page(
-            key, "\n\n".join([gallery_block(key), lead_block()]), has_gallery=True,
+            key, "\n\n".join([gallery_block(key), cta_band(key), lead_block()]), has_gallery=True,
         ))
 
     write(PAGES["about"]["file"], page("about", about_block(), has_gallery=False,
