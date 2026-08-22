@@ -102,7 +102,7 @@
    attributes so the browser can reserve space before the file arrives; without
    this, a constrained width leaves the attribute height in force and the photo
    is stretched vertically. Components that want a fixed box (.sf-mosaic__item,
-   .sf-pack__media, .sf-contact__media) set height:100% via a class, which has
+   .sf-pack__media, .sf-card__frame) set height:100% via a class, which has
    more specificity than this :where() rule and still wins. */
 .sf-root :where(img) { display: block; max-width: 100%; height: auto; }
 
@@ -131,8 +131,6 @@
 
 .sf-wrap        { padding-inline: var(--sf-pad-x); }
 .sf-sect { padding-block: var(--sf-sect-y); }
-/* Small uppercase label — used above headings and on nav */
-.sf-h2      { font-size: var(--sf-fs-h2); }
 /* Заголовок «Обо мне»: имя, под ним род занятий строкой мельче и легче.
    Одной строкой «София Филатова — фотограф и кинорежиссёр» получалось бы
    длинно и ломалось бы посреди слова; разнесённое по двум строкам читается
@@ -409,17 +407,6 @@
 
    Row height is (container - gaps) / sum-of-ratios, so two rows whose ratios
    add up to the same number stay exactly level at any viewport width. */
-.sf-mosaic--rows .sf-mosaic__item { flex-basis: 0; }
-.sf-mosaic__break { flex-basis: 100%; height: 0; margin: 0; }
-
-@media (max-width: 700px) {
-  /* Four across is too tight on a phone — wrap naturally instead. The tighter
-     row height packs the hero into two-up rows so it stays a hero rather than
-     scrolling for a page and a half before the headline. */
-  .sf-mosaic--rows { --sf-row-h: 120px; }
-  .sf-mosaic--rows .sf-mosaic__break { display: none; }
-  .sf-mosaic--rows .sf-mosaic__item { flex-basis: calc(var(--ar) * var(--sf-row-h)); }
-}
 
 .sf-mosaic__item img {
   width: 100%;
@@ -615,7 +602,6 @@
 .sf-split__body { max-width: 58ch; }
 @media (max-width: 820px) {
   .sf-split { grid-template-columns: 1fr; gap: 32px; }
-  .sf-split--reverse .sf-split__media { order: 0; }
   .sf-split__body { max-width: none; }
 }
 

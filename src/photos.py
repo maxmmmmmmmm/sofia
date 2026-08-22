@@ -218,20 +218,8 @@ SELF_PORTRAIT = BASE + "sofia.jpg"
 
 GALLERIES = {"portraits": PORTRAITS, "street": STREET, "love": LOVE}
 
-# Home page hero — three composed rows, 4 / 4 / 3, exactly like the reference.
-#
-# Row height is (container width - gaps) / sum of that row's aspect ratios.
-# Rows 1 and 2 both total 3.538, so they sit level at every width; row 3 totals
-# 2.833, which makes it the taller closing row the reference uses. Reorder
-# freely, but keep those sums if you want the same rhythm.
 # Один большой кадр-заставка на главной, во всю ширину.
 HERO_SHOT = BASE + PORTRAITS[28][0]
-
-HERO_ROWS = [
-    [PORTRAITS[28], PORTRAITS[9], PORTRAITS[1], PORTRAITS[12]],  # 1.461+0.667+0.749+0.661
-    [LOVE[2],       PORTRAITS[0], STREET[1],    LOVE[6]],        # 1.502+0.812+0.663+0.562
-    [STREET[0],     STREET[5],    LOVE[18]],                     # 1.333+0.749+0.751
-]
 
 # Covers for the three category cards.
 COVERS = {

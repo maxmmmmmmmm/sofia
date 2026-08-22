@@ -77,25 +77,11 @@ def sm(path):
 
 # ------------------------------------------------------------ components
 
-def mosaic(items, alt_text, flush=False, eager=0, rows=None):
+def mosaic(items, alt_text, eager=0):
     """
     Justified gallery. Each figure carries --ar (width/height); the CSS turns
     that into equal-height rows with no JavaScript layout pass.
-
-    Pass `rows` as a list of lists to compose the wrap points by hand instead
-    of letting the flow decide — that is how the home hero gets its 4/4/3.
     """
-    composed = rows is not None
-    if composed:
-        flat, breaks = [], set()
-        for row in rows:
-            if flat:
-                breaks.add(len(flat))
-            flat.extend(row)
-        items = flat
-    else:
-        breaks = set()
-
     figures = []
     for i, entry in enumerate(items):
         path, ar = entry[0], entry[1]
@@ -105,8 +91,6 @@ def mosaic(items, alt_text, flush=False, eager=0, rows=None):
         h = round(w / ar)
         loading = "eager" if i < eager else "lazy"
         priority = ' fetchpriority="high"' if i < eager else ""
-        if i in breaks:
-            figures.append('  <i class="sf-mosaic__break" aria-hidden="true"></i>')
         figures.append(
             '  <figure class="sf-mosaic__item" style="--ar:%s">\n'
             '    <button class="sf-mosaic__btn" type="button" data-full="%s" data-alt="%s">\n'
@@ -116,24 +100,13 @@ def mosaic(items, alt_text, flush=False, eager=0, rows=None):
         )
 
     # Invisible tail items so the final row keeps roughly the target height
-    # instead of blowing two photos up across the whole viewport. Skipped when
-    # rows are composed by hand — there is no partial row to pad, and on a wide
-    # screen the padding could join the last real row and squash it.
-    if composed:
-        fillers = ""
-    else:
-        fillers = "\n" + "\n".join(
-            '  <i class="sf-mosaic__fill" style="--ar:%s" aria-hidden="true"></i>' % ar
-            for ar in (0.75, 0.67, 0.8, 1.33, 0.7)
-        )
+    # instead of blowing two photos up across the whole viewport.
+    fillers = "\n" + "\n".join(
+        '  <i class="sf-mosaic__fill" style="--ar:%s" aria-hidden="true"></i>' % ar
+        for ar in (0.75, 0.67, 0.8, 1.33, 0.7)
+    )
 
-    classes = "sf-mosaic"
-    if flush:
-        classes += " sf-mosaic--flush"
-    if composed:
-        classes += " sf-mosaic--rows"
-
-    return '<div class="%s">\n%s%s\n</div>' % (classes, "\n".join(figures), fillers)
+    return '<div class="sf-mosaic">\n%s%s\n</div>' % ("\n".join(figures), fillers)
 
 
 def lightbox():
@@ -633,7 +606,7 @@ def main():
         "Блок T123 внизу страниц /portraits, /street, /love", cta_band("portraits")))
 
     write("tilda/06b-lead-in.html", block(
-        "06b", "Строка «Расскажите, что снимаем»",
+        "06b", "Строка «съёмка по записи»",
         "Блок T123 в самом низу /portraits, /street, /love — под кнопкой «ещё». "
         "Сама строка и есть кнопка: по нажатию раскрываются три мессенджера.",
         lead_block()))
@@ -650,8 +623,8 @@ def main():
         "Блок T123 на странице /price, НАД пакетами", process_block()))
 
     write("tilda/09-contact-details.html", block(
-        "09", "Контакты — колонка с телефонами и мессенджерами",
-        "Блок T123 на /contact, рядом с родной формой Tilda", contact_details()))
+        "09", "Контакты — кадр во весь экран и три мессенджера",
+        "Блок T123 на /contact, единственный на странице", contact_details()))
 
     write("tilda/10-footer.html", block(
         "10", "Футер", "Блок T123 внизу каждой страницы", footer()))
