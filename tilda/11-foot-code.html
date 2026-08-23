@@ -37,6 +37,24 @@
       btn.setAttribute("aria-pressed", String(btn.dataset.lang === lang));
     });
     try { localStorage.setItem(LANG_KEY, lang); } catch (e) { /* private mode */ }
+
+    // Язык выбирает город в прайсе: русскому посетителю показываем Москву,
+    // англоязычному — Лиссабон. Ручной выбор вкладки живёт до следующей
+    // смены языка.
+    showCity(lang === "ru" ? "moscow" : "lisbon");
+  }
+
+  function showCity(city) {
+    var tabs = $$(".sf-tab");
+    if (!tabs.length) return;
+    tabs.forEach(function (t) {
+      var on = t.dataset.city === city;
+      t.classList.toggle("is-active", on);
+      t.setAttribute("aria-selected", String(on));
+    });
+    $$(".sf-pricelist").forEach(function (list) {
+      list.hidden = list.dataset.city !== city;
+    });
   }
 
   (function initLang() {
@@ -105,17 +123,7 @@
     if (!tabs.length) return;
 
     tabs.forEach(function (tab) {
-      tab.addEventListener("click", function () {
-        var target = tab.dataset.city;
-        tabs.forEach(function (t) {
-          var on = t.dataset.city === target;
-          t.classList.toggle("is-active", on);
-          t.setAttribute("aria-selected", String(on));
-        });
-        $$(".sf-pricelist").forEach(function (list) {
-          list.hidden = list.dataset.city !== target;
-        });
-      });
+      tab.addEventListener("click", function () { showCity(tab.dataset.city); });
     });
   })();
 

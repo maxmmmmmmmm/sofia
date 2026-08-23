@@ -606,6 +606,53 @@
 }
 
 /* --------------------------------------------------------------------------
+   НАЗВАНИЕ РАЗДЕЛА ПОВЕРХ ГАЛЕРЕИ
+
+   Полоса, в которой лежит название, по высоте повторяет первый ряд сетки:
+   и ряд, и полоса считаются от ширины окна (26vw против ~25vw у ряда),
+   поэтому подпись остаётся примерно посередине первого ряда и на широком
+   мониторе, и на телефоне — без единой строчки скрипта. Нижняя граница 150px
+   подобрана по телефону: там ряд из трёх кадров выходит около 157px.
+   -------------------------------------------------------------------------- */
+
+.sf-gallery { position: relative; }
+
+.sf-gallery__title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: clamp(150px, 26vw, 380px);
+  display: grid;
+  place-items: center;
+  margin: 0;
+  font-family: var(--sf-display);
+  font-weight: 300;
+  font-size: clamp(15px, 1.6vw, 20px);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #fff;
+  /* Кадры бывают и светлые: тень держит подпись читаемой на любом. */
+  text-shadow: 0 1px 14px rgba(20, 18, 16, 0.55);
+  pointer-events: none;
+}
+
+/* Мягкое притенение сверху — под подписью, поверх кадров. Без него на
+   белых снимках даже с тенью буквы теряются. */
+.sf-gallery::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  height: clamp(150px, 26vw, 380px);
+  background: linear-gradient(180deg, rgba(20, 18, 16, 0.34), rgba(20, 18, 16, 0));
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
    7. PAGE HEAD (gallery / price / contact intro)
    -------------------------------------------------------------------------- */
 
@@ -651,7 +698,14 @@
 .sf-tab:hover { color: var(--sf-ink); }
 .sf-tab.is-active { color: var(--sf-ink); font-weight: 500; }
 
+/* Порядок пакетов зависит от языка: в английской версии первой идёт улица,
+   затем пары и только потом студия — там спрос начинается с улицы. В русской
+   порядок исходный. Меняется раскладкой, разметка одна на оба языка. */
+.sf-pricelist { display: flex; flex-direction: column; }
 .sf-pricelist[hidden] { display: none; }
+.sf-root[data-lang="en"] .sf-pack:nth-child(1) { order: 3; }
+.sf-root[data-lang="en"] .sf-pack:nth-child(2) { order: 1; }
+.sf-root[data-lang="en"] .sf-pack:nth-child(3) { order: 2; }
 
 .sf-pack {
   display: grid;
@@ -767,9 +821,14 @@
 }
 @media (min-width: 860px) {
   /* В одну колонку на 1180px строка вышла бы вдвое длиннее читаемой,
-     поэтому четыре шага садятся попарно. */
+     поэтому четыре шага садятся попарно.
+
+     Заполняются по столбцам, а не по строкам: слева сверху вниз 1 и 2,
+     справа 3 и 4. Читается как две колонки текста, а не как таблица. */
   .sf-steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, auto);
+    grid-auto-flow: column;
     column-gap: clamp(40px, 5vw, 76px);
     row-gap: clamp(30px, 3.4vw, 46px);
   }
