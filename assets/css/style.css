@@ -598,53 +598,6 @@
 }
 
 /* --------------------------------------------------------------------------
-   НАЗВАНИЕ РАЗДЕЛА ПОВЕРХ ГАЛЕРЕИ
-
-   Полоса, в которой лежит название, по высоте повторяет первый ряд сетки:
-   и ряд, и полоса считаются от ширины окна (26vw против ~25vw у ряда),
-   поэтому подпись остаётся примерно посередине первого ряда и на широком
-   мониторе, и на телефоне — без единой строчки скрипта. Нижняя граница 150px
-   подобрана по телефону: там ряд из трёх кадров выходит около 157px.
-   -------------------------------------------------------------------------- */
-
-.sf-gallery { position: relative; }
-
-.sf-gallery__title {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  height: clamp(150px, 26vw, 380px);
-  display: grid;
-  place-items: center;
-  margin: 0;
-  font-family: var(--sf-display);
-  font-weight: 300;
-  font-size: clamp(15px, 1.6vw, 20px);
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: #fff;
-  /* Кадры бывают и светлые: тень держит подпись читаемой на любом. */
-  text-shadow: 0 1px 14px rgba(20, 18, 16, 0.55);
-  pointer-events: none;
-}
-
-/* Мягкое притенение сверху — под подписью, поверх кадров. Без него на
-   белых снимках даже с тенью буквы теряются. */
-.sf-gallery::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
-  height: clamp(150px, 26vw, 380px);
-  background: linear-gradient(180deg, rgba(20, 18, 16, 0.34), rgba(20, 18, 16, 0));
-  pointer-events: none;
-}
-
-/* --------------------------------------------------------------------------
    7. PAGE HEAD (gallery / price / contact intro)
    -------------------------------------------------------------------------- */
 
@@ -654,9 +607,7 @@
   padding: clamp(24px, 3vw, 34px) var(--sf-pad-x) clamp(18px, 2.4vw, 30px);
   text-align: center;
 }
-/* На галереях заголовка нет: раздел уже назван в меню и подсвечен там.
-   Мозаика начинается вплотную к шапке — тем же зазором, что кадр на главной. */
-.sf-main > .sf-mosaic:first-child { margin-top: 0; }
+
 .sf-pagehead__title {
   font-family: var(--sf-display);
   font-weight: 300;

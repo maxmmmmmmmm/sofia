@@ -303,18 +303,14 @@ def about_block():
 
 
 def gallery_block(key):
-    """Мозаика с названием раздела поверх неё.
-
-    Отдельной строкой над сеткой заголовок отодвигал фотографии вниз и
-    дублировал подсвеченный пункт меню. Лёжа на кадрах он не занимает ни
-    пикселя высоты, а раздел всё равно назван — и для читалок это по-прежнему
-    настоящий h1, первый в документе."""
+    """Название раздела строкой над сеткой, по центру страницы."""
     g = C.GALLERIES[key]
-    return """<div class="sf-gallery">
+    return """<section class="sf-pagehead">
   %s
-%s
-</div>""" % (
-        tb(g["title"], "h1", "sf-gallery__title"),
+</section>
+
+%s""" % (
+        tb(g["title"], "h1", "sf-pagehead__title"),
         mosaic(P.GALLERIES[key], "%s — Sofia Filatova" % a(g["title"]), eager=6),
     )
 
