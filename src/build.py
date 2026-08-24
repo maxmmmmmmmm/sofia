@@ -219,40 +219,16 @@ def lead_block():
     </div>
   </div>
 </section>""" % (t(C.LEAD["title"]), links)
-
-
-def cta_band(current):
-    """«Показать ещё» — подгружает следующие ряды галереи. Живёт только на
-    страницах с галереей; скрипт сам прячет кнопку, когда рядов не осталось."""
-    if current not in ("portraits", "street", "love"):
-        return ""
-    return """<section class="sf-sect sf-cta">
-  <div class="sf-wrap">
-    <button class="sf-btn" type="button" data-more hidden>%s</button>
-  </div>
-</section>""" % t(UI["see_more"])
-
-
 # ------------------------------------------------------------ home parts
-
-# Насколько срезать заставку по высоте. 0.80 = кадр ниже на 20%; поставьте
-# 0.85, чтобы срезать 15%, или 1.0, чтобы не резать вовсе.
-OPENER_KEEP = 0.80
-
-
-def home_hero():
-    """Один большой кадр во всю ширину — вместо мозаики. Главная открывается
-    одной фотографией, а разделы идут карточками сразу под ней.
-
-    Пропорция считается здесь, из пропорции самого снимка: тогда при замене
-    фотографии срез остаётся ровно тем же процентом, а не съезжает вслед за
-    новыми размерами файла. По ширине кадр не трогается никогда."""
-    path = P.HERO_SHOT.replace(P.BASE, "")
-    ar = next(a for n, a, _ in P.PORTRAITS + P.STREET + P.LOVE if n == path)
-    return """<section class="sf-opener" style="--sf-opener-ar:%.3f">
-  %s
-  <img src="%s" alt="Sofia Filatova" width="1800" height="1230" loading="eager" decoding="async" fetchpriority="high">
-</section>""" % (ar / OPENER_KEEP, tb(C.HOME["hero_title"], "h1", "sf-vh"), P.HERO_SHOT)
+def home_strapline():
+    """Три строки капслоком над сеткой: чем занимается, как зовут, где снимает.
+    На телефоне это единственный текст на первом экране, поэтому он и держит
+    страницу; на компьютере всё то же сообщение уже несёт шапка."""
+    return """<section class="sf-strapline">
+  <p class="sf-strapline__line">CINEMATIC &amp; VINTAGE PHOTOGRAPHER</p>
+  <p class="sf-strapline__name">SOFIA FILATOVA</p>
+  <p class="sf-strapline__line">MOSCOW, RU | LISBON, PT</p>
+</section>"""
 
 
 def home_grid():
@@ -271,23 +247,6 @@ def home_tagline():
     на телефоне под ней сразу идут три раздела, и звать никуда не нужно."""
     return '<section class="sf-tagline">\n  %s\n</section>' % tb(
         C.HOME["tagline"], "p", "sf-tagline__text")
-
-
-def home_cards():
-    """Три входа в галереи. Кадр, под ним название — как в референсе."""
-    def card(key):
-        return """    <a class="sf-card" href="%s">
-      <div class="sf-card__frame">
-        <img src="%s" alt="%s" width="900" height="1200" loading="lazy" decoding="async">
-      </div>
-      <span class="sf-card__name">%s</span>
-    </a>""" % (PAGES[key]["file"], sm(P.COVERS[key]),
-               a(C.GALLERIES[key]["title"]), t(PAGES[key]["nav"]))
-
-    return '<section class="sf-cards">\n%s\n</section>' % "\n".join(
-        card(k) for k in ("portraits", "street", "love"))
-
-
 # --------------------------------------------------------- other blocks
 
 def about_block():
@@ -475,8 +434,7 @@ FONTS = (
     '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
     '  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?'
     'family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400'
-    '&amp;family=Manrope:wght@300;400;500'
-    '&amp;family=Jost:wght@300;400&amp;display=swap">'
+    '&amp;family=Jost:wght@300;400;500&amp;display=swap">'
 )
 
 
@@ -542,13 +500,13 @@ def main():
 
     write(PAGES["home"]["file"], page(
         "home",
-        "\n\n".join([home_hero(), home_grid(), home_cards(), home_tagline()]),
+        "\n\n".join([home_strapline(), home_grid(), home_tagline()]),
         has_gallery=True,
     ))
 
     for key in ("portraits", "street", "love"):
         write(PAGES[key]["file"], page(
-            key, "\n\n".join([gallery_block(key), cta_band(key), lead_block()]), has_gallery=True,
+            key, "\n\n".join([gallery_block(key), lead_block()]), has_gallery=True,
         ))
 
     write(PAGES["about"]["file"], page("about", about_block(), has_gallery=False,
@@ -614,14 +572,6 @@ def main():
         '<section class="sf-hero">\n  %s\n  %s\n</section>' % (
             tb(C.HOME["hero_title"], "h1", "sf-vh"),
             tb(C.HOME["hero_sub"], "p", "sf-hero__sub"))))
-
-    write("tilda/05-home-cards.html", block(
-        "05", "Главная — три карточки разделов",
-        "Блок T123 на главной, под большим кадром", home_cards()))
-
-    write("tilda/06-cta.html", block(
-        "06a", "Кнопка «ещё»",
-        "Блок T123 внизу страниц /portraits, /street, /love", cta_band("portraits")))
 
     write("tilda/06b-lead-in.html", block(
         "06b", "Строка «съёмка по записи»",

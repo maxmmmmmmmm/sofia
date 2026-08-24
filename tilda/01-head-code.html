@@ -4,7 +4,7 @@
      ========================================================== -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&amp;family=Manrope:wght@300;400;500&amp;family=Jost:wght@300;400&amp;display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&amp;family=Jost:wght@300;400;500&amp;display=swap">
 <style>
 /* ==========================================================================
    SOFIA FILATOVA — photography site
@@ -42,12 +42,15 @@
 
   /* Type */
   --sf-serif: "Cormorant Garamond", Cormorant, Georgia, "Times New Roman", serif;
-  --sf-sans:  "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-              "Helvetica Neue", Arial, sans-serif;
+  /* На сайте работают два семейства, не три: антиква Cormorant Garamond
+     на имя, меню и заголовки — и Jost на всё остальное. Manrope был
+     третьим и давал визуальный шум при том, что почти дублировал Jost. */
+  --sf-sans:  "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial,
+              sans-serif;
   /* Заголовки и рубрики. Геометрический гротеск: уживается с засечками
-     логотипа и держит капс с разрядкой лучше, чем текстовой Manrope.
+     логотипа и держит капс с разрядкой лучше, чем текстовая антиква.
      Кириллица проверена — подмены нет. */
-  --sf-display: "Jost", "Manrope", -apple-system, Arial, sans-serif;
+  --sf-display: "Jost", -apple-system, Arial, sans-serif;
 
   --sf-fs-display: clamp(30px, 5.2vw, 58px);
   --sf-fs-h2:      clamp(24px, 3.6vw, 40px);
@@ -66,6 +69,8 @@
   --sf-gap:    4px;          /* gallery gutter */
 
   /* Mosaic target row height — the only knob for gallery density */
+  /* Высота ряда, от которой пляшет вся выключенная сетка. 23vw держит
+     ряд из четырёх-пяти кадров на широком экране. */
   --sf-row-h: clamp(150px, 23vw, 330px);
 
   /* Шапка прижата к верху: 93px давали заметную полосу пустоты над кадром,
@@ -96,13 +101,13 @@
 
 /* These element defaults are wrapped in :where() so they carry NO specificity
    of their own. Written plainly, `.sf-root h2` (class + type) would outrank a
-   component class like `.sf-cta__title`, and every margin a component tried to
+   component class like `.sf-pack__name`, and every margin a component tried to
    set on a heading or paragraph would be silently ignored. */
 /* height:auto is not optional here. Every <img> carries width/height
    attributes so the browser can reserve space before the file arrives; without
    this, a constrained width leaves the attribute height in force and the photo
    is stretched vertically. Components that want a fixed box (.sf-mosaic__item,
-   .sf-pack__media, .sf-card__frame) set height:100% via a class, which has
+   .sf-pack__media, .sf-split__media) set height:100% via a class, which has
    more specificity than this :where() rule and still wins. */
 .sf-root :where(img) { display: block; max-width: 100%; height: auto; }
 
@@ -144,24 +149,29 @@
 }
 .sf-abouttitle__role {
   display: block;
-  margin-top: 0.5em;
+  margin-top: 0.55em;
   font-family: var(--sf-sans);
-  font-weight: 300;
+  /* Было 13px очень светлым #a39a91 с широкой разрядкой — строка не
+     читалась. Кегль тот же, но вес и тон плотнее, разрядка уже. */
+  font-weight: 400;
   font-size: 13px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--sf-ink-faint);
+  color: var(--sf-ink-nav);
 }
 
 /* Основной текст. Не сплошные чернила: #262320 в длинном абзаце читается
    тяжело и выглядит грубо. Тон на ступень мягче, строка длиннее, интерлиньяж
    шире — текст перестаёт быть плитой. */
 .sf-lead {
-  font-size: 18px;
+  /* Было 18px — почти вровень с именем над текстом, отчего абзацы читались
+     как второй заголовок. Ниже кегля имени примерно вдвое. */
+  font-size: 15px;
   font-weight: 300;
-  line-height: 1.95;
+  line-height: 1.8;
   color: var(--sf-ink-text);
 }
+@media (max-width: 900px) { .sf-lead { font-size: 14px; line-height: 1.75; } }
 .sf-lead p + p { margin-top: 1.5em; }
 
 /* Первая фраза — крупнее и антиквой: она задаёт тон и разбивает монолит */
@@ -171,8 +181,11 @@
 .sf-lead > [data-l] > p:first-child,
 .sf-lead > p:first-child {
   font-family: var(--sf-sans);
+  /* Кегль тот же, что у остальных абзацев: 17px против 14 делали из неё
+     третий заголовок подряд после имени и рода занятий. Выделяет её
+     теперь только отбивка снизу. */
   font-weight: 300;
-  font-size: 17px;
+  font-size: inherit;
   letter-spacing: 0.02em;
   line-height: 1.5;
   color: var(--sf-ink);
@@ -356,9 +369,22 @@
      to give the wide nav room it does not need once the nav is a drawer. */
   .sf-root { --sf-header-h: 66px; }
   .sf-header__nav { display: none; }
-  .sf-header { justify-content: space-between; }
+
+  /* Имя стоит ровно посередине шапки и ни к чему не прижато: раньше оно
+     шло сразу за EN/RU и читалось как продолжение переключателя.
+
+     Абсолютное позиционирование, а не колонка грида: бургер и языки разной
+     ширины, и при обычной раскладке имя вставало по центру оставшегося
+     места, а не экрана. */
+  .sf-header { position: sticky; justify-content: space-between; }
   .sf-header__side { margin-left: 0; order: -1; }
-  .sf-logo { font-size: 15px; }
+  .sf-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 17px;
+    white-space: nowrap;
+  }
 }
 @media (min-width: 981px) {
   .sf-drawer { display: none; }
@@ -384,6 +410,16 @@
   padding-inline: 0;
 }
 .sf-mosaic__item[hidden] { display: none; }
+
+@media (max-width: 700px) {
+  /* На телефоне 150px давали ряд из двух кадров — крупно и коротко, совсем
+     не та мелкая сетка, что в референсе.
+
+     88px подобраны перебором: ряды выходят 4/3/3, ни один кадр не уже 63px,
+     и все десять помещаются в один экран. При 96px последний кадр оставался
+     в ряду один и растягивался на 269px. */
+  .sf-root { --sf-row-h: 88px; }
+}
 
 .sf-mosaic__item {
   position: relative;
@@ -466,36 +502,6 @@
 }
 
 /* --------------------------------------------------------------------------
-   6. ГЛАВНАЯ — кадр-заставка и карточки разделов
-   -------------------------------------------------------------------------- */
-
-/* Заставка — кадр целиком, без единого срезанного пикселя: высота считается
-   из пропорции снимка, а не задаётся. Прошлый вариант выбрасывал треть кадра
-   и оттого читался как баннер.
-   Ширина вынесена в переменную: 100% — во всю колонку между полями. */
-/* Кадр от края до края окна и во всю высоту под шапкой — как в референсе.
-   Полей нет вовсе, поэтому фотография начинается там же, где кончается меню. */
-.sf-opener { padding: 0; }
-.sf-opener img {
-  display: block;
-  width: 100%;
-  /* На узком экране высота считается из пропорции снимка (см. OPENER_KEEP
-     в build.py): растянуть горизонтальный кадр на весь телефонный экран
-     значит срезать его по бокам почти вдвое. */
-  aspect-ratio: var(--sf-opener-ar);
-  height: auto;
-  object-fit: cover;
-  object-position: center;
-}
-@media (min-width: 900px) {
-  /* svh, а не vh: на ноутбуке разницы нет, но в мобильном Safari vh считает
-     высоту без адресной строки, и кадр вылезал бы за экран. */
-  .sf-opener img {
-    aspect-ratio: auto;
-    height: calc(100svh - var(--sf-header-h));
-  }
-}
-/* --------------------------------------------------------------------------
    ГЛАВНАЯ НА КОМПЬЮТЕРЕ — СЕТКА ИЗБРАННОГО
 
    Кадр-заставка и три карточки уступают место сетке лучших снимков: сразу
@@ -505,24 +511,43 @@
    в столбик там превратились бы в бесконечную ленту.
    -------------------------------------------------------------------------- */
 
-.sf-homegrid { display: none; }
+/* Сетка избранного — единственный вход в работы на обеих версиях.
+   Кадра-заставки и трёх карточек больше нет: разделы открываются из меню,
+   как в референсе. */
 
-@media (min-width: 900px) {
-  .sf-homegrid { display: block; }
-  /* Через .sf-main, потому что базовые правила .sf-opener и .sf-cards стоят
-     в файле ниже — при равной специфичности побеждали бы они. */
-  .sf-main > .sf-opener,
-  .sf-main > .sf-cards { display: none; }
+/* Подпись над сеткой. На компьютере тише и мельче — там то же самое уже
+   сказано шапкой; на телефоне это весь первый экран. */
+.sf-strapline {
+  text-align: center;
+  padding: clamp(30px, 7vw, 54px) var(--sf-pad-x) clamp(26px, 5vw, 40px);
+}
+.sf-strapline__line,
+.sf-strapline__name {
+  margin: 0;
+  font-family: var(--sf-display);
+  text-transform: uppercase;
+}
+.sf-strapline__line {
+  font-weight: 300;
+  font-size: clamp(9px, 2.6vw, 11px);
+  letter-spacing: 0.26em;
+  color: var(--sf-ink-nav);
+}
+.sf-strapline__name {
+  margin: 0.85em 0;
+  font-family: var(--sf-serif);
+  font-weight: 400;
+  font-size: clamp(21px, 6.4vw, 30px);
+  letter-spacing: 0.2em;
+  color: var(--sf-ink);
 }
 
 /* Строка под сеткой — зачем смотреть дальше. Кегль крупнее текстового,
    но набор тихий: это не заголовок, а подпись ко всей странице. */
 .sf-tagline {
-  display: none;
   text-align: center;
   padding: clamp(46px, 6vw, 92px) var(--sf-pad-x) clamp(30px, 4vw, 60px);
 }
-@media (min-width: 900px) { .sf-tagline { display: block; } }
 
 .sf-tagline__text {
   margin: 0;
@@ -533,104 +558,6 @@
   line-height: 1.5;
   letter-spacing: 0.01em;
   color: var(--sf-ink);
-}
-
-/* Три входа в галереи. Кадр 3:4, под ним название — как в референсе. */
-.sf-cards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--sf-gap);
-  /* Полей по бокам нет: карточки идут от края до края, как мозаика в
-     галереях и кадр-заставка над ними. Сверху — отступ от заставки. */
-  padding: clamp(28px, 3vw, 48px) 0 0;
-}
-
-.sf-card { display: block; }
-
-.sf-card__frame {
-  aspect-ratio: 3 / 4;
-  overflow: hidden;
-  background: var(--sf-bg-sunk);
-}
-.sf-card__frame img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  transition: transform 1.2s var(--sf-ease);
-}
-@media (hover: hover) {
-  .sf-card:hover .sf-card__frame img { transform: scale(1.04); }
-}
-
-.sf-card__name {
-  display: block;
-  margin-top: 14px;
-  text-align: center;
-  font-family: var(--sf-display);
-  font-size: 12px;
-  font-weight: 300;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  /* Полный тон чернил, а не приглушённый: кегль и вес оставлены как есть,
-     подписи стали заметнее только за счёт контраста. */
-  color: var(--sf-ink);
-  transition: opacity 0.3s var(--sf-ease);
-}
-.sf-card:hover .sf-card__name { opacity: 0.6; }
-
-/* --------------------------------------------------------------------------
-   ГЛАВНАЯ НА ТЕЛЕФОНЕ
-
-   Кадра-заставки здесь нет: он съедал первый экран, а разделы уходили под
-   сгиб. Вместо него сразу три входа стопкой во всю ширину. Название лежит
-   поверх кадра и возникает только под пальцем — при прокрутке кадры
-   остаются чистыми.
-   -------------------------------------------------------------------------- */
-@media (max-width: 900px) {
-  .sf-opener { display: none; }
-
-  .sf-cards {
-    grid-template-columns: 1fr;
-    gap: var(--sf-gap);
-    padding: 0;
-  }
-  .sf-card { position: relative; }
-  /* Пропорция референса. Обложки вертикальные, поэтому object-fit: cover
-     срезает их сверху и снизу — кадр не искажается. */
-  .sf-card__frame { aspect-ratio: 4 / 3; position: relative; }
-
-  /* Вуаль под пальцем: без неё светлая подпись тонет в светлых кадрах.
-     Лежит на рамке, а подпись идёт следующей — та поверх вуали. */
-  .sf-card__frame::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(20, 18, 16, 0.42);
-    opacity: 0;
-    transition: opacity 0.25s var(--sf-ease);
-    pointer-events: none;
-  }
-  .sf-card.is-touched .sf-card__frame::after { opacity: 1; }
-
-  .sf-card__name {
-    position: absolute;
-    inset: 0;
-    margin: 0;
-    display: grid;
-    place-items: center;
-    color: #fff;
-    font-size: 19px;
-    letter-spacing: 0.2em;
-    text-shadow: 0 1px 12px rgba(20, 18, 16, 0.45);
-    opacity: 0;
-    transition: opacity 0.5s var(--sf-ease);
-    /* Подпись не должна перехватывать нажатие у самой ссылки. */
-    pointer-events: none;
-  }
-  /* Подпись держится с касания и до касания другой карточки. :active сюда
-     не годится: он снимается на отпускании пальца, и подсветка гасла
-     посреди перехода — это и читалось как подвисшее промежуточное
-     состояние. */
-  .sf-card.is-touched .sf-card__name { opacity: 1; }
 }
 
 /* Two-column: image one side, prose the other */
@@ -697,7 +624,10 @@
 /* Порядок пакетов зависит от языка: в английской версии первой идёт улица,
    затем пары и только потом студия — там спрос начинается с улицы. В русской
    порядок исходный. Меняется раскладкой, разметка одна на оба языка. */
-.sf-pricelist { display: flex; flex-direction: column; }
+/* grid, а не flex: пакеты — колоночные флекс-элементы с aspect-ratio внутри,
+   и в мобильном Safari такая связка схлопывала кадр в полоску. В гриде
+   строка считается по содержимому, а order работает точно так же. */
+.sf-pricelist { display: grid; }
 .sf-pricelist[hidden] { display: none; }
 .sf-root[data-lang="en"] .sf-pack:nth-child(1) { order: 3; }
 .sf-root[data-lang="en"] .sf-pack:nth-child(2) { order: 1; }
@@ -741,11 +671,21 @@
 }
 
 .sf-pack__body { max-width: 44ch; }
-.sf-pack__name { font-size: clamp(22px, 2.6vw, 30px); }
+/* Название пакета — капителью гротеска, сумма — крупной антиквой.
+   Раньше они были почти одного кегля и сливались в две строки подряд. */
+.sf-pack__name {
+  font-family: var(--sf-sans);
+  font-weight: 400;
+  font-size: clamp(13px, 1.3vw, 15px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sf-ink);
+}
 .sf-pack__price {
-  margin-top: 0.35em;
+  margin-top: 0.5em;
   font-family: var(--sf-serif);
-  font-size: clamp(19px, 2.1vw, 25px);
+  font-size: clamp(30px, 3.2vw, 40px);
+  line-height: 1.1;
   color: var(--sf-ink);
 }
 
@@ -1078,14 +1018,6 @@
    отдельная секция. */
 /* Кнопка «ещё» — хвост галереи, а не отдельная секция, поэтому сверху
    отступ маленький: она должна читаться как продолжение сетки. */
-.sf-cta {
-  text-align: center;
-  padding-top: clamp(20px, 2.6vw, 34px);
-  /* «ещё» и строка записи — соседи, а не разные разделы. Раньше их нижний и
-     верхний отступы складывались в 168px пустоты на ровном месте. */
-  padding-bottom: clamp(18px, 2vw, 26px);
-}
-
 .sf-footer {
   padding: clamp(30px, 4vw, 54px) var(--sf-pad-x) clamp(38px, 5vw, 64px);
   display: flex;
