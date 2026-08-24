@@ -255,6 +255,24 @@ def home_hero():
 </section>""" % (ar / OPENER_KEEP, tb(C.HOME["hero_title"], "h1", "sf-vh"), P.HERO_SHOT)
 
 
+def home_grid():
+    """Сетка избранных кадров — только на компьютере.
+
+    Собирается тем же mosaic(), что и галереи: пропорции берутся из общего
+    списка, поэтому при замене снимка ряды пересчитаются сами."""
+    ratios = {n: a for n, a, _ in P.PORTRAITS + P.STREET + P.LOVE}
+    items = [(n, ratios[n]) for n in P.BEST]
+    return '<div class="sf-homegrid">\n%s\n</div>' % indent(
+        mosaic(items, "Sofia Filatova", eager=8), "  ")
+
+
+def home_tagline():
+    """Строка под сеткой: зачем смотреть дальше. Только на компьютере —
+    на телефоне под ней сразу идут три раздела, и звать никуда не нужно."""
+    return '<section class="sf-tagline">\n  %s\n</section>' % tb(
+        C.HOME["tagline"], "p", "sf-tagline__text")
+
+
 def home_cards():
     """Три входа в галереи. Кадр, под ним название — как в референсе."""
     def card(key):
@@ -456,7 +474,7 @@ FONTS = (
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
     '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
     '  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?'
-    'family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400'
+    'family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400'
     '&amp;family=Manrope:wght@300;400;500'
     '&amp;family=Jost:wght@300;400&amp;display=swap">'
 )
@@ -524,7 +542,7 @@ def main():
 
     write(PAGES["home"]["file"], page(
         "home",
-        "\n\n".join([home_hero(), home_cards()]),
+        "\n\n".join([home_hero(), home_grid(), home_cards(), home_tagline()]),
         has_gallery=True,
     ))
 

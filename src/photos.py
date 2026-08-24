@@ -218,6 +218,15 @@ SELF_PORTRAIT = BASE + "sofia.jpg"
 
 GALLERIES = {"portraits": PORTRAITS, "street": STREET, "love": LOVE}
 
+# Избранное для сетки на главной. Порядок задан руками: чередование
+# вертикальных и горизонтальных кадров нужно, чтобы флексбокс сложил ровные
+# ряды примерно по четыре — сумма пропорций ряда выходит около 4.
+BEST = [
+    "portraits/01.jpg", "love/03.jpg",     "portraits/10.jpg", "street/10.jpg",
+    "street/22.jpg",    "love/01.jpg",     "portraits/29.jpg", "love/08.jpg",
+    "portraits/05.jpg", "street/01.jpg",
+]
+
 # Один большой кадр-заставка на главной, во всю ширину.
 HERO_SHOT = BASE + PORTRAITS[28][0]
 

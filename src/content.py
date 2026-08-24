@@ -45,7 +45,7 @@ PAGES = {
     "contact":   {"file": "contact.html",   "nav": {"en": "Contact",   "ru": "Контакты"}},
 }
 
-NAV_ORDER = ["home", "portraits", "street", "love", "about", "price", "contact"]
+NAV_ORDER = ["home", "about", "portraits", "street", "love", "price", "contact"]
 
 # ------------------------------------------------------------------ SEO
 
