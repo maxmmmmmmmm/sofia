@@ -40,7 +40,7 @@ PAGES = {
     "portraits": {"file": "portraits.html", "nav": {"en": "Portraits", "ru": "Portraits"}},
     "street":    {"file": "street.html",    "nav": {"en": "Street",    "ru": "Street"}},
     "love":      {"file": "love.html",      "nav": {"en": "Love",      "ru": "Love"}},
-    "about":     {"file": "about.html",     "nav": {"en": "About",     "ru": "Обо мне"}},
+    "about":     {"file": "about.html",     "nav": {"en": "About me",     "ru": "Обо мне"}},
     "price":     {"file": "price.html",     "nav": {"en": "Price",     "ru": "Цены"}},
     "contact":   {"file": "contact.html",   "nav": {"en": "Contact",   "ru": "Контакты"}},
 }

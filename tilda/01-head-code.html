@@ -637,6 +637,14 @@
 .sf-root[data-lang="en"] .sf-pack:nth-child(2) { order: 1; }
 .sf-root[data-lang="en"] .sf-pack:nth-child(3) { order: 2; }
 
+/* Сторона кадра назначалась по месту в разметке, а порядок в английской
+   версии другой — оттого студия и пары оказывались слева подряд.
+
+   В разметке идут студия, улица, пары; на экране в английской версии —
+   улица, пары, студия. Чтобы стороны чередовались, студии нужен кадр
+   справа: получается справа, слева, справа. */
+.sf-root[data-lang="en"] .sf-pack:nth-child(1) .sf-pack__media { order: 2; }
+
 .sf-pack {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
