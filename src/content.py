@@ -118,8 +118,8 @@ HOME = {
     # The script line under the grid, in place of the reference's
     # "for the adventurous, the heartfelt and the sun kissed".
     "tagline": {
-        "en": "every portrait a scene,<br>every person a story",
-        "ru": "каждый портрет — сцена,<br>каждый человек — история",
+        "en": "every portrait is a scene<br>every person is a story",
+        "ru": "каждый портрет — сцена<br>каждый человек — история",
     },
     "cta_title": {
         "en": "You have a story. Let me capture it.",

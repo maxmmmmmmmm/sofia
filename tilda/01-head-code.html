@@ -4,7 +4,7 @@
      ========================================================== -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&amp;family=Jost:wght@300;400;500&amp;display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&amp;family=Cormorant+SC:wght@400&amp;family=Jost:wght@300;400;500&amp;display=swap">
 <style>
 /* ==========================================================================
    SOFIA FILATOVA — photography site
@@ -553,12 +553,16 @@
 
 .sf-tagline__text {
   margin: 0;
-  font-family: var(--sf-serif);
-  font-weight: 300;
-  font-style: italic;
-  font-size: clamp(22px, 2.4vw, 32px);
-  line-height: 1.5;
-  letter-spacing: 0.01em;
+  /* Cormorant SC — капитель той же гарнитуры, что имя и меню. Строчные
+     буквы рисуются малыми прописными, поэтому строка читается как
+     гравировка, а не как цитата курсивом. */
+  font-family: "Cormorant SC", var(--sf-serif);
+  font-weight: 400;
+  font-size: clamp(19px, 1.9vw, 26px);
+  /* Капители нужен воздух между буквами: без разрядки малые прописные
+     сбиваются в плотную полосу. */
+  letter-spacing: 0.08em;
+  line-height: 1.75;
   color: var(--sf-ink);
 }
 
