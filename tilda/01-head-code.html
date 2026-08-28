@@ -735,7 +735,15 @@
 /* Без маркеров: короткие пункты держит воздух между строками, а палочки
    перед ними читались как обрывки подчёркивания. */
 .sf-pack__list { list-style: none; margin: 1.7em 0 0; padding: 0; }
-.sf-pack__list li { color: var(--sf-ink); }
+/* Тот же набор, что у текста шагов в «Как проходит съёмка»: там 15px
+   лёгкого начертания с широким интерлиньяжем. Здесь строки были плотнее
+   и на ступень темнее — два перечня на соседних экранах читались по-разному. */
+.sf-pack__list li {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--sf-ink-text);
+}
 .sf-pack__list li + li { margin-top: 0.6em; }
 
 /* Дополнения — сноска, а не второй столбец условий: мельче и без линии
@@ -932,14 +940,16 @@
   z-index: 1;
   display: grid;
   justify-items: center;
-  gap: clamp(11px, 1.4vw, 18px);
+  /* Зазор уменьшен ровно на прирост интерлиньяжа от укрупнённого кегля:
+     строки стали крупнее, а просветы между ними остались прежними. */
+  gap: clamp(8px, 1.1vw, 14px);
   padding: 24px;
 }
 .sf-contactpage__channels a {
   color: #fff;
   font-family: var(--sf-display);
-  /* +5% к прежним 14/1.2vw/17. */
-  font-size: clamp(14.7px, 1.26vw, 17.85px);
+  /* +2.5px к прежним 14.7/1.26vw/17.85. */
+  font-size: clamp(17.2px, 1.44vw, 20.35px);
   font-weight: 300;
   letter-spacing: .01em;
   text-shadow: 0 1px 8px rgba(0,0,0,.28);
@@ -1005,7 +1015,8 @@
   }
   .sf-main:has(.sf-contactpage) { display: flex; min-height: 0; }
   .sf-contactpage { flex: 1; min-height: 0; }
-  .sf-contactpage__channels a { font-size: 15px; }
+  /* +2.5px, как и на компьютере. */
+  .sf-contactpage__channels a { font-size: 17.5px; }
 
   /* Подпись ложится поверх кадра — тем же светлым, что и каналы, иначе на
      фотографии её не видно. Футер вынут из потока, чтобы не отодвигать
