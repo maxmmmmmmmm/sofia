@@ -550,6 +550,10 @@
      гравировка, а не как цитата курсивом. */
   font-family: "Cormorant SC", var(--sf-serif);
   font-weight: 400;
+  /* Строка набирается целиком прописными. У капители строчные рисуются
+     малыми прописными, а первая буква слова оставалась полной — строка
+     шла ступеньками. */
+  text-transform: uppercase;
   font-size: clamp(19px, 1.9vw, 26px);
   /* Капители нужен воздух между буквами: без разрядки малые прописные
      сбиваются в плотную полосу. */
@@ -587,12 +591,15 @@
 }
 
 .sf-pagehead__title {
-  font-family: var(--sf-display);
-  font-weight: 300;
-  /* +15% к прежним 13px. Разрядка чуть уже: на большем кегле прежние
-     0.26em растаскивали слово шире, чем нужно. */
-  font-size: 15px;
-  letter-spacing: 0.24em;
+  /* Та же капитель, что в строке на главной: гротеск здесь был четвёртым
+     начертанием на странице и выбивался из набора. Всего на сайте три
+     семейства — Cormorant Garamond, Cormorant SC и Jost. */
+  font-family: "Cormorant SC", var(--sf-serif);
+  font-weight: 400;
+  /* Капитель зрительно крупнее гротеска при равном кегле, поэтому 15 → 17px
+     без прибавки в весе. */
+  font-size: 17px;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--sf-ink-nav);
 }
@@ -633,13 +640,16 @@
 .sf-root[data-lang="en"] .sf-pack:nth-child(2) { order: 1; }
 .sf-root[data-lang="en"] .sf-pack:nth-child(3) { order: 2; }
 
-/* Сторона кадра назначалась по месту в разметке, а порядок в английской
-   версии другой — оттого студия и пары оказывались слева подряд.
+/* Сторона кадра должна зависеть от места на экране, а не в разметке.
+   Раскладка одна на обе версии: первый блок — кадр слева, второй — справа,
+   третий снова слева.
 
-   В разметке идут студия, улица, пары; на экране в английской версии —
-   улица, пары, студия. Чтобы стороны чередовались, студии нужен кадр
-   справа: получается справа, слева, справа. */
-.sf-root[data-lang="en"] .sf-pack:nth-child(1) .sf-pack__media { order: 2; }
+   В разметке идут студия, улица, пары. На экране в английской версии —
+   улица (второй в разметке), пары (третий), студия (первый). Отсюда и
+   номера: улице и студии кадр слева, парам справа. */
+.sf-root[data-lang="en"] .sf-pack:nth-child(1) .sf-pack__media { order: 0; }
+.sf-root[data-lang="en"] .sf-pack:nth-child(2) .sf-pack__media { order: 0; }
+.sf-root[data-lang="en"] .sf-pack:nth-child(3) .sf-pack__media { order: 2; }
 
 .sf-pack {
   display: grid;
@@ -870,7 +880,10 @@
    Фотография работает фоном, но остаётся настоящим <img>, а не CSS-слоем. */
 .sf-contactpage {
   position: relative;
-  min-height: calc(100svh - var(--sf-header-h) - 50px);
+  /* Во всю высоту под шапкой, без вычета на футер: страница должна
+     заканчиваться фотографией, а не светлой полосой под ней. Футер
+     ложится поверх кадра — см. правило ниже. */
+  min-height: calc(100svh - var(--sf-header-h));
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -929,6 +942,20 @@
   padding: 0 var(--sf-pad-x);
   display: grid;
   place-items: center;
+  /* Футер вынут из потока и лежит на кадре — иначе он отодвигал бы
+     фотографию вверх и снизу оставалась полоса фона. Подпись светлая,
+     как и каналы: на снимке тёмный текст не читался бы. */
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding-bottom: 14px;
+}
+.sf-root:has(.sf-contactpage) { position: relative; }
+.sf-footer.sf-footer--contact .sf-footer__legal {
+  color: #fff;
+  text-shadow: 0 1px 10px rgba(20, 18, 16, 0.45);
 }
 .sf-main:has(.sf-contactpage) + .sf-footer.sf-footer--contact {
   padding: 0 var(--sf-pad-x);
