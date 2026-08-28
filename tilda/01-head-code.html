@@ -558,11 +558,12 @@
      гравировка, а не как цитата курсивом. */
   font-family: "Cormorant SC", var(--sf-serif);
   font-weight: 400;
-  /* Строка набирается целиком прописными. У капители строчные рисуются
-     малыми прописными, а первая буква слова оставалась полной — строка
-     шла ступеньками. */
-  text-transform: uppercase;
-  font-size: clamp(19px, 1.9vw, 26px);
+  /* Строчными: капитель рисует их малыми прописными, и строка выходит
+     из ровных невысоких букв, без заглавных в начале слов. Принудительный
+     верхний регистр отсюда снят — он делал её громкой. */
+  text-transform: lowercase;
+  /* −10% к прежним 19/1.9vw/26. */
+  font-size: clamp(17px, 1.7vw, 23px);
   /* Капители нужен воздух между буквами: без разрядки малые прописные
      сбиваются в плотную полосу. */
   letter-spacing: 0.08em;
@@ -648,22 +649,16 @@
 .sf-root[data-lang="en"] .sf-pack:nth-child(2) { order: 1; }
 .sf-root[data-lang="en"] .sf-pack:nth-child(3) { order: 2; }
 
-/* Сторона кадра должна зависеть от места на экране, а не в разметке.
-   Раскладка одна на обе версии: первый блок — кадр слева, второй — справа,
-   третий снова слева.
 
-   В разметке идут студия, улица, пары. На экране в английской версии —
-   улица (второй в разметке), пары (третий), студия (первый). Отсюда и
-   номера: улице и студии кадр слева, парам справа. */
-.sf-root[data-lang="en"] .sf-pack:nth-child(1) .sf-pack__media { order: 0; }
-.sf-root[data-lang="en"] .sf-pack:nth-child(2) .sf-pack__media { order: 0; }
-.sf-root[data-lang="en"] .sf-pack:nth-child(3) .sf-pack__media { order: 2; }
 
 .sf-pack {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
   gap: clamp(26px, 5vw, 76px);
   align-items: center;
+  /* width обязателен: у кадра процентная ширина, и без явной ширины грид
+     считает пакет по содержимому — тот схлопывался с 1180 до 1002. */
+  width: 100%;
   max-width: 1180px;
   margin-inline: auto;
   padding-block: clamp(34px, 5vw, 68px);
@@ -684,15 +679,37 @@
    На узком окне центрирование не работает и краем становится сам отступ —
    его и берёт max(). */
 @media (min-width: 900px) {
-  .sf-pack__media { --sf-bleed: max(var(--sf-pad-x), 50vw - 590px); }
-
-  .sf-pack:nth-child(odd) .sf-pack__media {
-    margin-left: calc(-1 * var(--sf-bleed));
-    width: calc(100% + var(--sf-bleed));
+  .sf-pack__media {
+    --sf-bleed: max(var(--sf-pad-x), 50vw - 590px);
+    /* Куда тянется кадр — влево или вправо. Ноль означает «никуда». */
+    --sf-bleed-l: 0px;
+    --sf-bleed-r: 0px;
+    margin-left: calc(-1 * var(--sf-bleed-l));
+    margin-right: calc(-1 * var(--sf-bleed-r));
+    width: calc(100% + var(--sf-bleed-l) + var(--sf-bleed-r));
   }
-  .sf-pack:nth-child(even) .sf-pack__media {
-    margin-right: calc(-1 * var(--sf-bleed));
-    width: calc(100% + var(--sf-bleed));
+
+  /* Русская версия: кадр слева, справа, слева. */
+  .sf-pack:nth-child(odd)  .sf-pack__media { --sf-bleed-l: var(--sf-bleed); }
+  .sf-pack:nth-child(even) .sf-pack__media { --sf-bleed-r: var(--sf-bleed); }
+
+  /* Английская: на экране улица (второй в разметке), пары (третий),
+     студия (первый). Стороны те же — слева, справа, слева, — поэтому
+     сторона и вынос задаются вместе, одним правилом на блок. */
+  .sf-root[data-lang="en"] .sf-pack:nth-child(1) .sf-pack__media {
+    order: 0;
+    --sf-bleed-l: var(--sf-bleed);
+    --sf-bleed-r: 0px;
+  }
+  .sf-root[data-lang="en"] .sf-pack:nth-child(2) .sf-pack__media {
+    order: 0;
+    --sf-bleed-l: var(--sf-bleed);
+    --sf-bleed-r: 0px;
+  }
+  .sf-root[data-lang="en"] .sf-pack:nth-child(3) .sf-pack__media {
+    order: 2;
+    --sf-bleed-l: 0px;
+    --sf-bleed-r: var(--sf-bleed);
   }
 }
 
