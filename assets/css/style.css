@@ -146,13 +146,11 @@
      считался бы от кегля самой подписи и на телефоне уезжал. */
   margin-top: 14px;
   font-family: var(--sf-sans);
-  /* Было 13px очень светлым #a39a91 с широкой разрядкой — строка не
-     читалась. Кегль тот же, но вес и тон плотнее, разрядка уже. */
   font-weight: 400;
   font-size: 13px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--sf-ink-nav);
+  color: var(--sf-ink-faint);
 }
 
 /* Основной текст. Не сплошные чернила: #262320 в длинном абзаце читается
