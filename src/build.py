@@ -227,8 +227,8 @@ def home_strapline():
     return """<section class="sf-strapline">
   <p class="sf-strapline__line">CINEMATIC &amp; VINTAGE PHOTOGRAPHER</p>
   <p class="sf-strapline__name">SOFIA FILATOVA</p>
-  <p class="sf-strapline__line">MOSCOW, RU | LISBON, PT</p>
-</section>"""
+  %s
+</section>""" % tb(C.HOME["places"], "p", "sf-strapline__line")
 
 
 def home_grid():
@@ -502,6 +502,7 @@ def main():
     write(PAGES["home"]["file"], page(
         "home",
         "\n\n".join([home_strapline(), home_grid(), home_tagline()]),
+        body_class="sf-body--home",
         has_gallery=True,
     ))
 

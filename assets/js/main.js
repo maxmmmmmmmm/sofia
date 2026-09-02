@@ -123,6 +123,43 @@
   })();
 
   /* ------------------------------------------------------------------
+     Сетка на главной заканчивается полным рядом
+     ------------------------------------------------------------------ */
+
+  (function initGridTrim() {
+    var grid = $(".sf-homegrid .sf-mosaic");
+    if (!grid) return;
+    var items = $$(".sf-mosaic__item", grid);
+    if (items.length < 4) return;
+
+    function trim() {
+      items.forEach(function (i) { i.hidden = false; });
+
+      // Ряды не заданы разметкой — их складывает флексбокс, и на разной
+      // ширине они разные. Границу ряда определяем по offsetTop.
+      var rows = [], prev = null;
+      items.forEach(function (i) {
+        if (prev === null || i.offsetTop !== prev) { rows.push([]); prev = i.offsetTop; }
+        rows[rows.length - 1].push(i);
+      });
+      if (rows.length < 2) return;
+
+      var heights = rows.map(function (r) { return r[0].getBoundingClientRect().height; });
+      var rest = heights.slice(0, -1).sort(function (a, b) { return a - b; });
+      var median = rest[Math.floor(rest.length / 2)];
+
+      // Неполный ряд флексбокс растягивает по ширине, и он выходит заметно
+      // выше остальных. Это и есть признак хвоста.
+      if (heights[heights.length - 1] > median * 1.25) {
+        rows[rows.length - 1].forEach(function (i) { i.hidden = true; });
+      }
+    }
+
+    trim();
+    window.addEventListener("resize", trim);
+  })();
+
+  /* ------------------------------------------------------------------
      Lightbox
      ------------------------------------------------------------------ */
 

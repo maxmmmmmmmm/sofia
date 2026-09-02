@@ -107,6 +107,12 @@ META = {
 # ----------------------------------------------------------------- home
 
 HOME = {
+    # Города под именем на главной. Регистр поднимает CSS, поэтому здесь
+    # обычное написание.
+    "places": {
+        "en": "Moscow, RU | Lisbon, PT",
+        "ru": "Москва | Лиссабон",
+    },
     "hero_title": {
         "en": "Portraits that feel like stills from a film",
         "ru": "Портреты, похожие на кадры из фильма",
@@ -209,7 +215,7 @@ PRICE = {
             {
                 "shot": "loveStory",
                 "name": {"en": "Love story", "ru": "Парная съёмка"},
-                "cost": "€350",
+                "cost": "€300",
                 "items": [
                     {"en": "Up to 2 hours of shooting", "ru": "До 2 часов съёмки"},
                     {"en": "60 retouched photographs within 14 days", "ru": "60 отретушированных фотографий в течение 14 дней"},
@@ -279,21 +285,21 @@ PROCESS = {
     "title": {"en": "How a shoot goes", "ru": "Как проходит съёмка"},
     "steps": [
         {"n": "01",
-         "name": {"en": "You write", "ru": "Заявка"},
-         "text": {"en": "Telegram or WhatsApp: city, rough dates, what you have in mind.",
-                  "ru": "Telegram или WhatsApp: город, примерные даты, что хочется снять."}},
+         "name": {"en": "Enquiry", "ru": "Заявка"},
+         "text": {"en": "City, dates and what you have in mind — in Telegram, WhatsApp or Instagram.",
+                  "ru": "Город, даты и ваши пожелания — в Telegram, WhatsApp или Instagram."}},
         {"n": "02",
-         "name": {"en": "We prepare", "ru": "Подготовка"},
-         "text": {"en": "Mood board, studio or locations, the looks. I will tell you what to wear.",
-                  "ru": "Мудборд, студия или локации, образы. Подскажу, что надеть."}},
+         "name": {"en": "Preparation", "ru": "Подготовка"},
+         "text": {"en": "We settle on the location, the looks and the mood of the shoot.",
+                  "ru": "Определяем локацию, образы и настроение съёмки."}},
         {"n": "03",
          "name": {"en": "The shoot", "ru": "Съёмка"},
-         "text": {"en": "An hour and a half to two. I direct as we go — posing is my job, not yours.",
-                  "ru": "Полтора-два часа. Направляю по ходу — позировать не нужно."}},
+         "text": {"en": "An hour and a half to two. We talk, we take our time, we catch the real moments.",
+                  "ru": "1,5–2 часа. Разговариваем, отдыхаем и ловим настоящие моменты."}},
         {"n": "04",
-         "name": {"en": "Selection and retouch", "ru": "Отбор и ретушь"},
-         "text": {"en": "Full gallery to choose from, retouched frames in 10 to 14 days.",
-                  "ru": "Галерея на выбор, отретушированные кадры за 10–14 дней."}},
+         "name": {"en": "Photographs", "ru": "Фотографии"},
+         "text": {"en": "I pick the best frames and retouch them lightly. Ready in 10 to 14 days.",
+                  "ru": "Отбираю лучшие кадры и делаю лёгкую ретушь. Готовые фотографии через 10–14 дней."}},
     ],
 }
 
@@ -302,7 +308,7 @@ PROCESS = {
 # Блок в конце галерей. Две строки без рамок: имя и способ связи. Больше
 # спрашивать нельзя — каждое лишнее поле стоит части заявок.
 LEAD = {
-    "title": {"en": "sessions by appointment", "ru": "съёмка по записи"},
+    "title": {"en": "book a photoshoot", "ru": "записаться на съёмку"},
 }
 
 # -------------------------------------------------------------- contact

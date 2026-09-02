@@ -224,7 +224,9 @@ GALLERIES = {"portraits": PORTRAITS, "street": STREET, "love": LOVE}
 BEST = [
     "portraits/01.jpg", "love/03.jpg",     "portraits/10.jpg", "street/10.jpg",
     "street/22.jpg",    "love/01.jpg",     "portraits/29.jpg", "love/08.jpg",
-    "portraits/05.jpg", "street/01.jpg",
+    "portraits/05.jpg", "street/01.jpg",   "love/05.jpg",      "portraits/11.jpg",
+    "street/03.jpg",    "love/04.jpg",     "portraits/15.jpg", "street/02.jpg",
+    "love/06.jpg",      "street/04.jpg",   "portraits/13.jpg", "love/02.jpg",
 ]
 
 # Один большой кадр-заставка на главной, во всю ширину.
