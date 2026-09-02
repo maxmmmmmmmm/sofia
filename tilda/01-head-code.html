@@ -942,6 +942,14 @@
   color: var(--sf-ink);
   padding: 10px 8px;
   margin: -10px -8px;
+  /* Подчёркивание в один пиксель — той же толщины, что просвет между
+     кадрами в галереях, и тем же тихим тоном, что номера шагов рядом.
+     Отбивка в 7px уводит линию от выносных элементов: вплотную она
+     цепляла бы «б» и «ъ». */
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--sf-ink-faint);
+  text-underline-offset: 7px;
 }
 .sf-lead-in--inline .sf-reach__list { gap: 8px; justify-items: center; }
 .sf-lead-in--inline .sf-reach__link {
@@ -951,7 +959,10 @@
   letter-spacing: 0.02em;
 }
 @media (hover: hover) {
-  .sf-lead-in--inline .sf-reach__open:hover { letter-spacing: 0.06em; }
+  .sf-lead-in--inline .sf-reach__open:hover {
+    letter-spacing: 0.06em;
+    text-decoration-color: var(--sf-ink);
+  }
 }
 
 /* Страница контактов: один кадр, каналы поверх него и небольшой футер.
