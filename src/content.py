@@ -297,7 +297,7 @@ PROCESS = {
          "text": {"en": "1.5–2 hours, no rush. I’ll guide you through the process and help you feel natural and comfortable in front of the camera.",
                   "ru": "1,5–2 часа. Разговариваем, отдыхаем и ловим настоящие моменты."}},
         {"n": "04",
-         "name": {"en": "Editing", "ru": "Фотографии"},
+         "name": {"en": "Editing", "ru": "Обработка"},
          "text": {"en": "I select the best pics and give them a light, natural retouch. Your photos will be ready within 10–14 days.",
                   "ru": "Отбираю лучшие кадры и делаю лёгкую ретушь. Готовые фотографии через 10–14 дней."}},
     ],

@@ -514,7 +514,8 @@ def main():
     write(PAGES["about"]["file"], page("about", about_block(), has_gallery=False,
                                       body_class="sf-body--fit"))
     write(PAGES["price"]["file"], page(
-        "price", "\n\n".join([process_block(), price_block()]), has_gallery=False))
+        "price", "\n\n".join([process_block(), lead_block(), price_block()]),
+        has_gallery=False))
     write(PAGES["contact"]["file"], page("contact", contact_block(), has_gallery=False))
 
     # ------------------------------------------------------ Tilda paste-kit
