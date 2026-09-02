@@ -266,7 +266,7 @@ def about_block():
         %s
         <span class="sf-abouttitle__role">%s</span>
       </h1>
-      <div class="sf-lead" style="margin-top:1.5em">
+      <div class="sf-lead" style="margin-top:40px">
         <div data-l="en">
         %s
         </div>
