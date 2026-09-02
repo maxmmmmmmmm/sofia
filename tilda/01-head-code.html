@@ -867,7 +867,9 @@
 }
 
 @media (max-width: 560px) {
-  .sf-step { grid-template-columns: 1fr; gap: 6px; }
+  .sf-step,
+  .sf-process__cta { grid-template-columns: 1fr; gap: 6px; }
+  .sf-process__gutter { display: none; }
   /* −17% ко всем трём строкам шага: блок занимал почти весь экран, при этом
      кегль был крупнее, чем у прайса под ним. */
   .sf-step__n { font-size: 15px; }
@@ -919,6 +921,52 @@
 @media (hover: hover) {
   .sf-lead-in--footer .sf-reach__open:hover { letter-spacing: 0.12em; }
   .sf-lead-in--footer .sf-reach__link:hover { letter-spacing: 0.07em; }
+}
+
+/* Строка записи внутри блока шагов. Ставится под четвёртым шагом, по его
+   левому краю: отдельной секцией посреди пустоты она читалась как чужой
+   элемент. Кегль и тон — как у текста шагов, поэтому она и не спорит с ними. */
+.sf-process__cta {
+  max-width: 1180px;
+  margin: clamp(22px, 2.6vw, 34px) auto 0;
+  /* Та же пара колонок, что у шага: пустой номер держит ширину, и строка
+     встаёт ровно под текстом четвёртого пункта, а не под его номером. */
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(18px, 2.4vw, 34px);
+}
+.sf-process__gutter { visibility: hidden; }
+.sf-lead-in--inline { padding: 0; }
+.sf-lead-in--inline .sf-reach { text-align: left; }
+.sf-lead-in--inline .sf-reach__open {
+  font-family: var(--sf-sans);
+  font-weight: 300;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: var(--sf-ink);
+  padding: 10px 8px;
+  margin: -10px -8px;
+}
+.sf-lead-in--inline .sf-reach__list { gap: 8px; justify-items: start; }
+.sf-lead-in--inline .sf-reach__link {
+  font-family: var(--sf-sans);
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+@media (hover: hover) {
+  .sf-lead-in--inline .sf-reach__open:hover { letter-spacing: 0.06em; }
+}
+
+@media (min-width: 860px) {
+  /* Та же сетка, что у шагов, — строка садится во вторую колонку, ровно
+     под четвёртым пунктом. */
+  /* Сдвигаем весь блок во вторую колонку — под четвёртый шаг. */
+  .sf-process__cta {
+    margin-left: calc(50% + clamp(40px, 5vw, 76px) / 2);
+    max-width: calc(590px - clamp(40px, 5vw, 76px) / 2);
+    margin-right: 0;
+  }
 }
 
 /* Страница контактов: один кадр, каналы поверх него и небольшой футер.

@@ -198,9 +198,11 @@ def footer(extra_class=""):
 </footer>""" % (extra_class, indent(social_row("sf-footer__social"), "  "), SITE["year"], SITE["wordmark"])
 
 
-def lead_block():
-    """Финальная строка перед футером: запись не отделяется от страницы
-    самостоятельной секцией, а завершает просмотр вместе с соцсетями."""
+def lead_block(variant="footer", arrow=True):
+    """Строка записи. variant задаёт оформление: «footer» — финальная строка
+    перед подвалом, «inline» — строка внутри другого блока, набранная вровень
+    с его текстом. arrow=False убирает стрелку: она уместна там, где строка
+    завершает страницу, и лишняя внутри абзацев."""
     ch = C.CONTACT["channels"]
     links = "\n".join(
         '      <a class="sf-reach__link" href="%s" target="_blank" rel="noopener">%s</a>'
@@ -211,14 +213,16 @@ def lead_block():
             (SITE["instagram"]["href"], ch["instagram"]),
         )
     )
-    return """<section class="sf-lead-in sf-lead-in--footer">
+    tip = ('<span class="sf-lead-in__arrow" aria-hidden="true">→</span>'
+           if arrow else "")
+    return """<section class="sf-lead-in sf-lead-in--%s">
   <div class="sf-reach">
-    <button class="sf-reach__open" type="button" aria-expanded="false">%s<span class="sf-lead-in__arrow" aria-hidden="true">→</span></button>
+    <button class="sf-reach__open" type="button" aria-expanded="false">%s%s</button>
     <div class="sf-reach__list" hidden>
 %s
     </div>
   </div>
-</section>""" % (t(C.LEAD["title"]), links)
+</section>""" % (variant, t(C.LEAD["title"]), tip, links)
 # ------------------------------------------------------------ home parts
 def home_strapline():
     """Три строки капслоком над сеткой: чем занимается, как зовут, где снимает.
@@ -293,8 +297,9 @@ def gallery_block(key):
 
 
 def process_block():
-    """Четыре шага съёмки. Стоит перед пакетами: человек сначала понимает,
-    как это будет происходить, и только потом смотрит на цены."""
+    """Четыре шага съёмки и строка записи под ними. Стоит перед пакетами:
+    человек сначала понимает, как это будет происходить, и только потом
+    смотрит на цены."""
     steps = "\n".join(
         '    <li class="sf-step">\n'
         '      <span class="sf-step__n">%s</span>\n'
@@ -310,7 +315,14 @@ def process_block():
   <ol class="sf-steps">
 %s
   </ol>
-</section>""" % (tb(C.PROCESS["title"], "h2", "sf-sectitle"), steps)
+  <div class="sf-process__cta">
+    <span class="sf-step__n sf-process__gutter" aria-hidden="true">04</span>
+    <div>
+%s
+    </div>
+  </div>
+</section>""" % (tb(C.PROCESS["title"], "h2", "sf-sectitle"), steps,
+                 indent(lead_block("inline", arrow=False), "      "))
 
 
 def price_block():
@@ -514,8 +526,7 @@ def main():
     write(PAGES["about"]["file"], page("about", about_block(), has_gallery=False,
                                       body_class="sf-body--fit"))
     write(PAGES["price"]["file"], page(
-        "price", "\n\n".join([process_block(), lead_block(), price_block()]),
-        has_gallery=False))
+        "price", "\n\n".join([process_block(), price_block()]), has_gallery=False))
     write(PAGES["contact"]["file"], page("contact", contact_block(), has_gallery=False))
 
     # ------------------------------------------------------ Tilda paste-kit
