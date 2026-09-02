@@ -316,13 +316,10 @@ def process_block():
 %s
   </ol>
   <div class="sf-process__cta">
-    <span class="sf-step__n sf-process__gutter" aria-hidden="true">04</span>
-    <div>
 %s
-    </div>
   </div>
 </section>""" % (tb(C.PROCESS["title"], "h2", "sf-sectitle"), steps,
-                 indent(lead_block("inline", arrow=False), "      "))
+                 indent(lead_block("inline", arrow=False), "    "))
 
 
 def price_block():
