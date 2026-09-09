@@ -218,11 +218,15 @@ def lead_block(variant="footer", arrow=True):
     return """<section class="sf-lead-in sf-lead-in--%s">
   <div class="sf-reach">
     <button class="sf-reach__open" type="button" aria-expanded="false">%s%s</button>
-    <div class="sf-reach__list" hidden>
+    <div class="sf-reach__list" role="dialog" aria-modal="true" aria-label="%s" hidden>
+      <button class="sf-reach__close" type="button" aria-label="%s">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      </button>
 %s
     </div>
   </div>
-</section>""" % (variant, t(C.LEAD["title"]), tip, links)
+</section>""" % (variant, t(C.LEAD["title"]), tip,
+                 a(C.LEAD["title"]), a(UI["close"]), links)
 # ------------------------------------------------------------ home parts
 def home_strapline():
     """Три строки капслоком над сеткой: чем занимается, как зовут, где снимает.

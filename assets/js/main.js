@@ -266,57 +266,6 @@
   })();
 
   /* ------------------------------------------------------------------
-     Booking dialog — three ways to get in touch
-     ------------------------------------------------------------------ */
-
-  (function initBooking() {
-    var box = $(".sf-booking");
-    var triggers = $$("[data-booking]");
-    if (!box || !triggers.length) return;
-
-    var lastFocus = null;
-
-    function open() {
-      lastFocus = document.activeElement;
-      box.classList.add("is-open");
-      box.setAttribute("aria-hidden", "false");
-      document.body.classList.add("sf-noscroll");
-      var first = $(".sf-booking__row", box);
-      if (first) first.focus();
-    }
-
-    function close() {
-      stopShow();
-      box.classList.remove("is-open");
-      box.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("sf-noscroll");
-      if (lastFocus && lastFocus.focus) lastFocus.focus();
-    }
-
-    triggers.forEach(function (btn) {
-      btn.addEventListener("click", open);
-    });
-
-    var closeBtn = $(".sf-booking__close", box);
-    if (closeBtn) closeBtn.addEventListener("click", close);
-
-    // Backdrop only — a click on the panel itself must not dismiss it.
-    box.addEventListener("click", function (e) {
-      if (e.target === box) close();
-    });
-
-    window.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && box.classList.contains("is-open")) close();
-    });
-
-    // Picking a messenger leaves the page; drop the lock so returning via the
-    // back button does not land on a frozen page.
-    $$(".sf-booking__row", box).forEach(function (a) {
-      a.addEventListener("click", close);
-    });
-  })();
-
-  /* ------------------------------------------------------------------
      Смена экранов: гасим страницу перед переходом
      ------------------------------------------------------------------ */
 
@@ -357,8 +306,11 @@
       var btn = $(".sf-reach__open", box);
       var list = $(".sf-reach__list", box);
       if (!btn || !list) return;
+      var closeBtn = $(".sf-reach__close", list);
+      var lastFocus = null;
 
-      btn.addEventListener("click", function () {
+      function open() {
+        lastFocus = document.activeElement;
         list.hidden = false;
         // hidden снимаем раньше класса, иначе переход не проиграет: элемент
         // появляется уже в конечном состоянии. Начальное состояние закрепляем
@@ -367,6 +319,36 @@
         void list.offsetWidth;
         box.classList.add("is-open");
         btn.setAttribute("aria-expanded", "true");
+        document.body.classList.add("sf-noscroll");
+        if (closeBtn) closeBtn.focus();
+      }
+
+      function close() {
+        box.classList.remove("is-open");
+        // Закрытие мгновенное — как у лайтбокса: ждать выхода незачем.
+        list.hidden = true;
+        btn.setAttribute("aria-expanded", "false");
+        document.body.classList.remove("sf-noscroll");
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+
+      btn.addEventListener("click", open);
+      if (closeBtn) closeBtn.addEventListener("click", close);
+
+      // Клик по завесе закрывает; по самим ссылкам — уводит в мессенджер.
+      list.addEventListener("click", function (e) {
+        if (e.target === list) close();
+      });
+
+      // Мессенджер открывается в соседней вкладке, страница остаётся за
+      // окном. Не закрой мы его здесь — вернувшись, человек застал бы
+      // завесу на месте и заблокированную прокрутку.
+      $$(".sf-reach__link", list).forEach(function (a) {
+        a.addEventListener("click", close);
+      });
+
+      window.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && box.classList.contains("is-open")) close();
       });
     });
   })();

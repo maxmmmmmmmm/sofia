@@ -31,6 +31,10 @@
   /* Подложка лайтбокса — тон фона сайта, слегка прозрачный: кадр всплывает
      на светлом, а не проваливается в темноту. */
   --sf-overlay:     rgba(250, 248, 246, 0.93);
+  /* Завеса под окном записи мягче, чем под лайтбоксом: кадр требует
+     чистого поля, а здесь страница должна остаться узнаваемой —
+     видно, откуда пришёл, и что это шаг в сторону, а не новый экран. */
+  --sf-overlay-soft: rgba(250, 248, 246, 0.86);
 
   /* Type */
   --sf-serif: "Cormorant Garamond", Cormorant, Georgia, "Times New Roman", serif;
@@ -882,8 +886,7 @@
 
 /* Кегль здесь текстовый, а не «кнопочный»: капслок с широкой разрядкой
    на целой фразе читается тяжело и выдаёт баннер. */
-.sf-lead-in--footer .sf-reach__open,
-.sf-lead-in--footer .sf-reach__link {
+.sf-lead-in--footer .sf-reach__open {
   font-family: var(--sf-display);
   font-weight: 300;
   color: var(--sf-ink);
@@ -904,14 +907,8 @@
   line-height: .7;
   vertical-align: -1px;
 }
-.sf-lead-in--footer .sf-reach__list { gap: 10px; }
-.sf-lead-in--footer .sf-reach__link {
-  font-size: 14px;
-  letter-spacing: 0.04em;
-}
 @media (hover: hover) {
   .sf-lead-in--footer .sf-reach__open:hover { letter-spacing: 0.12em; }
-  .sf-lead-in--footer .sf-reach__link:hover { letter-spacing: 0.07em; }
 }
 
 /* Строка записи внутри блока шагов. Ставится под четвёртым шагом, по его
@@ -942,13 +939,6 @@
   text-decoration-thickness: 1px;
   text-decoration-color: var(--sf-ink-faint);
   text-underline-offset: 7px;
-}
-.sf-lead-in--inline .sf-reach__list { gap: 8px; justify-items: center; }
-.sf-lead-in--inline .sf-reach__link {
-  font-family: var(--sf-sans);
-  font-weight: 300;
-  font-size: 14px;
-  letter-spacing: 0.02em;
 }
 @media (hover: hover) {
   .sf-lead-in--inline .sf-reach__open:hover {
@@ -1101,19 +1091,59 @@
 @media (hover: hover) {
   .sf-reach__open:hover { letter-spacing: 0.1em; }
 }
-.sf-reach.is-open .sf-reach__open { display: none; }
-
+/* Окно по центру экрана. Страница под ним не перестраивается: строка,
+   из которой окно вызвали, остаётся на своём месте — поэтому кнопка и не
+   прячется, как раньше. Выше шапки, но ниже лайтбокса: вместе они не
+   появляются. */
 .sf-reach__list {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
   display: grid;
-  gap: clamp(14px, 1.8vw, 24px);
+  align-content: center;
   justify-items: center;
+  gap: clamp(20px, 2.6vw, 30px);
+  padding: var(--sf-pad-x);
+  background: var(--sf-overlay-soft);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  opacity: 0;
+  transition: opacity 0.32s var(--sf-ease);
 }
 .sf-reach__list[hidden] { display: none; }
+.sf-reach.is-open .sf-reach__list { opacity: 1; }
 
+/* Крестик в углу — тот же, что у лайтбокса: закрыть можно и мимо ссылок,
+   и клавишей, но на телефоне нужна видимая цель. */
+.sf-reach__close {
+  position: absolute;
+  /* Поле в 12px даёт цель 46×46 — палец попадает. Отступы блока на эти же
+     12px меньше, поэтому сам знак стоит там же, где стоял. */
+  top: 10px;
+  right: 12px;
+  border: 0;
+  background: none;
+  padding: 12px;
+  color: var(--sf-ink-nav);
+  opacity: 0.65;
+  cursor: pointer;
+  transition: opacity 0.3s var(--sf-ease);
+}
+.sf-reach__close:hover { opacity: 1; }
+.sf-reach__close svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+}
+
+/* Кегль здесь крупный: в окне это единственное, что нужно прочитать. */
 .sf-reach__link {
   font-family: var(--sf-display);
   font-weight: 300;
-  font-size: clamp(21px, 2.8vw, 34px);
+  font-size: clamp(23px, 3vw, 34px);
   letter-spacing: 0.03em;
   color: var(--sf-ink-nav);
   opacity: 0;
@@ -1122,8 +1152,9 @@
               transform 0.6s var(--sf-ease), letter-spacing 0.6s var(--sf-ease);
 }
 .sf-reach.is-open .sf-reach__link { opacity: 1; transform: none; }
-.sf-reach.is-open .sf-reach__link:nth-child(2) { transition-delay: 0.08s; }
-.sf-reach.is-open .sf-reach__link:nth-child(3) { transition-delay: 0.16s; }
+/* По типу, а не по порядку: первым ребёнком в окне стоит крестик. */
+.sf-reach.is-open .sf-reach__link:nth-of-type(2) { transition-delay: 0.08s; }
+.sf-reach.is-open .sf-reach__link:nth-of-type(3) { transition-delay: 0.16s; }
 @media (hover: hover) {
   .sf-reach__link:hover { color: var(--sf-ink); letter-spacing: 0.09em; }
 }
