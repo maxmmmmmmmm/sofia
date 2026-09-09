@@ -236,9 +236,9 @@
   gap: 20px;
   min-height: var(--sf-header-h);
   padding-inline: var(--sf-pad-x);
-  background: rgba(250, 248, 246, 0.9);
-  backdrop-filter: saturate(150%) blur(12px);
-  -webkit-backdrop-filter: saturate(150%) blur(12px);
+  /* Бумага без просвета: кадры уходили под шапку и просвечивали сквозь неё,
+     из-за чего строка меню меняла тон по ходу прокрутки. */
+  background: var(--sf-bg);
 }
 
 /* Tilda variant. `position: sticky` cannot escape a Tilda record, so add
@@ -643,8 +643,10 @@
   cursor: pointer;
   transition: color 0.3s var(--sf-ease);
 }
-.sf-tab:hover { color: var(--sf-ink); }
-.sf-tab.is-active { color: var(--sf-ink); font-weight: 500; }
+/* Выбранный город того же тона, что подписи шагов над ним: разницу с
+   невыбранным держит вес, а не чернота. */
+.sf-tab:hover { color: var(--sf-ink-nav); }
+.sf-tab.is-active { color: var(--sf-ink-nav); font-weight: 500; }
 
 /* Порядок пакетов зависит от языка: в английской версии первой идёт улица,
    затем пары и только потом студия — там спрос начинается с улицы. В русской
@@ -849,6 +851,10 @@
   font-family: var(--sf-sans);
   font-size: 12px;
   font-weight: 500;
+  /* Тот же тон, что у заголовка «Как проходит съёмка» строкой выше: подпись
+     шага — такая же служебная строка, а не заголовок сама по себе. Чёрным
+     она перебивала и заголовок, и собственный текст под собой. */
+  color: var(--sf-ink-nav);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   margin-bottom: 0.7em;
