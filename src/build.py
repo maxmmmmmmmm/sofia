@@ -198,11 +198,14 @@ def footer(extra_class=""):
 </footer>""" % (extra_class, indent(social_row("sf-footer__social"), "  "), SITE["year"], SITE["wordmark"])
 
 
-def lead_block(variant="footer", arrow=True):
-    """Строка записи. variant задаёт оформление: «footer» — финальная строка
-    перед подвалом, «inline» — строка внутри другого блока, набранная вровень
-    с его текстом. arrow=False убирает стрелку: она уместна там, где строка
-    завершает страницу, и лишняя внутри абзацев."""
+def lead_block():
+    """Финальная строка страницы: она завершает просмотр и раскрывает каналы
+    связи окном по центру экрана.
+
+    «Телефон» стоит последним и показывается только в русской версии — тем же
+    правилом, что и на странице контактов: российский номер англоязычному
+    посетителю бесполезен. Прячет его CSS по data-lang, поэтому переключение
+    языка работает без перезагрузки."""
     ch = C.CONTACT["channels"]
     links = "\n".join(
         '      <a class="sf-reach__link" href="%s" target="_blank" rel="noopener">%s</a>'
@@ -213,20 +216,19 @@ def lead_block(variant="footer", arrow=True):
             (SITE["instagram"]["href"], ch["instagram"]),
         )
     )
-    tip = ('<span class="sf-lead-in__arrow" aria-hidden="true">→</span>'
-           if arrow else "")
-    return """<section class="sf-lead-in sf-lead-in--%s">
+    links += ('\n      <a class="sf-reach__link sf-reach__link--phone" href="%s">'
+              'Телефон</a>' % SITE["phone_ru"]["href"])
+    return """<section class="sf-lead-in sf-lead-in--footer">
   <div class="sf-reach">
-    <button class="sf-reach__open" type="button" aria-expanded="false">%s%s</button>
-    <div class="sf-reach__list" role="dialog" aria-modal="true" aria-label="%s" hidden>
+    <button class="sf-reach__open" type="button" aria-expanded="false">%s<span class="sf-lead-in__arrow" aria-hidden="true">→</span></button>
+    <div class="sf-reach__list" role="dialog" aria-modal="true" aria-label="%s" tabindex="-1" hidden>
       <button class="sf-reach__close" type="button" aria-label="%s">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
       </button>
 %s
     </div>
   </div>
-</section>""" % (variant, t(C.LEAD["title"]), tip,
-                 a(C.LEAD["title"]), a(UI["close"]), links)
+</section>""" % (t(C.LEAD["title"]), a(C.LEAD["title"]), a(UI["close"]), links)
 # ------------------------------------------------------------ home parts
 def home_strapline():
     """Три строки капслоком над сеткой: чем занимается, как зовут, где снимает.
@@ -301,9 +303,9 @@ def gallery_block(key):
 
 
 def process_block():
-    """Четыре шага съёмки и строка записи под ними. Стоит перед пакетами:
-    человек сначала понимает, как это будет происходить, и только потом
-    смотрит на цены."""
+    """Четыре шага съёмки. Стоит перед пакетами: человек сначала понимает,
+    как это будет происходить, и только потом смотрит на цены. Позвать на
+    съёмку посреди страницы нечем — строка записи ждёт внизу, как в галереях."""
     steps = "\n".join(
         '    <li class="sf-step">\n'
         '      <span class="sf-step__n">%s</span>\n'
@@ -319,11 +321,7 @@ def process_block():
   <ol class="sf-steps">
 %s
   </ol>
-  <div class="sf-process__cta">
-%s
-  </div>
-</section>""" % (tb(C.PROCESS["title"], "h2", "sf-sectitle"), steps,
-                 indent(lead_block("inline", arrow=False), "    "))
+</section>""" % (tb(C.PROCESS["title"], "h2", "sf-sectitle"), steps)
 
 
 def price_block():
@@ -335,6 +333,10 @@ def price_block():
 
     def pack(p):
         items = "\n".join("        <li>%s</li>" % t(it) for it in p["items"])
+        # Сноска есть не у каждого пакета: она про дорогу к океану, а в студию
+        # ехать никуда не нужно.
+        note = ("\n          %s" % tb(p["note"], "span", "sf-pack__note")
+                if p.get("note") else "")
         return """    <article class="sf-pack">
       <div class="sf-pack__media">
         <img src="%s" alt="%s" width="1000" height="1250" loading="lazy" decoding="async">
@@ -347,13 +349,13 @@ def price_block():
         </ul>
         <div class="sf-pack__extras">
           <strong>%s</strong>
-          %s
+          %s%s
         </div>
       </div>
     </article>""" % (
             sm(P.PRICE_SHOTS[p["shot"]]), a(p["name"]),
             t(p["name"]), t(p["cost"]), items,
-            t(UI["extras"]), tb(p["extras"], "span"),
+            t(UI["extras"]), tb(p["extras"], "span"), note,
         )
 
     def city_list(city_id, hidden):
@@ -527,7 +529,8 @@ def main():
     write(PAGES["about"]["file"], page("about", about_block(), has_gallery=False,
                                       body_class="sf-body--fit"))
     write(PAGES["price"]["file"], page(
-        "price", "\n\n".join([process_block(), price_block()]), has_gallery=False))
+        "price", "\n\n".join([process_block(), price_block(), lead_block()]),
+        has_gallery=False))
     write(PAGES["contact"]["file"], page("contact", contact_block(), has_gallery=False))
 
     # ------------------------------------------------------ Tilda paste-kit

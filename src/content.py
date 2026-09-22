@@ -123,9 +123,10 @@ HOME = {
     },
     # The script line under the grid, in place of the reference's
     # "for the adventurous, the heartfelt and the sun kissed".
+    # Одна строка вместо двух — перенос здесь больше нечего разделять.
     "tagline": {
-        "en": "every portrait is a scene<br>every person is a story",
-        "ru": "каждый портрет — сцена<br>каждый человек — история",
+        "en": "The world through a director\u2019s eyes",
+        "ru": "Мир глазами режиссёра",
     },
     "cta_title": {
         "en": "You have a story. Let me capture it.",
@@ -152,9 +153,8 @@ ABOUT = {
             "You have a story. Let me capture it.",
         ],
         "ru": [
-            "Снимаю в Москве и Лиссабоне.",
-            "Я фотографирую более семи лет. Окончила ВГИК с отличием по специальности «Режиссер». Именно режиссура сформировала мой взгляд на фотографию: я вижу в каждом портрете сцену из кино, а в каждом человеке историю, которую хочется рассказать.",
-            "Я дважды финалист чемпионата «ArtMasters» в компетенции «фотограф». Мои работы публиковались в таких журналах как ELLE, Forbes и «Кинорепортёр». Вхожу в топ-10 фотографов России в возрасте до 35 лет.",
+            "Занимаюсь фотографией более семи лет. Окончила ВГИК с отличием по специальности «Режиссура кино и телевидения». Именно это сформировало мой взгляд на фотографию: я вижу в каждом портрете сцену из кино, а в каждом человеке историю, которую хочется рассказать.",
+            "Дважды финалист чемпионата «ArtMasters» в компетенции «Фотограф». Мои работы публиковались в таких журналах как ELLE Girl, Forbes и «Кинорепортёр». Вхожу в топ-10 фотографов России в возрасте до 35 лет.",
             "У каждого есть своя история. Давайте расскажем её вместе через фотографию.",
         ],
     },
@@ -184,32 +184,22 @@ PRICE = {
     "packages": {
         "lisbon": [
             {
-                "shot": "studio",
-                "name": {"en": "Studio portraits", "ru": "Студийный портрет"},
-                "cost": "€300",
-                "items": [
-                    {"en": "Up to 2 hours of shooting", "ru": "До 2 часов съёмки"},
-                    {"en": "50 retouched photographs within 10 days", "ru": "50 отретушированных фотографий в течение 10 дней"},
-                    {"en": "Help with preparation — references, wardrobe, studio", "ru": "Помощь в подготовке — референсы, образы, студия"},
-                ],
-                "extras": {
-                    "en": "Extra hour +€70 · Express retouching in 3 days +€60 · Studio rental paid separately",
-                    "ru": "Дополнительный час +€70 · Экспресс-ретушь за 3 дня +€60 · Аренда студии оплачивается отдельно",
-                },
-            },
-            {
                 "shot": "walk",
                 "name": {"en": "Photo walk", "ru": "Фотопрогулка"},
                 "cost": "€250",
                 "items": [
                     {"en": "1.5 hours of shooting", "ru": "1,5 часа съёмки"},
-                    {"en": "60 retouched photographs within 10 days", "ru": "60 отретушированных фотографий в течение 10 дней"},
-                    {"en": "3–5 locations — street or ocean", "ru": "3–5 локаций — улица или океан"},
-                    {"en": "Help with preparation", "ru": "Помощь в подготовке"},
+                    {"en": "40 retouched photographs within 10 days", "ru": "40 фотографий в ретуши в течение 10 дней"},
+                    {"en": "3–5 locations: street or ocean", "ru": "3–5 локаций: улица или океан"},
+                    {"en": "Help getting ready for the shoot", "ru": "Помощь в подготовке к съёмке"},
                 ],
                 "extras": {
-                    "en": "Extra hour +€70 · Express retouching +€60 · Ocean location +€50 (taxi covered by the client)",
-                    "ru": "Дополнительный час +€70 · Экспресс-ретушь +€60 · Локация у океана +€50 (такси за счёт клиента)",
+                    "en": "Extra hour +€70 · Express retouching +€60 · Ocean location +€50 · Sunrise shoot +€50",
+                    "ru": "Дополнительный час +€70 · Экспресс-ретушь +€60 · Съёмка у океана +€50 · Съёмка на рассвете +€50",
+                },
+                "note": {
+                    "en": "Travel to the ocean location is paid separately",
+                    "ru": "Транспорт до локации у океана оплачивается отдельно",
                 },
             },
             {
@@ -218,13 +208,31 @@ PRICE = {
                 "cost": "€300",
                 "items": [
                     {"en": "Up to 2 hours of shooting", "ru": "До 2 часов съёмки"},
-                    {"en": "60 retouched photographs within 14 days", "ru": "60 отретушированных фотографий в течение 14 дней"},
+                    {"en": "60 retouched photographs within 14 days", "ru": "60 фотографий в ретуши в течение 14 дней"},
                     {"en": "Street, studio or ocean", "ru": "Улица, студия или океан"},
-                    {"en": "Help with preparation", "ru": "Помощь в подготовке"},
+                    {"en": "Help getting ready for the shoot", "ru": "Помощь в подготовке к съёмке"},
                 ],
                 "extras": {
-                    "en": "Extra hour +€70 · Express retouching +€60 · Ocean location +€50 · Studio rental paid separately",
-                    "ru": "Дополнительный час +€70 · Экспресс-ретушь +€60 · Локация у океана +€50 · Аренда студии отдельно",
+                    "en": "Extra hour +€70 · Express retouching +€60 · Ocean location +€50 · Sunrise shoot +€50 · Studio rental paid separately",
+                    "ru": "Дополнительный час +€70 · Экспресс-ретушь +€60 · Съёмка у океана +€50 · Съёмка на рассвете +€50 · Аренда студии оплачивается отдельно",
+                },
+                "note": {
+                    "en": "Travel to the ocean location is paid separately",
+                    "ru": "Транспорт до локации у океана оплачивается отдельно",
+                },
+            },
+            {
+                "shot": "studio",
+                "name": {"en": "Studio portrait", "ru": "Студийный портрет"},
+                "cost": "€300",
+                "items": [
+                    {"en": "Up to 2 hours of shooting", "ru": "До 2 часов съёмки"},
+                    {"en": "40 retouched photographs within 10 days", "ru": "40 фотографий в ретуши в течение 10 дней"},
+                    {"en": "Help getting ready: references, looks and choosing the studio", "ru": "Помощь в подготовке: референсы, образы и выбор студии"},
+                ],
+                "extras": {
+                    "en": "Extra hour +€70 · Express retouching in 3 days +€60 · Studio rental paid separately",
+                    "ru": "Дополнительный час +€70 · Экспресс-ретушь за 3 дня +€60 · Аренда студии оплачивается отдельно",
                 },
             },
         ],
@@ -286,20 +294,20 @@ PROCESS = {
     "steps": [
         {"n": "01",
          "name": {"en": "Enquiry", "ru": "Заявка"},
-         "text": {"en": "Your city, dates and ideas — send me a message via Telegram, WhatsApp or Instagram.",
-                  "ru": "Город, даты и ваши пожелания — в Telegram, WhatsApp или Instagram."}},
+         "text": {"en": "Your city, your dates and what you have in mind — in Telegram, WhatsApp or Instagram",
+                  "ru": "Город, даты и ваши пожелания — в Telegram, WhatsApp или Instagram"}},
         {"n": "02",
          "name": {"en": "Preparation", "ru": "Подготовка"},
-         "text": {"en": "We choose the location, discuss the looks and create a mood board for our photoshoot.",
-                  "ru": "Определяем локацию, образы и настроение съёмки."}},
+         "text": {"en": "We settle on the location, the looks and the mood of the shoot",
+                  "ru": "Определяем локацию, образы и настроение съёмки"}},
         {"n": "03",
          "name": {"en": "Photoshoot", "ru": "Съёмка"},
-         "text": {"en": "1.5–2 hours, no rush. I’ll guide you through the process and help you feel natural and comfortable in front of the camera.",
-                  "ru": "1,5–2 часа. Разговариваем, отдыхаем и ловим настоящие моменты."}},
+         "text": {"en": "I direct you as we go and help you with posing",
+                  "ru": "Я направляю вас в процессе и помогаю с позированием"}},
         {"n": "04",
          "name": {"en": "Editing", "ru": "Обработка"},
-         "text": {"en": "I select the best pics and give them a light, natural retouch. Your photos will be ready within 10–14 days.",
-                  "ru": "Отбираю лучшие кадры и делаю лёгкую ретушь. Готовые фотографии через 10–14 дней."}},
+         "text": {"en": "I pick the best frames and give them a light retouch and colour grade. Your photographs are with you within 10–14 days",
+                  "ru": "Отбираю лучшие кадры и делаю лёгкую ретушь и цветокоррекцию. Готовые фотографии у вас в течение 10–14 дней"}},
     ],
 }
 

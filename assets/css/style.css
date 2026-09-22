@@ -565,19 +565,17 @@
 
 .sf-tagline__text {
   margin: 0;
-  /* Тот же набор, что у состава пакетов в «Прайсе»: Jost лёгкого
-     начертания, обычными строчными. Капитель Cormorant SC отсюда снята. */
+  /* Кегль и тон — строки «CINEMATIC & VINTAGE PHOTOGRAPHER» над именем:
+     это такая же тихая подпись, а не второй заголовок. Раньше цвет был
+     объявлен дважды, и побеждал самый чёрный тон на сайте. */
   font-family: var(--sf-sans);
   font-weight: 300;
   text-transform: lowercase;
-  font-size: clamp(13px, 1.3vw, 17.5px);
-  /* Набор строки «MOSCOW, RU | LISBON, PT» из шапки главной: та же широкая
-     разрядка и тот же приглушённый тон — только строчными. */
+  font-size: clamp(9px, 2.6vw, 11px);
   letter-spacing: 0.2em;
   color: var(--sf-ink-nav);
   opacity: 0.9;
   line-height: 1.75;
-  color: var(--sf-ink);
 }
 
 /* Two-column: image one side, prose the other */
@@ -648,17 +646,14 @@
 .sf-tab:hover { color: var(--sf-ink-nav); }
 .sf-tab.is-active { color: var(--sf-ink-nav); font-weight: 500; }
 
-/* Порядок пакетов зависит от языка: в английской версии первой идёт улица,
-   затем пары и только потом студия — там спрос начинается с улицы. В русской
-   порядок исходный. Меняется раскладкой, разметка одна на оба языка. */
-/* grid, а не flex: пакеты — колоночные флекс-элементы с aspect-ratio внутри,
-   и в мобильном Safari такая связка схлопывала кадр в полоску. В гриде
-   строка считается по содержимому, а order работает точно так же. */
+/* Порядок пакетов задаёт разметка, а не стили: у каждого города он свой и
+   от языка не зависит. Раньше английская версия переставляла блоки поверх
+   русской — от этого сторона выноса кадра считалась дважды и разъезжалась.
+
+   grid, а не flex: пакеты — колоночные флекс-элементы с aspect-ratio внутри,
+   и в мобильном Safari такая связка схлопывала кадр в полоску. */
 .sf-pricelist { display: grid; }
 .sf-pricelist[hidden] { display: none; }
-.sf-root[data-lang="en"] .sf-pack:nth-child(1) { order: 3; }
-.sf-root[data-lang="en"] .sf-pack:nth-child(2) { order: 1; }
-.sf-root[data-lang="en"] .sf-pack:nth-child(3) { order: 2; }
 
 
 
@@ -700,28 +695,9 @@
     width: calc(100% + var(--sf-bleed-l) + var(--sf-bleed-r));
   }
 
-  /* Русская версия: кадр слева, справа, слева. */
+  /* Кадр слева, справа, слева — по порядку блоков в разметке. */
   .sf-pack:nth-child(odd)  .sf-pack__media { --sf-bleed-l: var(--sf-bleed); }
   .sf-pack:nth-child(even) .sf-pack__media { --sf-bleed-r: var(--sf-bleed); }
-
-  /* Английская: на экране улица (второй в разметке), пары (третий),
-     студия (первый). Стороны те же — слева, справа, слева, — поэтому
-     сторона и вынос задаются вместе, одним правилом на блок. */
-  .sf-root[data-lang="en"] .sf-pack:nth-child(1) .sf-pack__media {
-    order: 0;
-    --sf-bleed-l: var(--sf-bleed);
-    --sf-bleed-r: 0px;
-  }
-  .sf-root[data-lang="en"] .sf-pack:nth-child(2) .sf-pack__media {
-    order: 0;
-    --sf-bleed-l: var(--sf-bleed);
-    --sf-bleed-r: 0px;
-  }
-  .sf-root[data-lang="en"] .sf-pack:nth-child(3) .sf-pack__media {
-    order: 2;
-    --sf-bleed-l: 0px;
-    --sf-bleed-r: var(--sf-bleed);
-  }
 }
 
 .sf-pack__body { max-width: 44ch; }
@@ -765,6 +741,12 @@
   color: var(--sf-ink-faint);
   line-height: 1.7;
   max-width: 42ch;
+}
+/* Сноска про дорогу к океану: отбита от перечня дополнений пустой строкой,
+   потому что относится ко всему пакету, а не к одному из пунктов. */
+.sf-pack__note {
+  display: block;
+  margin-top: 0.9em;
 }
 .sf-pack__extras strong {
   display: block;
@@ -902,55 +884,25 @@
      тихой подписью, а не отдельной кнопкой. */
   font-size: 16px;
   letter-spacing: 0.08em;
+  text-transform: lowercase;
   padding: 10px 8px;
   margin: -10px -8px;
+  /* Флекс ставит стрелку вровень с серединой строки. Вертикальными сдвигами
+     это не держалось: у Jost и у Cormorant разная высота строки, и на разных
+     языках стрелка вставала по-разному. */
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 .sf-lead-in__arrow {
-  display: inline-block;
-  padding-left: 11px;
-  color: var(--sf-ink-faint);
-  font-size: 22px;
-  line-height: .7;
-  vertical-align: -1px;
+  /* Тем же тоном, что и сама строка, и мельче: раньше стрелка была вдвое
+     крупнее текста и светлее его — читалась отдельным значком. */
+  color: inherit;
+  font-size: 15px;
+  line-height: 1;
 }
 @media (hover: hover) {
   .sf-lead-in--footer .sf-reach__open:hover { letter-spacing: 0.12em; }
-}
-
-/* Строка записи внутри блока шагов. Ставится под четвёртым шагом, по его
-   левому краю: отдельной секцией посреди пустоты она читалась как чужой
-   элемент. Кегль и тон — как у текста шагов, поэтому она и не спорит с ними. */
-/* Строка записи по центру под всем блоком шагов: она подводит итог обоим
-   столбцам сразу, поэтому и не привязана ни к одному из них. */
-.sf-process__cta {
-  max-width: 1180px;
-  margin: clamp(26px, 3.2vw, 42px) auto 0;
-  text-align: center;
-}
-.sf-lead-in--inline { padding: 0; }
-.sf-lead-in--inline .sf-reach { text-align: center; }
-.sf-lead-in--inline .sf-reach__open {
-  font-family: var(--sf-sans);
-  font-weight: 300;
-  font-size: 15px;
-  letter-spacing: 0.02em;
-  color: var(--sf-ink);
-  padding: 10px 8px;
-  margin: -10px -8px;
-  /* Подчёркивание в один пиксель — той же толщины, что просвет между
-     кадрами в галереях, и тем же тихим тоном, что номера шагов рядом.
-     Отбивка в 7px уводит линию от выносных элементов: вплотную она
-     цепляла бы «б» и «ъ». */
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-decoration-color: var(--sf-ink-faint);
-  text-underline-offset: 7px;
-}
-@media (hover: hover) {
-  .sf-lead-in--inline .sf-reach__open:hover {
-    letter-spacing: 0.06em;
-    text-decoration-color: var(--sf-ink);
-  }
 }
 
 /* Страница контактов: один кадр, каналы поверх него и небольшой футер.
@@ -1122,6 +1074,12 @@
   transition: opacity 0.32s var(--sf-ease);
 }
 .sf-reach__list[hidden] { display: none; }
+/* Окно принимает фокус само, поэтому и обводка ему не нужна: браузер рисовал
+   рамку вокруг крестика, стоило открыть окно с клавиатуры или мышью. */
+.sf-reach__list:focus { outline: none; }
+/* Российский номер — только в русской версии, как и на странице контактов. */
+.sf-reach__link--phone { display: none; }
+.sf-root[data-lang="ru"] .sf-reach__link--phone { display: block; }
 .sf-reach.is-open .sf-reach__list { opacity: 1; }
 
 /* Крестик в углу — тот же, что у лайтбокса: закрыть можно и мимо ссылок,

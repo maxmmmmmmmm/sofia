@@ -320,7 +320,9 @@
         box.classList.add("is-open");
         btn.setAttribute("aria-expanded", "true");
         document.body.classList.add("sf-noscroll");
-        if (closeBtn) closeBtn.focus();
+        // Фокус на само окно, а не на крестик: скриптовый фокус браузер
+        // считает клавиатурным и обводит цель рамкой.
+        list.focus();
       }
 
       function close() {
