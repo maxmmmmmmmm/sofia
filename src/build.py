@@ -273,10 +273,10 @@ def about_block():
         <span class="sf-abouttitle__role">%s</span>
       </h1>
       <div class="sf-lead" style="margin-top:40px">
-        <div data-l="en">
+        <div data-l="en" lang="en">
         %s
         </div>
-        <div data-l="ru">
+        <div data-l="ru" lang="ru">
         %s
         </div>
       </div>
@@ -524,6 +524,7 @@ def main():
     for key in ("portraits", "street", "love"):
         write(PAGES[key]["file"], page(
             key, "\n\n".join([gallery_block(key), lead_block()]), has_gallery=True,
+            body_class="sf-body--gallery",
         ))
 
     write(PAGES["about"]["file"], page("about", about_block(), has_gallery=False,

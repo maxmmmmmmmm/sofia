@@ -188,10 +188,10 @@ PRICE = {
                 "name": {"en": "Photo walk", "ru": "Фотопрогулка"},
                 "cost": "€250",
                 "items": [
-                    {"en": "1.5 hours of shooting", "ru": "1,5 часа съёмки"},
-                    {"en": "40 retouched photographs within 10 days", "ru": "40 фотографий в ретуши в течение 10 дней"},
-                    {"en": "3–5 locations: street or ocean", "ru": "3–5 локаций: улица или океан"},
-                    {"en": "Help getting ready for the shoot", "ru": "Помощь в подготовке к съёмке"},
+                    {"en": "Help with preparing for the photoshoot", "ru": "Помощь в подготовке к съёмке"},
+                    {"en": "Up to 1.5 hours of shooting", "ru": "До 1,5 часов съёмки"},
+                    {"en": "3–5 locations", "ru": "3–5 локаций"},
+                    {"en": "40 retouched photos delivered within 10 days", "ru": "40 фотографий в ретуши в течение 10 дней"},
                 ],
                 "extras": {
                     "en": "Extra hour +€70 · Express retouching +€60 · Ocean location +€50 · Sunrise shoot +€50",
@@ -207,10 +207,10 @@ PRICE = {
                 "name": {"en": "Love story", "ru": "Парная съёмка"},
                 "cost": "€300",
                 "items": [
+                    {"en": "Help with preparing for the photoshoot", "ru": "Помощь в подготовке к съёмке"},
                     {"en": "Up to 2 hours of shooting", "ru": "До 2 часов съёмки"},
-                    {"en": "60 retouched photographs within 14 days", "ru": "60 фотографий в ретуши в течение 14 дней"},
                     {"en": "Street, studio or ocean", "ru": "Улица, студия или океан"},
-                    {"en": "Help getting ready for the shoot", "ru": "Помощь в подготовке к съёмке"},
+                    {"en": "60 retouched photos delivered within 14 days", "ru": "60 фотографий в ретуши в течение 14 дней"},
                 ],
                 "extras": {
                     "en": "Extra hour +€70 · Express retouching +€60 · Ocean location +€50 · Sunrise shoot +€50 · Studio rental paid separately",
@@ -224,11 +224,11 @@ PRICE = {
             {
                 "shot": "studio",
                 "name": {"en": "Studio portrait", "ru": "Студийный портрет"},
-                "cost": "€300",
+                "cost": "€270",
                 "items": [
+                    {"en": "Help with preparing for the shoot: references, looks and studio selection", "ru": "Помощь в подготовке: референсы, образы и выбор студии"},
                     {"en": "Up to 2 hours of shooting", "ru": "До 2 часов съёмки"},
-                    {"en": "40 retouched photographs within 10 days", "ru": "40 фотографий в ретуши в течение 10 дней"},
-                    {"en": "Help getting ready: references, looks and choosing the studio", "ru": "Помощь в подготовке: референсы, образы и выбор студии"},
+                    {"en": "40 retouched photos delivered within 10 days", "ru": "40 фотографий в ретуши в течение 10 дней"},
                 ],
                 "extras": {
                     "en": "Extra hour +€70 · Express retouching in 3 days +€60 · Studio rental paid separately",
