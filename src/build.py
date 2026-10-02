@@ -135,6 +135,12 @@ def header(current):
     nav_links = "\n".join("    " + link(k, "sf-header__link") for k in NAV_ORDER)
     drawer_links = "\n".join("  " + link(k, "sf-drawer__link") for k in NAV_ORDER)
 
+    # На телефоне в середине шапки вместо имени стоит название раздела. Это
+    # копия заголовка, а не сам заголовок: настоящий h1 остаётся на странице,
+    # спрятанный от глаз, — иначе читалка объявляла бы название дважды.
+    pagename = ('\n    <span class="sf-pagename" aria-hidden="true">%s</span>'
+                % t(C.GALLERIES[current]["title"])) if current in C.GALLERIES else ""
+
     return """<header class="sf-header">
   <nav class="sf-header__nav" aria-label="%s">
 %s
@@ -150,7 +156,7 @@ def header(current):
       <span class="sf-lang__sep">/</span>
       <button class="sf-lang__btn" type="button" data-lang="ru">RU</button>
     </div>
-    <a class="sf-logo" href="%s">%s</a>
+    <a class="sf-logo" href="%s">%s</a>%s
   </div>
 </header>
 
@@ -158,7 +164,7 @@ def header(current):
 %s
 </div>""" % (
         a(UI["menu"]), nav_links, a(UI["menu"]),
-        PAGES["home"]["file"], SITE["wordmark"], drawer_links,
+        PAGES["home"]["file"], SITE["wordmark"], pagename, drawer_links,
     )
 
 
@@ -331,6 +337,17 @@ def price_block():
         for i, c in enumerate(C.PRICE["cities"])
     )
 
+    def extras(v):
+        """Дополнения — список, а не сплошная строка. Каждый пункт обёрнут
+        отдельно и не переносится внутри себя: не влез — уходит на новую
+        строку целиком. Точку-разделитель ставит CSS, поэтому в тексте её
+        нет и она не отрывается от своего пункта."""
+        def one(lang):
+            return "".join('<span class="sf-pack__extra">%s</span>\n          ' % part.strip()
+                           for part in v[lang].split("·"))
+        return ('<span data-l="en">%s</span><span data-l="ru">%s</span>'
+                % (one("en"), one("ru")))
+
     def pack(p):
         items = "\n".join("        <li>%s</li>" % t(it) for it in p["items"])
         # Сноска есть не у каждого пакета: она про дорогу к океану, а в студию
@@ -355,7 +372,7 @@ def price_block():
     </article>""" % (
             sm(P.PRICE_SHOTS[p["shot"]]), a(p["name"]),
             t(p["name"]), t(p["cost"]), items,
-            t(UI["extras"]), tb(p["extras"], "span"), note,
+            t(UI["extras"]), extras(p["extras"]), note,
         )
 
     def city_list(city_id, hidden):
@@ -369,7 +386,7 @@ def price_block():
   %s
 </section>
 
-<section class="sf-wrap" style="padding-bottom:var(--sf-sect-y)">
+<section class="sf-wrap sf-pricebody" style="padding-bottom:var(--sf-sect-y)">
   <div class="sf-tabs" role="tablist">
 %s
   </div>
@@ -531,7 +548,7 @@ def main():
                                       body_class="sf-body--fit"))
     write(PAGES["price"]["file"], page(
         "price", "\n\n".join([process_block(), price_block(), lead_block()]),
-        has_gallery=False))
+        has_gallery=False, body_class="sf-body--price"))
     write(PAGES["contact"]["file"], page("contact", contact_block(), has_gallery=False))
 
     # ------------------------------------------------------ Tilda paste-kit

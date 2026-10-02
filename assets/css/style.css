@@ -60,6 +60,9 @@
   --sf-track-logo: 0.26em;   /* wordmark */
 
   /* Space */
+  /* Шаг вертикального ритма на телефоне: все отбивки в пакетах цен и на
+     странице «Обо мне» кратны ему, а не набраны на глаз. */
+  --sf-rhythm: 12px;
   --sf-pad-x:  clamp(16px, 4vw, 51px);
   --sf-sect-y: clamp(64px, 9vw, 132px);
   --sf-gap:    1px;          /* просвет между кадрами: волосяная линия */
@@ -260,6 +263,10 @@
 .sf-header__link:hover { color: var(--sf-ink); }
 .sf-header__link.is-active { color: var(--sf-ink); font-weight: 500; }
 
+/* Название раздела в шапке — только на телефоне: на компьютере там стоит
+   имя, а название раздела идёт строкой над сеткой. */
+.sf-pagename { display: none; }
+
 .sf-header__side {
   margin-left: auto;
   display: flex;
@@ -391,6 +398,33 @@
      единственное место, где назван автор. */
   .sf-body--home .sf-logo,
   .sf-body--gallery .sf-logo { display: none; }
+
+  /* Название раздела занимает в шапке то же место, что имя на других
+     страницах: та же середина, тот же кегль, та же антиква. */
+  .sf-body--gallery .sf-pagename {
+    display: block;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--sf-serif);
+    font-size: 17px;
+    letter-spacing: var(--sf-track-logo);
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--sf-ink);
+  }
+  /* Строка над сеткой больше не нужна — название уехало наверх. Сам
+     заголовок остаётся в разметке, спрятанный от глаз: страница не должна
+     лишиться своего h1. */
+  .sf-body--gallery .sf-pagehead { padding: 0; }
+  .sf-body--gallery .sf-pagehead__title {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 @media (min-width: 981px) {
   .sf-drawer { display: none; }
@@ -588,9 +622,39 @@
 .sf-split--narrow { max-width: 1140px; grid-template-columns: 0.78fr 1fr; }
 .sf-split__media img { width: 100%; }
 .sf-split__body { max-width: 58ch; }
+/* На телефоне разворот не распадается на кадр и текст под ним: кадр уходит
+   в левый край, текст обтекает его справа и продолжается во всю ширину под
+   ним. Обтекание, а не колонка: так текст сам решает, где кончается узкая
+   часть, и правило живёт при любом числе абзацев и на обоих языках. */
 @media (max-width: 820px) {
-  .sf-split { grid-template-columns: 1fr; gap: 32px; }
+  .sf-split { display: block; max-width: none; }
   .sf-split__body { max-width: none; }
+  .sf-split__media {
+    float: left;
+    /* Половина ширины плюс отступ страницы: кадр доходит до самого края. */
+    width: calc(50% + var(--sf-pad-x));
+    margin-left: calc(-1 * var(--sf-pad-x));
+    margin-right: calc(var(--sf-rhythm) * 1.5);
+    margin-bottom: calc(var(--sf-rhythm) * 2);
+    /* Исходник квадратный, а портрету нужна высота: срезаем поля по бокам
+       тем же кадрированием, что на компьютере, и кадр держит разворот. */
+    aspect-ratio: 4 / 5;
+  }
+  .sf-split__media img {
+    height: 100%;
+    object-fit: cover;
+    object-position: 55% 38%;
+  }
+  /* Род занятий встаёт над именем: на узкой колонке он работает надписью
+     к портрету, а имя остаётся самой крупной строкой разворота. */
+  .sf-abouttitle { display: flex; flex-direction: column; align-items: flex-start; }
+  .sf-abouttitle__role {
+    order: -1;
+    margin-top: 0;
+    margin-bottom: var(--sf-rhythm);
+  }
+  /* Отбивка до текста тоже кратна шагу — вместо прежних 40px из разметки. */
+  .sf-split__body .sf-lead { margin-top: calc(var(--sf-rhythm) * 2) !important; }
 }
 
 /* --------------------------------------------------------------------------
@@ -746,6 +810,12 @@
   display: block;
   margin-top: 0.9em;
 }
+/* Каждое дополнение — целое: внутри себя не переносится, а не влезло —
+   уходит на новую строку полностью. Точка-разделитель приклеена к концу
+   своего пункта, поэтому строка не может начаться с неё. */
+.sf-pack__extra { white-space: nowrap; }
+.sf-pack__extra:not(:last-child)::after { content: " ·"; }
+
 .sf-pack__extras strong {
   display: block;
   margin-bottom: 0.45em;
@@ -759,10 +829,9 @@
 /* На телефоне пакет не распадается на кадр и подпись под ним: кадр уходит в
    левый край экрана, условия стоят справа от него, а дополнения ложатся во всю
    ширину под обоими. Вертикальные отступы здесь кратны одной величине —
-   --sf-pack-rhythm, — чтобы расстояния не набирались на глаз. */
+   --sf-rhythm, — чтобы расстояния не набирались на глаз. */
 @media (max-width: 820px) {
   .sf-pack {
-    --sf-pack-rhythm: 12px;
     grid-template-columns: minmax(0, 0.52fr) minmax(0, 0.48fr);
     grid-template-areas:
       "media name"
@@ -772,7 +841,7 @@
     column-gap: clamp(14px, 4vw, 22px);
     row-gap: 0;
     align-items: start;
-    padding-block: calc(var(--sf-pack-rhythm) * 2);
+    padding-block: calc(var(--sf-rhythm) * 2);
   }
   /* Разметку не меняем: обёртка исчезает, и её содержимое становится
      ячейками той же сетки. */
@@ -789,26 +858,56 @@
     width: calc(100% + var(--sf-pad-x));
     position: relative;
     min-height: 0;
+    /* Вверх — на отбивку самого блока, вниз — в просвет перед дополнениями.
+       Кадр перестаёт висеть вровень с текстом и держит блок по высоте
+       целиком; до строки «Дополнительно» остаётся один шаг ритма. */
+    margin-top: calc(-2 * var(--sf-rhythm));
+    margin-bottom: calc(-2 * var(--sf-rhythm));
   }
   .sf-pack__media img { position: absolute; inset: 0; }
-  .sf-pack:nth-child(even) .sf-pack__media { order: 0; }
+  /* Шахматка: у чётного блока кадр уходит в правый край, текст встаёт
+     слева. Порядок пакетов при этом не меняется — меняются местами только
+     колонки внутри блока. */
+  .sf-pack:nth-child(even) {
+    grid-template-columns: minmax(0, 0.48fr) minmax(0, 0.52fr);
+    grid-template-areas:
+      "name  media"
+      "price media"
+      "list  media"
+      "extras extras";
+  }
+  .sf-pack:nth-child(even) .sf-pack__media {
+    order: 0;
+    margin-left: 0;
+    margin-right: calc(-1 * var(--sf-pad-x));
+  }
   .sf-pack__name   { grid-area: name; font-size: 12px; letter-spacing: 0.16em; }
   .sf-pack__price  {
     grid-area: price;
     font-size: 28px;
-    margin-top: var(--sf-pack-rhythm);
+    margin-top: var(--sf-rhythm);
     margin-bottom: 0;
   }
-  .sf-pack__list   { grid-area: list; margin-top: calc(var(--sf-pack-rhythm) * 2); }
+  .sf-pack__list   { grid-area: list; margin-top: calc(var(--sf-rhythm) * 2); }
   .sf-pack__list li { font-size: 13px; line-height: 1.7; }
-  .sf-pack__list li + li { margin-top: var(--sf-pack-rhythm); }
+  .sf-pack__list li + li { margin-top: var(--sf-rhythm); }
   .sf-pack__extras {
     grid-area: extras;
     max-width: none;
-    margin-top: calc(var(--sf-pack-rhythm) * 3);
+    margin-top: calc(var(--sf-rhythm) * 3);
   }
-  .sf-pack__note { margin-top: var(--sf-pack-rhythm); }
-  .sf-pack + .sf-pack { padding-top: calc(var(--sf-pack-rhythm) * 4); }
+  .sf-pack__note { margin-top: var(--sf-rhythm); }
+  .sf-pack + .sf-pack { padding-top: calc(var(--sf-rhythm) * 4); }
+
+  /* На телефоне сначала цены, потом порядок работы: экран узкий, и человек,
+     пришедший за суммой, не должен пролистывать до неё четыре шага. Порядок
+     в разметке не тронут — там он остаётся прежним ради поисковиков и
+     читалок. */
+  .sf-body--price .sf-main { display: flex; flex-direction: column; }
+  .sf-body--price .sf-pricehead { order: 1; }
+  .sf-body--price .sf-pricebody { order: 2; }
+  .sf-body--price .sf-process   { order: 3; }
+  .sf-body--price .sf-lead-in   { order: 4; }
 }
 
 /* --------------------------------------------------------------------------
