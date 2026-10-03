@@ -450,7 +450,9 @@ def contact_block():
     перезагрузки страницы."""
     return """<section class="sf-contactpage">
   %s
-  <img class="sf-contactpage__photo" src="assets/img/home/launch-01.jpg" alt="" width="1200" height="1800" loading="eager" decoding="async">
+  <img class="sf-contactpage__photo" src="assets/img/contact/bg.jpg"
+       srcset="assets/img/contact/bg@sm.jpg 1400w, assets/img/contact/bg.jpg 2400w"
+       sizes="100vw" alt="" width="2400" height="1801" loading="eager" decoding="async" fetchpriority="high">
   <div class="sf-contactpage__shade" aria-hidden="true"></div>
   <nav class="sf-contactpage__channels" aria-label="Contacts">
     <a href="%s" target="_blank" rel="noopener">Telegram</a>

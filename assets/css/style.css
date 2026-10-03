@@ -805,7 +805,9 @@
   margin-top: 1.9em;
   font-size: 12px;
   color: var(--sf-ink-faint);
-  line-height: 1.7;
+  /* Сноска набирается плотнее основного текста: перенесённый пункт должен
+     читаться одной мыслью, а не двумя отдельными строками. */
+  line-height: 1.45;
   max-width: 42ch;
 }
 /* Сноска про дорогу к океану: отбита от перечня дополнений пустой строкой,
@@ -932,9 +934,12 @@
 
 .sf-sectitle {
   font-family: var(--sf-display);
-  font-weight: 300;
-  font-size: 13px;
-  letter-spacing: 0.26em;
+  /* Вес и разрядка — как у названий пакетов. Цвет у них был общий и раньше,
+     но Jost 300 с разбегом в 0.26em читается серым даже самым чёрным тоном:
+     тонкие штрихи на широких просветах глаз смешивает с бумагой. */
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   text-align: center;
   /* Тот же тон, что у названий пакетов под ним: заголовок раздела не должен
@@ -1096,7 +1101,11 @@
 .sf-contactpage__photo {
   max-width: none;
   object-fit: cover;
-  object-position: center 58%;
+  /* По вертикали кадр опущен так, что голова встаёт примерно на пятой части
+     высоты снизу от шапки, а надписи ложатся на фигуру. По горизонтали ничего
+     не сдвинуто: на широком окне снимок и так виден во всю ширину, двигать
+     его там некуда. */
+  object-position: center 68%;
 }
 .sf-contactpage__shade { background: rgba(20, 18, 16, .42); }
 .sf-contactpage__channels {
