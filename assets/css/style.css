@@ -397,11 +397,13 @@
      дублировалось. Прячем только там; на остальных страницах это
      единственное место, где назван автор. */
   .sf-body--home .sf-logo,
-  .sf-body--gallery .sf-logo { display: none; }
+  .sf-body--gallery .sf-logo,
+  .sf-body--price .sf-logo { display: none; }
 
   /* Название раздела занимает в шапке то же место, что имя на других
      страницах: та же середина, тот же кегль, та же антиква. */
-  .sf-body--gallery .sf-pagename {
+  .sf-body--gallery .sf-pagename,
+  .sf-body--price .sf-pagename {
     display: block;
     position: absolute;
     left: 50%;
@@ -416,8 +418,10 @@
   /* Строка над сеткой больше не нужна — название уехало наверх. Сам
      заголовок остаётся в разметке, спрятанный от глаз: страница не должна
      лишиться своего h1. */
-  .sf-body--gallery .sf-pagehead { padding: 0; }
-  .sf-body--gallery .sf-pagehead__title {
+  .sf-body--gallery .sf-pagehead,
+  .sf-body--price .sf-pricehead { padding: 0; }
+  .sf-body--gallery .sf-pagehead__title,
+  .sf-body--price .sf-pricehead .sf-pagehead__title {
     position: absolute;
     width: 1px; height: 1px;
     margin: -1px; padding: 0;
@@ -908,6 +912,18 @@
   .sf-body--price .sf-pricebody { order: 2; }
   .sf-body--price .sf-process   { order: 3; }
   .sf-body--price .sf-lead-in   { order: 4; }
+
+  /* Между последним пакетом и «Как проходит съёмка» стояло 134px пустоты:
+     складывались отбивка самого пакета, низ секции цен и верх секции шагов,
+     каждая рассчитанная на широкий экран. На телефоне хватает одного шага
+     ритма снизу и двух сверху — границу разделов видно и так. */
+  .sf-body--price .sf-pricebody {
+    /* Заголовок «Цены» уехал в шапку, и переключатель городов упирался в неё
+       вплотную — два шага сверху возвращают ему воздух. */
+    padding-top: calc(var(--sf-rhythm) * 2);
+    padding-bottom: var(--sf-rhythm);
+  }
+  .sf-body--price .sf-process { padding-top: calc(var(--sf-rhythm) * 2); }
 }
 
 /* --------------------------------------------------------------------------
@@ -931,6 +947,10 @@
   padding-top: clamp(46px, 5vw, 76px);
   padding-bottom: clamp(34px, 4vw, 58px);
 }
+/* Отбивка снизу была записана прямо в разметке и оттуда перебивала любые
+   правила — из-за неё на телефоне не срабатывало уменьшение просвета. */
+.sf-pricebody { padding-bottom: var(--sf-sect-y); }
+
 .sf-pricehead {
   padding-top: clamp(18px, 2.5vw, 32px);
   padding-bottom: clamp(18px, 2.2vw, 28px);
@@ -1033,19 +1053,19 @@
   text-transform: lowercase;
   padding: 10px 8px;
   margin: -10px -8px;
-  /* Флекс ставит стрелку вровень с серединой строки. Вертикальными сдвигами
-     это не держалось: у Jost и у Cormorant разная высота строки, и на разных
-     языках стрелка вставала по-разному. */
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
 }
 .sf-lead-in__arrow {
   /* Тем же тоном, что и сама строка, и мельче: раньше стрелка была вдвое
-     крупнее текста и светлее его — читалась отдельным значком. */
+     крупнее текста и светлее его — читалась отдельным значком.
+
+     Никаких сдвигов и выравниваний по коробке: стрелка — обычный знак на той
+     же базовой линии, что и буквы. Коробки у них разной высоты, и центрировать
+     по коробкам означало поднимать стрелку над строкой. По базовой линии же
+     отпечаток стрелки и отпечаток строчных букв совпадают серединой — это и
+     есть «по центру текста». */
   color: inherit;
   font-size: 15px;
-  line-height: 1;
+  padding-left: 10px;
 }
 @media (hover: hover) {
   .sf-lead-in--footer .sf-reach__open:hover { letter-spacing: 0.12em; }

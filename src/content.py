@@ -194,8 +194,8 @@ PRICE = {
                     {"en": "40 retouched photos delivered within 10 days", "ru": "40 фотографий в ретуши в течение 10 дней"},
                 ],
                 "extras": {
-                    "en": "Extra hour +€70 · Express retouching +€60 · Ocean location +€50 · Sunrise shoot +€50",
-                    "ru": "Дополнительный час +€70 · Экспресс-ретушь +€60 · Съёмка у океана +€50 · Съёмка на рассвете +€50",
+                    "en": "Extra hour +€70 · Express retouching +€60 · Sunrise shoot +€50",
+                    "ru": "Дополнительный час +€70 · Экспресс-ретушь +€60 · Съёмка на рассвете +€50",
                 },
                 "note": {
                     "en": "Travel to the ocean location is paid separately",
@@ -213,8 +213,8 @@ PRICE = {
                     {"en": "60 retouched photos delivered within 14 days", "ru": "60 фотографий в ретуши в течение 14 дней"},
                 ],
                 "extras": {
-                    "en": "Extra hour +€70 · Express retouching +€60 · Ocean location +€50 · Sunrise shoot +€50 · Studio rental paid separately",
-                    "ru": "Дополнительный час +€70 · Экспресс-ретушь +€60 · Съёмка у океана +€50 · Съёмка на рассвете +€50 · Аренда студии оплачивается отдельно",
+                    "en": "Extra hour +€70 · Express retouching +€60 · Sunrise shoot +€50",
+                    "ru": "Дополнительный час +€70 · Экспресс-ретушь +€60 · Съёмка на рассвете +€50",
                 },
                 "note": {
                     "en": "Travel to the ocean location is paid separately",
@@ -231,8 +231,8 @@ PRICE = {
                     {"en": "40 retouched photos delivered within 10 days", "ru": "40 фотографий в ретуши в течение 10 дней"},
                 ],
                 "extras": {
-                    "en": "Extra hour +€70 · Express retouching in 3 days +€60 · Studio rental paid separately",
-                    "ru": "Дополнительный час +€70 · Экспресс-ретушь за 3 дня +€60 · Аренда студии оплачивается отдельно",
+                    "en": "Extra hour +€70 · Express retouching +€60 · Sunrise shoot +€50",
+                    "ru": "Дополнительный час +€70 · Экспресс-ретушь +€60 · Съёмка на рассвете +€50",
                 },
             },
         ],

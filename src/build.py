@@ -138,8 +138,14 @@ def header(current):
     # На телефоне в середине шапки вместо имени стоит название раздела. Это
     # копия заголовка, а не сам заголовок: настоящий h1 остаётся на странице,
     # спрятанный от глаз, — иначе читалка объявляла бы название дважды.
+    if current in C.GALLERIES:
+        label = C.GALLERIES[current]["title"]
+    elif current == "price":
+        label = PAGES[current]["nav"]
+    else:
+        label = None
     pagename = ('\n    <span class="sf-pagename" aria-hidden="true">%s</span>'
-                % t(C.GALLERIES[current]["title"])) if current in C.GALLERIES else ""
+                % t(label)) if label else ""
 
     return """<header class="sf-header">
   <nav class="sf-header__nav" aria-label="%s">
@@ -386,7 +392,7 @@ def price_block():
   %s
 </section>
 
-<section class="sf-wrap sf-pricebody" style="padding-bottom:var(--sf-sect-y)">
+<section class="sf-wrap sf-pricebody">
   <div class="sf-tabs" role="tablist">
 %s
   </div>
