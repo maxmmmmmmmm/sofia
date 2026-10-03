@@ -210,6 +210,19 @@ def footer(extra_class=""):
 </footer>""" % (extra_class, indent(social_row("sf-footer__social"), "  "), SITE["year"], SITE["wordmark"])
 
 
+ARROW = (
+    '<svg class="sf-lead-in__arrow" viewBox="0 0 100 39" aria-hidden="true" '
+    'focusable="false">'
+    # древко: прямая постоянной толщины, 4.8 единицы из ста — та же доля,
+    # что на присланном рисунке
+    '<rect x="0" y="17.1" width="86" height="4.8"/>'
+    # остриё: две дуги наружу от кончика к концам усов и две внутрь, к древку
+    '<path d="M100 19.5C88 12 78 5 70 0c6 8 10 14 14 19.5'
+    'C80 25 76 31 70 39c8-5 18-12 30-19.5Z"/>'
+    "</svg>"
+)
+
+
 def lead_block():
     """Финальная строка страницы: она завершает просмотр и раскрывает каналы
     связи окном по центру экрана.
@@ -232,7 +245,7 @@ def lead_block():
               'Телефон</a>' % SITE["phone_ru"]["href"])
     return """<section class="sf-lead-in sf-lead-in--footer">
   <div class="sf-reach">
-    <button class="sf-reach__open" type="button" aria-expanded="false">%s<span class="sf-lead-in__arrow" aria-hidden="true">→</span></button>
+    <button class="sf-reach__open" type="button" aria-expanded="false">%s%s</button>
     <div class="sf-reach__list" role="dialog" aria-modal="true" aria-label="%s" tabindex="-1" hidden>
       <button class="sf-reach__close" type="button" aria-label="%s">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
@@ -240,7 +253,7 @@ def lead_block():
 %s
     </div>
   </div>
-</section>""" % (t(C.LEAD["title"]), a(C.LEAD["title"]), a(UI["close"]), links)
+</section>""" % (t(C.LEAD["title"]), ARROW, a(C.LEAD["title"]), a(UI["close"]), links)
 # ------------------------------------------------------------ home parts
 def home_strapline():
     """Три строки капслоком над сеткой: чем занимается, как зовут, где снимает.
@@ -555,7 +568,10 @@ def main():
     write(PAGES["about"]["file"], page("about", about_block(), has_gallery=False,
                                       body_class="sf-body--fit"))
     write(PAGES["price"]["file"], page(
-        "price", "\n\n".join([process_block(), price_block(), lead_block()]),
+        # Сначала цены, потом порядок работы: человек приходит сюда за суммой,
+        # а как всё будет происходить читает уже после. Порядок один на все
+        # ширины — раньше его переставляла раскладка, и только на телефоне.
+        "price", "\n\n".join([price_block(), process_block(), lead_block()]),
         has_gallery=False, body_class="sf-body--price"))
     write(PAGES["contact"]["file"], page("contact", contact_block(), has_gallery=False))
 
