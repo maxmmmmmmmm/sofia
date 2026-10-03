@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en" class="sf-html">
+<head>
+  <!-- ЗАПАСНОЙ МАКЕТ ГЛАВНОЙ.
+
+       Основная главная — сетка избранных кадров (index.html); в Tilda она
+       собирается родным блоком галереи. Этот файл держит другой вариант:
+       три карточки разделов во всю высоту, кадры смешанные — портреты и
+       пары в чёрно-белом, улица в цвете.
+
+       Файл самостоятельный: берёт те же стили и тот же скрипт, что сайт,
+       поэтому меню, переключатель языка и переходы работают. Собран из
+       index.html заменой сетки на карточки; стили карточек лежат ниже,
+       в этом же файле, и в общий style.css не попадают. -->
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Главная карточками — Sofia Filatova — cinematic portrait photographer, Moscow &amp; Lisbon</title>
+  <meta name="description" content="Cinematic and vintage portrait photography by Sofia Filatova. Studio portraits, street sessions and couple shoots in Moscow and Lisbon.">
+  <meta property="og:title" content="Sofia Filatova — cinematic portrait photographer, Moscow &amp; Lisbon">
+  <meta property="og:description" content="Cinematic and vintage portrait photography by Sofia Filatova. Studio portraits, street sessions and couple shoots in Moscow and Lisbon.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="../assets/img/portraits/01.jpg">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&amp;family=Cormorant+SC:wght@400&amp;family=Jost:wght@300;400;500&amp;display=swap">
+  <link rel="stylesheet" href="../assets/css/style.css?v=1791048855">
+
+  <style>
+    /* Три карточки вместо сетки. Без линеек под названием и под «смотреть»:
+       линеек на сайте нет нигде, и здесь они единственное, что спорит
+       с кадром. */
+    /* Высота карточки задана пропорцией, а не остатком экрана. Раньше
+       карточки тянулись флексом на всё свободное место — а в мобильном
+       Safari при прокрутке сворачивается панель браузера, видимая высота
+       растёт, и карточки вместе с ней: со стороны это выглядело как
+       наезд фотографий. С пропорцией высота от прокрутки не зависит.
+
+       По бокам — тот же отступ, что у остальных страниц сайта. */
+    .sf-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--sf-gap);
+      padding-inline: var(--sf-pad-x);
+    }
+    .sf-card {
+      position: relative;
+      display: block;
+      overflow: hidden;
+      background: #0c0a09;
+      aspect-ratio: 1 / 3.7;
+    }
+    .sf-card img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .sf-card__veil {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top,
+        rgba(12,10,9,.62) 0%, rgba(12,10,9,.18) 42%, rgba(12,10,9,0) 68%);
+    }
+    .sf-card__cap {
+      position: absolute; left: 0; right: 0; bottom: 18px;
+      text-align: center; color: #fff;
+    }
+    .sf-card__ttl {
+      display: block;
+      font-family: var(--sf-serif);
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-shadow: 0 1px 10px rgba(0,0,0,.35);
+    }
+    .sf-card__view {
+      display: block;
+      margin-top: 8px;
+      font-family: var(--sf-sans);
+      font-weight: 300;
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-shadow: 0 1px 8px rgba(0,0,0,.35);
+    }
+    /* Стрелка — обычный знак на той же базовой линии, что и буквы. */
+    .sf-card__view i { font-style: normal; font-size: 10px; padding-left: 6px; }
+
+    @media (min-width: 821px) {
+      .sf-cards { padding-inline: 0; }
+      .sf-card { aspect-ratio: 1 / 1.62; }
+      .sf-card__ttl { font-size: 21px; letter-spacing: 0.14em; }
+      .sf-card__view { font-size: 11px; letter-spacing: 0.2em; margin-top: 12px; }
+      .sf-card__view i { font-size: 12px; padding-left: 8px; }
+      .sf-card__cap { bottom: 26px; }
+    }
+  </style>
+</head>
+<body class="sf-body sf-body--home">
+<div class="sf-root" data-lang="en">
+
+<header class="sf-header">
+  <nav class="sf-header__nav" aria-label="Menu">
+    <a class="sf-header__link is-active" href="#"><span data-l="en">Main</span><span data-l="ru">Главная</span></a>
+    <a class="sf-header__link" href="../about.html"><span data-l="en">About me</span><span data-l="ru">Обо мне</span></a>
+    <a class="sf-header__link" href="../portraits.html"><span data-l="en">Portraits</span><span data-l="ru">Portraits</span></a>
+    <a class="sf-header__link" href="../street.html"><span data-l="en">Street</span><span data-l="ru">Street</span></a>
+    <a class="sf-header__link" href="../love.html"><span data-l="en">Love</span><span data-l="ru">Love</span></a>
+    <a class="sf-header__link" href="../price.html"><span data-l="en">Price</span><span data-l="ru">Цены</span></a>
+    <a class="sf-header__link" href="../contact.html"><span data-l="en">Contact</span><span data-l="ru">Контакты</span></a>
+  </nav>
+
+  <button class="sf-burger" type="button" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+
+  <div class="sf-header__side">
+    <div class="sf-lang">
+      <button class="sf-lang__btn" type="button" data-lang="en">EN</button>
+      <span class="sf-lang__sep">/</span>
+      <button class="sf-lang__btn" type="button" data-lang="ru">RU</button>
+    </div>
+    <a class="sf-logo" href="#">Sofia Filatova</a>
+  </div>
+</header>
+
+<div class="sf-drawer">
+  <a class="sf-drawer__link is-active" href="#"><span data-l="en">Main</span><span data-l="ru">Главная</span></a>
+  <a class="sf-drawer__link" href="../about.html"><span data-l="en">About me</span><span data-l="ru">Обо мне</span></a>
+  <a class="sf-drawer__link" href="../portraits.html"><span data-l="en">Portraits</span><span data-l="ru">Portraits</span></a>
+  <a class="sf-drawer__link" href="../street.html"><span data-l="en">Street</span><span data-l="ru">Street</span></a>
+  <a class="sf-drawer__link" href="../love.html"><span data-l="en">Love</span><span data-l="ru">Love</span></a>
+  <a class="sf-drawer__link" href="../price.html"><span data-l="en">Price</span><span data-l="ru">Цены</span></a>
+  <a class="sf-drawer__link" href="../contact.html"><span data-l="en">Contact</span><span data-l="ru">Контакты</span></a>
+</div>
+
+<main class="sf-main">
+
+<section class="sf-strapline">
+  <p class="sf-strapline__line">CINEMATIC &amp; VINTAGE PHOTOGRAPHER</p>
+  <p class="sf-strapline__name">SOFIA FILATOVA</p>
+  <p class="sf-strapline__line"><span data-l="en">Moscow | Lisbon</span><span data-l="ru">Москва | Лиссабон</span></p>
+</section>
+
+<div class="sf-cards">
+  <a class="sf-card" href="../portraits.html">
+    <img src="img/mix-1.jpg" alt="Portraits" loading="eager" decoding="async">
+    <span class="sf-card__veil"></span>
+    <span class="sf-card__cap">
+      <span class="sf-card__ttl">Portraits</span>
+      <span class="sf-card__view"><span data-l="en">view</span><span data-l="ru">смотреть</span><i>→</i></span>
+    </span>
+  </a>
+  <a class="sf-card" href="../street.html">
+    <img src="img/mix-2.jpg" alt="Street" loading="eager" decoding="async">
+    <span class="sf-card__veil"></span>
+    <span class="sf-card__cap">
+      <span class="sf-card__ttl">Street</span>
+      <span class="sf-card__view"><span data-l="en">view</span><span data-l="ru">смотреть</span><i>→</i></span>
+    </span>
+  </a>
+  <a class="sf-card" href="../love.html">
+    <img src="img/mix-3.jpg" alt="Love" loading="eager" decoding="async">
+    <span class="sf-card__veil"></span>
+    <span class="sf-card__cap">
+      <span class="sf-card__ttl">Love</span>
+      <span class="sf-card__view"><span data-l="en">view</span><span data-l="ru">смотреть</span><i>→</i></span>
+    </span>
+  </a>
+</div>
+
+<section class="sf-tagline">
+  <p class="sf-tagline__text"><span data-l="en">The world through a director’s eyes</span><span data-l="ru">Мир глазами режиссёра</span></p>
+</section>
+
+</main>
+
+<footer class="sf-footer">
+  <div class="sf-social sf-footer__social">
+    <a href="https://instagram.com/sfx.ph" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.05 1.8.25 2.2.42.6.22 1 .48 1.4.9.43.43.7.83.92 1.4.17.42.37 1.06.42 2.25.06 1.28.07 1.66.07 4.9s0 3.6-.07 4.9c-.05 1.2-.25 1.8-.42 2.2-.22.6-.5 1-.92 1.4-.42.43-.82.7-1.4.92-.42.17-1.06.37-2.25.42-1.28.06-1.66.07-4.9.07s-3.6 0-4.9-.07c-1.2-.05-1.8-.25-2.2-.42-.6-.22-1-.5-1.4-.92-.43-.42-.7-.82-.92-1.4-.17-.42-.37-1.06-.42-2.25C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.05-1.2.25-1.8.42-2.2.22-.6.5-1 .92-1.4.42-.43.82-.7 1.4-.92.42-.17 1.06-.37 2.25-.42C8.4 2.2 8.8 2.2 12 2.2Z"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.4" cy="6.6" r="1"/></svg></a>
+    <a href="https://t.me/sfxx1" target="_blank" rel="noopener" aria-label="Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.5 4.3 2.9 11.4c-.9.35-.9.86-.16 1.08l4.7 1.47 1.8 5.5c.22.6.4.83.86.83.36 0 .52-.16.72-.36l2.2-2.14 4.6 3.4c.84.46 1.44.22 1.65-.78l3-14.1c.3-1.22-.48-1.78-1.28-1.42Z"/></svg></a>
+    <a href="https://wa.me/79263759795" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.7a8.4 8.4 0 0 1-12.4 7.4L3.5 20.5l1.4-4.5A8.4 8.4 0 1 1 20.5 11.7Z"/><path d="M8.9 8.2c.2-.5.4-.5.6-.5h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2 0 .4-.1.6l-.4.5c-.1.2-.3.4-.1.7a6 6 0 0 0 2.8 2.5c.3.1.5 0 .7-.1l.6-.7c.2-.2.4-.2.6-.1l1.8.9c.2.1.4.2.4.4v.5c0 .8-.7 1.5-1.5 1.6-1 .1-2-.2-4-1.4a9.4 9.4 0 0 1-3.5-4.1c-.4-1.1-.3-2.2.2-2.7Z"/></svg></a>
+  </div>
+  <div class="sf-footer__legal">© 2026 Sofia Filatova</div>
+</footer>
+
+<div class="sf-lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="sf-lightbox__btn sf-lightbox__close" type="button" aria-label="Close">
+    <svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg>
+  </button>
+  <button class="sf-lightbox__btn sf-lightbox__prev" type="button" aria-label="Previous">
+    <svg viewBox="0 0 24 24"><path d="M15 4L7 12l8 8"/></svg>
+  </button>
+  <div class="sf-lightbox__stage"><img alt=""></div>
+  <button class="sf-lightbox__btn sf-lightbox__next" type="button" aria-label="Next">
+    <svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg>
+  </button>
+  <div class="sf-lightbox__count"></div>
+  <div class="sf-lightbox__bar"></div>
+</div>
+</div>
+<script src="../assets/js/main.js?v=1790090283"></script>
+</body>
+</html>
