@@ -893,7 +893,7 @@
     margin-left: 0;
     margin-right: calc(-1 * var(--sf-pad-x));
   }
-  .sf-pack__name   { grid-area: name; font-size: 12px; letter-spacing: 0.16em; }
+  .sf-pack__name   { grid-area: name; font-size: 14px; letter-spacing: 0.16em; }
   .sf-pack__price  {
     grid-area: price;
     font-size: 28px;
@@ -945,7 +945,9 @@
   letter-spacing: 0.26em;
   text-transform: uppercase;
   text-align: center;
-  color: var(--sf-ink-nav);
+  /* Тот же тон, что у названий пакетов под ним: заголовок раздела не должен
+     быть тише того, что он возглавляет. */
+  color: var(--sf-ink);
   margin-bottom: clamp(26px, 3vw, 42px);
 }
 
