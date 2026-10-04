@@ -95,8 +95,8 @@ META = {
     "contact": {
         "title": {"en": "Contact — Sofia Filatova", "ru": "Контакты — София Филатова"},
         "description": {
-            "en": "Get in touch to book a shoot in Moscow or Lisbon — Telegram, WhatsApp, Instagram or email.",
-            "ru": "Связаться и забронировать съёмку в Москве или Лиссабоне — Telegram, WhatsApp, Instagram или почта.",
+            "en": "Get in touch to book a shoot in Moscow or Lisbon — Telegram, WhatsApp or Instagram.",
+            "ru": "Связаться и забронировать съёмку в Москве или Лиссабоне — Telegram, WhatsApp или Instagram.",
         },
     },
 }
