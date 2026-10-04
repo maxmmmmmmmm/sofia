@@ -142,7 +142,10 @@ ABOUT = {
     # Имя и род занятий вынесены в заголовок. Первая фраза текста повторяла
     # их слово в слово, поэтому из тела она убрана — осталась только география.
     "title": {"en": "Sofia Filatova", "ru": "София Филатова"},
-    "role": {"en": "photographer and film director", "ru": "фотограф и кинорежиссёр"},
+    # Неразрывный пробел держит «and» при «photographer»: на телефоне строка
+    # ломается перед «film», и получается «PHOTOGRAPHER AND / FILM DIRECTOR».
+    # На компьютере строка одна, и пробел ни на что не влияет.
+    "role": {"en": "photographer\u00a0and film director", "ru": "фотограф\u00a0и кинорежиссёр"},
     # Sofia's own copy, supplied by the client — do not paraphrase it.
     "body": {
         "en": [

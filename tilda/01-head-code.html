@@ -642,7 +642,9 @@
 @media (max-width: 820px) {
   .sf-split {
     display: grid;
-    grid-template-columns: 54% minmax(0, 1fr);
+    /* 48, а не 54: в колонке рядом с кадром должна умещаться строка
+       «PHOTOGRAPHER AND» целиком — она длиннее русской «ФОТОГРАФ И». */
+    grid-template-columns: 48% minmax(0, 1fr);
     column-gap: calc(var(--sf-rhythm) * 1.5);
     row-gap: calc(var(--sf-rhythm) * 2);
     max-width: none;
@@ -681,6 +683,10 @@
     order: -1;
     margin-top: 0;
     margin-bottom: var(--sf-rhythm);
+    /* Кегль по ширине экрана: на узком телефоне «PHOTOGRAPHER AND» иначе
+       не помещается в колонку, а разорвать её нельзя — там неразрывный
+       пробел. Разрядку не трогаем, она и делает эту строку подписью. */
+    font-size: clamp(10.5px, 3.3vw, 13px);
   }
   .sf-split__body .sf-lead {
     grid-column: 1 / -1; grid-row: 2;
@@ -944,7 +950,9 @@
     margin-top: calc(var(--sf-rhythm) * 3);
   }
   .sf-pack__note { margin-top: var(--sf-rhythm); }
-  .sf-pack + .sf-pack { padding-top: calc(var(--sf-rhythm) * 4); }
+  /* Вдвое больше прежнего: пакеты — отдельные предложения, и на узком
+     экране их надо разводить сильнее, чем строки внутри одного. */
+  .sf-pack + .sf-pack { padding-top: calc(var(--sf-rhythm) * 8); }
 
   /* Между последним пакетом и «Как проходит съёмка» стояло 134px пустоты:
      складывались отбивка самого пакета, низ секции цен и верх секции шагов,
