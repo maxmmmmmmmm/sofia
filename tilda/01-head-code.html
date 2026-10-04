@@ -926,6 +926,24 @@
   .sf-body--price .sf-process { padding-top: calc(var(--sf-rhythm) * 2); }
 }
 
+/* Просветы на странице цен, компьютерная ширина. Отбивки здесь складывались
+   из общих правил — низ переключателя, верх и низ пакета, низ секции цен,
+   верх секции шагов, — и каждая была рассчитана на свой блок в одиночку.
+   Вместе они давали 115px от городов до первого кадра и 243px от последнего
+   кадра до «Как проходит съёмка»: страница распадалась на острова. Телефон
+   это правило не трогает — там свои величины, кратные шагу ритма. */
+@media (min-width: 821px) {
+  .sf-body--price .sf-tabs { padding-bottom: clamp(18px, 2vw, 28px); }
+  .sf-body--price .sf-pricebody .sf-pack:first-child {
+    padding-top: clamp(20px, 2.2vw, 30px);
+  }
+  .sf-body--price .sf-pricebody .sf-pack:last-child {
+    padding-bottom: clamp(20px, 2.2vw, 30px);
+  }
+  .sf-body--price .sf-pricebody { padding-bottom: clamp(18px, 2vw, 28px); }
+  .sf-body--price .sf-process { padding-top: clamp(28px, 3.2vw, 44px); }
+}
+
 /* --------------------------------------------------------------------------
    8b. КАК ПРОХОДИТ СЪЁМКА
    -------------------------------------------------------------------------- */
