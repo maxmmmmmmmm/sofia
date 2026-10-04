@@ -229,19 +229,6 @@ BEST = [
     "love/06.jpg",      "street/04.jpg",   "portraits/13.jpg", "love/02.jpg",
 ]
 
-# Один большой кадр-заставка на главной, во всю ширину.
-HERO_SHOT = BASE + PORTRAITS[28][0]
-
-# Covers for the three category cards.
-COVERS = {
-    "portraits": BASE + PORTRAITS[0][0],
-    "street":    BASE + STREET[9][0],
-    "love":      BASE + LOVE[0][0],
-}
-
-# Atmospheric photo beside the contact form, as on the reference.
-CONTACT_SHOT = BASE + LOVE[7][0]
-
 # Package illustrations on the price page.
 PRICE_SHOTS = {
     "studio":    BASE + PORTRAITS[4][0],

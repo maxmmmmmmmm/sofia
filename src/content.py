@@ -17,15 +17,12 @@ SITE = {
     "instagram": {"handle": "@sfx.ph", "href": "https://instagram.com/sfx.ph"},
     "telegram": {"handle": "@sfxx1", "href": "https://t.me/sfxx1"},
     "whatsapp": {"handle": "+7 926 375 97 95", "href": "https://wa.me/79263759795"},
-    "booking_href": "https://t.me/sfxx1",
     "year": 2026,
 }
 
+# Служебные надписи: только те, что ещё читаются сборщиком. Подписи снятых
+# блоков — кнопки «ещё», карточек разделов, счётчика кадров — убраны.
 UI = {
-    "book":     {"en": "Book a date",    "ru": "Забронировать"},
-    "read_more": {"en": "More about me", "ru": "Обо мне"},
-    "see_more": {"en": "more",           "ru": "ещё"},
-    "photos":   {"en": "photographs",    "ru": "фотографий"},
     "close":    {"en": "Close",          "ru": "Закрыть"},
     "prev":     {"en": "Previous",       "ru": "Назад"},
     "next":     {"en": "Next",           "ru": "Вперёд"},
@@ -128,10 +125,6 @@ HOME = {
         "en": "The world through a director\u2019s eyes",
         "ru": "Мир глазами режиссёра",
     },
-    "cta_title": {
-        "en": "You have a story. Let me capture it.",
-        "ru": "У вас есть история. Позвольте мне её снять.",
-    },
 }
 
 # ---------------------------------------------------------------- about
@@ -139,8 +132,6 @@ HOME = {
 ABOUT = {
     # Не «Привет, я София» — панибратство здесь не к месту. Варианты на замену
     # лежат рядом, поменять можно одной строкой.
-    # Имя и род занятий вынесены в заголовок. Первая фраза текста повторяла
-    # их слово в слово, поэтому из тела она убрана — осталась только география.
     "title": {"en": "Sofia Filatova", "ru": "София Филатова"},
     # Неразрывный пробел держит «and» при «photographer»: на телефоне строка
     # ломается перед «film», и получается «PHOTOGRAPHER AND / FILM DIRECTOR».
@@ -328,11 +319,5 @@ CONTACT = {
         "telegram":  {"en": "Telegram",  "ru": "Telegram"},
         "whatsapp":  {"en": "WhatsApp",  "ru": "WhatsApp"},
         "instagram": {"en": "Instagram", "ru": "Instagram"},
-    },
-    "form": {
-        "name":    {"en": "Your name", "ru": "Ваше имя"},
-        "contact": {"en": "Telegram, WhatsApp or email", "ru": "Telegram, WhatsApp или почта"},
-        "message": {"en": "What are we shooting?", "ru": "Что снимаем?"},
-        "submit":  {"en": "Send", "ru": "Отправить"},
     },
 }

@@ -21,8 +21,6 @@ else
   echo "  С телефона: адрес не определён — нет подключения к сети."
 fi
 echo ""
-echo "  Мобильная версия:    http://localhost:$PORT/mobile.html"
-echo ""
 echo "  Остановить — закрыть это окно или Ctrl+C."
 echo ""
 
