@@ -114,10 +114,6 @@ HOME = {
         "en": "Portraits that feel like stills from a film",
         "ru": "Портреты, похожие на кадры из фильма",
     },
-    "hero_sub": {
-        "en": "Cinematic &amp; vintage photographer from Moscow &amp; Lisbon",
-        "ru": "Кинематографичный фотограф, Москва и Лиссабон",
-    },
     # The script line under the grid, in place of the reference's
     # "for the adventurous, the heartfelt and the sun kissed".
     # Одна строка вместо двух — перенос здесь больше нечего разделять.
@@ -314,7 +310,6 @@ LEAD = {
 # -------------------------------------------------------------- contact
 
 CONTACT = {
-    "open": {"en": "get in touch", "ru": "связаться"},
     "channels": {
         "telegram":  {"en": "Telegram",  "ru": "Telegram"},
         "whatsapp":  {"en": "WhatsApp",  "ru": "WhatsApp"},

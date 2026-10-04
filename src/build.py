@@ -259,11 +259,16 @@ def home_strapline():
     """Три строки капслоком над сеткой: чем занимается, как зовут, где снимает.
     На телефоне это единственный текст на первом экране, поэтому он и держит
     страницу; на компьютере всё то же сообщение уже несёт шапка."""
+    # Имя набрано абзацем, а не заголовком: это подпись, а не название
+    # страницы. Настоящий h1 стоит рядом, спрятанный от глаз, — без него
+    # главная была единственной страницей сайта вообще без заголовка.
     return """<section class="sf-strapline">
+  %s
   <p class="sf-strapline__line">CINEMATIC &amp; VINTAGE PHOTOGRAPHER</p>
   <p class="sf-strapline__name">SOFIA FILATOVA</p>
   %s
-</section>""" % tb(C.HOME["places"], "p", "sf-strapline__line")
+</section>""" % (tb(C.HOME["hero_title"], "h1", "sf-vh"),
+                 tb(C.HOME["places"], "p", "sf-strapline__line"))
 
 
 def home_grid():
@@ -418,40 +423,22 @@ def price_block():
     )
 
 
-def contact_details():
-    """Версия для Tilda: тот же список каналов, без фото — снимок там ставится
-    родным блоком, поэтому в коде не остаётся ни одной ссылки на файл."""
-    return '<section class="sf-sect sf-wrap">\n  <div class="sf-reach">\n%s\n  </div>\n</section>' % reach_list("    ")
+# Единственное место во всём наборе, куда нужно подставить адрес фотографии.
+PHOTO_SLOT = "ВСТАВЬТЕ-СЮДА-АДРЕС-ФОТО"
 
 
-def reach(indent_by="    ", label=None):
-    """Одна кнопка по центру. По нажатию раскрываются три канала — только
-    названия, без ников и номеров: ссылка и так ведёт в нужный аккаунт.
-
-    label позволяет подставить свою подпись: под галереей кнопкой служит сама
-    фраза «Расскажите, что снимаем», на «Контактах» — короткое «связаться»."""
-    ch = C.CONTACT["channels"]
-    rows = [
-        ("telegram",  SITE["telegram"]["href"],  ch["telegram"]),
-        ("whatsapp",  SITE["whatsapp"]["href"],  ch["whatsapp"]),
-        ("instagram", SITE["instagram"]["href"], ch["instagram"]),
-    ]
-    links = "\n".join(
-        '%s    <a class="sf-reach__link" href="%s" target="_blank" rel="noopener">%s</a>'
-        % (indent_by, href, t(label)) for _key, href, label in rows
-    )
-    return """%s<div class="sf-reach">
-%s  <button class="sf-reach__open" type="button" aria-expanded="false">%s</button>
-%s  <div class="sf-reach__list" hidden>
-%s
-%s  </div>
-%s</div>""" % (indent_by, indent_by, t(label or C.CONTACT["open"]), indent_by, links, indent_by, indent_by)
-
-
-def contact_details():
-    """Версия для Tilda — та же кнопка, без фотографии."""
-    return '<section class="sf-sect sf-wrap sf-contactpage">\n  %s\n</section>' % tb(
-        PAGES["contact"]["nav"], "h1", "sf-vh") + "\n" + reach("  ")
+def tilda_contact():
+    """Контакты для Tilda: та же страница, что на сайте, но вместо нашего
+    кадра — одно место под адрес. Снимок грузится в библиотеку Tilda, и её
+    адрес подставляется прямо в блоке; подбора размеров под экран здесь нет,
+    Tilda отдаёт один файл."""
+    html = contact_block()
+    old = ('src="assets/img/contact/bg.jpg"\n'
+           '       srcset="assets/img/contact/bg@sm.jpg 1400w, '
+           'assets/img/contact/bg.jpg 2400w"\n'
+           '       sizes="100vw" alt=""')
+    assert old in html, "разметка кадра на контактах изменилась"
+    return html.replace(old, 'src="%s" alt=""' % PHOTO_SLOT)
 
 
 def contact_block():
@@ -631,16 +618,21 @@ def main():
         header("home")))
 
     write("tilda/03-home-strapline.html", block(
-        "03", "Главная — скрытый заголовок для поиска",
-        "Блок T123 на главной, в самом верху",
-        '<section class="sf-hero">\n  %s\n  %s\n</section>' % (
-            tb(C.HOME["hero_title"], "h1", "sf-vh"),
-            tb(C.HOME["hero_sub"], "p", "sf-hero__sub"))))
+        "03", "Главная — три строки над сеткой",
+        "Блок T123 на главной, в самом верху, НАД родной галереей. "
+        "Внутри спрятан заголовок страницы — он нужен поиску, видно его не будет.",
+        home_strapline()))
+
+    write("tilda/04-home-tagline.html", block(
+        "04", "Главная — строка под сеткой",
+        "Блок T123 на главной, ПОД родной галереей",
+        home_tagline()))
 
     write("tilda/06b-lead-in.html", block(
-        "06b", "Строка «съёмка по записи»",
-        "Блок T123 в самом низу /portraits, /street, /love — под кнопкой «ещё». "
-        "Сама строка и есть кнопка: по нажатию раскрываются три мессенджера.",
+        "06b", "Строка «записаться на съёмку»",
+        "Блок T123 в самом низу /portraits, /street, /love и /price. "
+        "Сама строка и есть кнопка: по нажатию каналы связи открываются окном "
+        "по центру экрана.",
         lead_block()))
 
     write("tilda/07-page-title.html", block(
@@ -655,8 +647,11 @@ def main():
         "Блок T123 на странице /price, НАД пакетами", process_block()))
 
     write("tilda/09-contact-details.html", block(
-        "09", "Контакты — кадр во весь экран и три мессенджера",
-        "Блок T123 на /contact, единственный на странице", contact_details()))
+        "09", "Контакты — кадр во весь экран и каналы связи",
+        "Блок T123 на /contact, единственный на странице. Единственное место "
+        "во всём наборе, где нужна фотография: загрузите кадр в Tilda и "
+        "подставьте его адрес вместо " + PHOTO_SLOT + ".",
+        tilda_contact()))
 
     write("tilda/10-footer.html", block(
         "10", "Футер", "Блок T123 внизу каждой страницы", footer()))
@@ -677,12 +672,20 @@ def main():
             if chunk.startswith(P.BASE):
                 leftover.append("%s -> %s" % (name, chunk))
 
+    # Считаем только настоящие места в разметке, не упоминания в пояснениях.
+    slots = sum(
+        open(os.path.join(tilda_dir, n), encoding="utf-8").read().count(
+            'src="%s"' % PHOTO_SLOT)
+        for n in os.listdir(tilda_dir) if n.endswith(".html")
+    )
     if leftover:
-        print("\n  ВНИМАНИЕ: в блоках остались картинки:")
+        print("\n  ВНИМАНИЕ: в блоках остались наши пути к файлам:")
         for x in leftover:
             print("   ", x)
     else:
-        print("\n  Картинок в блоках нет — вручную грузить нечего.")
+        print("\n  Путей к нашим файлам в блоках нет.")
+    print("  Мест под фотографию: %d (кадр на контактах) — всё остальное "
+          "ставится родными блоками Tilda." % slots)
 
     print("Done.")
 
