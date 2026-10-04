@@ -146,10 +146,8 @@ ABOUT = {
     # Sofia's own copy, supplied by the client — do not paraphrase it.
     "body": {
         "en": [
-            "Based in Moscow &amp; Lisbon.",
             "With a camera in my hands for over 7 years and a director's degree from VGIK (Russia's top film school), I see every portrait as a scene, every person as a story worth telling.",
-            "I\u2019m an \u2018ArtMasters Championship\u2019 finalist. Published in ELLE, Forbes and Kinoreporter. Named one of the Top 10 photographers in Russia under 35.",
-            "I shoot portraits that feel like stills from a film.",
+            "I\u2019m an \u2018ArtMasters Championship\u2019 finalist. Published in ELLE, Forbes and Kinoreporter. Named one of the Top 10 photographers in Russia under 35. I shoot portraits that feel like stills from a film.",
             "You have a story. Let me capture it.",
         ],
         "ru": [
