@@ -14,6 +14,7 @@ you paste into Tilda. Standard library only — nothing to install.
 """
 
 import os
+import re
 import sys
 
 
@@ -530,6 +531,162 @@ def page(key, body, has_gallery, body_class=""):
     )
 
 
+def tilda_native_css():
+    """Стили для родных блоков Tilda.
+
+    Родные блоки лежат снаружи нашего .sf-root, и переменные палитры там не
+    разрешаются — поэтому дублируем их на :root. Берём прямо из style.css,
+    вместе с тёмной стороной: пока это делалось руками, файл успел отстать
+    от сайта на один снятый шрифт и одну целую тему.
+    """
+    css = open(os.path.join(ROOT, "assets/css/style.css"), encoding="utf-8").read()
+
+    def palette(block):
+        """Объявления `--sf-…` из переданного куска, по одному на строку.
+
+        Режем по точке с запятой, а не по строкам: часть переменных записана
+        в две строки, у части в хвосте комментарий — построчный разбор их
+        молча терял, и в наборе для Tilda не оказывалось самого ходового
+        шрифта."""
+        body = re.sub(r"/\*.*?\*/", "", block, flags=re.S)
+        return "\n".join(
+            "  %s: %s;" % (m.group(1), " ".join(m.group(2).split()))
+            for m in re.finditer(r"(--sf-[a-z0-9-]+)\s*:\s*([^;]+);", body)
+        )
+
+    light = palette(css[css.index(".sf-root {"):css.index("\n}", css.index(".sf-root {"))])
+    dark_src = css[css.index("@media (prefers-color-scheme: dark)"):]
+    dark = palette(dark_src[:dark_src.index("\n  }")])
+    assert light and dark, "палитра не вычиталась из style.css"
+    # Самая ходовая переменная: без неё у родных блоков не будет фона вовсе.
+    assert "--sf-bg:" in light and "--sf-bg:" in dark, "в палитре потерялся фон"
+
+    return """/* ==========================================================================
+   10 — РОДНЫЕ БЛОКИ TILDA ПОД ОБЩИЙ СТИЛЬ
+
+   Куда: в тот же <style> в HEAD, сразу после кода из 01-head-code.html.
+
+   Зачем: галереи, «Обо мне» и пакеты цен собираются родными блоками Tilda,
+   чтобы фотографии менялись мышкой. По умолчанию они выглядят
+   «по-тильдовски»: скруглённые углы, свои поля и шрифты. Этот файл приводит
+   их к нашему виду.
+
+   ЭТОТ ФАЙЛ СОБИРАЕТСЯ. Палитра и тёмная тема берутся из assets/css/style.css
+   при каждой сборке — править их здесь бесполезно, правьте в style.css.
+
+   ВАЖНО ПРО СЕЛЕКТОРЫ. У Tilda классы отличаются от блока к блоку, и точный
+   набор зависит от того, какие блоки вы выберете. Считайте это заготовкой:
+   если что-то не подхватилось — правый клик по элементу → «Просмотреть код»,
+   посмотрите настоящий класс и допишите его сюда рядом через запятую.
+
+   Чтобы правило подействовало только на один блок, поставьте перед ним его
+   номер: #rec123456789 .t-title { … }. Номер виден в редакторе слева.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. ПАЛИТРА НА :root
+   Наши переменные объявлены на .sf-root, а родные блоки лежат снаружи него.
+   -------------------------------------------------------------------------- */
+
+:root {
+%s
+}
+
+/* Тёмная сторона — те же переменные в других тонах. Включается от настройки
+   телефона или компьютера, как и на остальном сайте. */
+@media (prefers-color-scheme: dark) {
+  :root {
+%s
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. ФОН И НАБОР
+   -------------------------------------------------------------------------- */
+
+body,
+.t-body,
+.t-records { background-color: var(--sf-bg); }
+
+.t-title {
+  font-family: var(--sf-serif) !important;
+  font-weight: 400 !important;
+  color: var(--sf-ink);
+  letter-spacing: 0.04em;
+}
+
+.t-descr,
+.t-text,
+.t-name {
+  font-family: var(--sf-sans) !important;
+  color: var(--sf-ink-text);
+  line-height: 1.8;
+}
+
+/* --------------------------------------------------------------------------
+   3. ГАЛЕРЕИ
+   Убираем скругления и тени, сводим зазор к нашему просвету и выводим сетку
+   на те же поля, что и остальной сайт.
+   -------------------------------------------------------------------------- */
+
+.t-gallery__item,
+.t-slds__item,
+.t-slds__bgimg,
+.t-gallery__img,
+.t-img { border-radius: 0 !important; box-shadow: none !important; }
+
+.t-gallery .t-container,
+.t-gallery .t-container_100,
+.t-slds .t-container_100 {
+  max-width: 100%% !important;
+  padding-left: var(--sf-pad-x) !important;
+  padding-right: var(--sf-pad-x) !important;
+}
+
+/* Приближение по наведению — как в наших галереях. На телефоне наведения
+   нет, поэтому и правила нет: иначе кадр «залипал» бы увеличенным. */
+@media (hover: hover) {
+  .t-gallery__item img,
+  .t-slds__item img { transition: transform 1.1s var(--sf-ease); }
+  .t-gallery__item:hover img,
+  .t-slds__item:hover img { transform: scale(1.035); }
+}
+
+/* --------------------------------------------------------------------------
+   4. КНОПКИ
+   Своих кнопок у нас нет: всё, что нажимается, — это набранная разрядкой
+   строка. Если родной блок принесёт кнопку, пусть выглядит так же.
+   -------------------------------------------------------------------------- */
+
+.t-btn,
+.t-btntext {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  color: var(--sf-ink) !important;
+  font-family: var(--sf-sans) !important;
+  font-weight: 300 !important;
+  font-size: 16px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: lowercase !important;
+  padding: 0 !important;
+  transition: letter-spacing .6s var(--sf-ease);
+}
+@media (hover: hover) {
+  .t-btn:hover { letter-spacing: 0.12em !important; }
+}
+
+/* --------------------------------------------------------------------------
+   5. ОТКРЫВАЛКА КАДРА
+   С родными галереями работает своя, наш лайтбокс не нужен — приводим только
+   подложку к нашей. В тёмной теме она темнеет сама: это та же переменная.
+   -------------------------------------------------------------------------- */
+
+.t-popup__container,
+.t-slds__wrapper { background-color: var(--sf-overlay) !important; }
+""" % (light, "  " + dark.replace("\n", "\n  "))
+
+
 # ------------------------------------------------------------------ emit
 
 def write(rel, text):
@@ -655,6 +812,8 @@ def main():
 
     write("tilda/10-footer.html", block(
         "10", "Футер", "Блок T123 внизу каждой страницы", footer()))
+
+    write("tilda/10-native-blocks.css", tilda_native_css())
 
     js = open(os.path.join(ROOT, "assets/js/main.js"), encoding="utf-8").read()
     write("tilda/11-foot-code.html",

@@ -1515,20 +1515,6 @@
 .sf-root[data-lang="en"] [data-l="ru"],
 .sf-root[data-lang="ru"] [data-l="en"] { display: none; }
 
-/* @tilda-cut — build.py drops everything below this line from the Tilda CSS */
-
-/* --------------------------------------------------------------------------
-   14. STANDALONE ONLY — delete this block when pasting into Tilda.
-   Tilda supplies its own html/body styling; these rules would fight it.
-   -------------------------------------------------------------------------- */
-
-html.sf-html {
-  background: #faf8f6;
-  /* Браузер узнаёт, что у страницы есть обе стороны: системные элементы —
-     полосы прокрутки, подсветка выделения — красятся в тон теме. */
-  color-scheme: light dark;
-}
-
 /* --------------------------------------------------------------------------
    ТЁМНАЯ СТОРОНА
 
@@ -1546,7 +1532,6 @@ html.sf-html {
    -------------------------------------------------------------------------- */
 
 @media (prefers-color-scheme: dark) {
-  html.sf-html { background: #1a1917; }
   .sf-root {
     --sf-bg:          #1a1917;
     --sf-bg-sunk:     #232120;
@@ -1567,6 +1552,26 @@ html.sf-html {
      отсчёта в лайтбоксе. */
   .sf-lightbox__bar { background: rgba(244, 243, 241, 0.3); }
 }
+
+/* @tilda-cut — build.py drops everything below this line from the Tilda CSS */
+
+/* --------------------------------------------------------------------------
+   14. STANDALONE ONLY — delete this block when pasting into Tilda.
+   Tilda supplies its own html/body styling; these rules would fight it.
+   -------------------------------------------------------------------------- */
+
+html.sf-html {
+  background: #faf8f6;
+  /* Браузер узнаёт, что у страницы есть обе стороны: системные элементы —
+     полосы прокрутки, подсветка выделения — красятся в тон теме. */
+  color-scheme: light dark;
+}
+/* Фон самого документа. В Tilda его красит Tilda, поэтому строка и остаётся
+   под разрезом — а палитра тёмной темы уехала выше, она нужна и там. */
+@media (prefers-color-scheme: dark) {
+  html.sf-html { background: #1a1917; }
+}
+
 /* --------------------------------------------------------------------------
    «ОБО МНЕ» — СТРАНИЦА В ОДИН ЭКРАН
 
