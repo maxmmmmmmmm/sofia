@@ -395,7 +395,7 @@ def price_block():
         </div>
       </div>
     </article>""" % (
-            sm(P.PRICE_SHOTS[p["shot"]]), a(p["name"]),
+            P.PRICE_SHOTS[p["shot"]], a(p["name"]),
             t(p["name"]), t(p["cost"]), items,
             t(UI["extras"]), extras(p["extras"]), note,
         )
@@ -468,8 +468,6 @@ def tilda_price():
         html = price_block()
     finally:
         P.PRICE_SHOTS = real
-    # sm() дописывает «@sm» к пути — у меток он не нужен.
-    html = html.replace("@sm\"", "\"")
     assert P.BASE not in html, "в блоке остались наши пути к файлам"
     assert html.count('src="ФОТО-') == 6, "обложек должно быть шесть"
     return html
