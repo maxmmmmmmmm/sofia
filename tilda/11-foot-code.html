@@ -109,6 +109,35 @@
      Price: city / currency tabs
      ------------------------------------------------------------------ */
 
+  /* ------------------------------------------------------------------
+     Текущая страница в меню
+
+     На сайте активный пункт проставляет сборщик, прямо в разметке. В Tilda
+     блок шапки один на все страницы, и пометить пункт там некому — «Главная»
+     осталась бы подсвеченной везде. Поэтому сверяем адрес сами.
+
+     Адреса у сайта и у Tilda разные: «about.html» против «/about», корень —
+     то «/», то «/index.html». Поэтому сравниваем не строки целиком, а имя
+     страницы: хвост пути без расширения, причём «index» считаем корнем.
+     ------------------------------------------------------------------ */
+
+  (function initCurrentLink() {
+    var links = $$(".sf-header__link, .sf-drawer__link");
+    if (!links.length) return;
+
+    function slug(path) {
+      var last = String(path || "").split("?")[0].split("#")[0];
+      last = last.replace(/\/+$/, "").split("/").pop() || "";
+      last = last.replace(/\.html$/, "");
+      return last === "index" ? "" : last;
+    }
+
+    var here = slug(window.location.pathname);
+    links.forEach(function (a) {
+      a.classList.toggle("is-active", slug(a.getAttribute("href")) === here);
+    });
+  })();
+
   (function initPriceTabs() {
     var tabs = $$(".sf-tab");
     if (!tabs.length) return;
