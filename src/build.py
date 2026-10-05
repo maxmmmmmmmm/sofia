@@ -374,30 +374,44 @@ def price_block():
                 % (one("en"), one("ru")))
 
     def pack(p):
-        items = "\n".join("        <li>%s</li>" % t(it) for it in p["items"])
-        # Сноска есть не у каждого пакета: она про дорогу к океану, а в студию
-        # ехать никуда не нужно.
-        note = ("\n          %s" % tb(p["note"], "span", "sf-pack__note")
-                if p.get("note") else "")
+        """Пакет. Три части необязательны, и каждая отсутствует осмысленно.
+
+        Сумма: у концепт-съёмки её нет — цена собирается под замысел. Пустую
+        строку в этом месте не оставляем, иначе под названием повиснет отбивка
+        от несуществующей цены.
+
+        Дополнения: тоже только у пакетов с фиксированной суммой.
+
+        Сноска: про дорогу к океану — в студию ехать никуда не нужно."""
+        body = [tb(p["name"], "h2", "sf-pack__name")]
+
+        if p.get("cost"):
+            body.append('<p class="sf-pack__price">%s</p>' % t(p["cost"]))
+
+        body.append('<ul class="sf-pack__list">\n%s\n        </ul>'
+                    % "\n".join("          <li>%s</li>" % t(it) for it in p["items"]))
+
+        if p.get("extras"):
+            note = ("\n          %s" % tb(p["note"], "span", "sf-pack__note")
+                    if p.get("note") else "")
+            body.append('<div class="sf-pack__extras">\n          <strong>%s</strong>\n          %s%s\n        </div>'
+                        % (t(UI["extras"]), extras(p["extras"]), note))
+
+        # Строка вместо суммы: стоит там же, где у остальных дополнения, —
+        # замыкает блок, а не спорит с ценами соседей.
+        if p.get("terms"):
+            body.append(tb(p["terms"], "p", "sf-pack__terms"))
+
         return """    <article class="sf-pack">
       <div class="sf-pack__media">
         <img src="%s" alt="%s" width="1000" height="1250" loading="lazy" decoding="async">
       </div>
       <div class="sf-pack__body">
-        <h2 class="sf-pack__name">%s</h2>
-        <p class="sf-pack__price">%s</p>
-        <ul class="sf-pack__list">
-%s
-        </ul>
-        <div class="sf-pack__extras">
-          <strong>%s</strong>
-          %s%s
-        </div>
+        %s
       </div>
     </article>""" % (
             P.PRICE_SHOTS[p["shot"]], a(p["name"]),
-            t(p["name"]), t(p["cost"]), items,
-            t(UI["extras"]), extras(p["extras"]), note,
+            "\n        ".join(body),
         )
 
     def city_list(city_id, hidden):
@@ -469,7 +483,8 @@ def tilda_price():
     finally:
         P.PRICE_SHOTS = real
     assert P.BASE not in html, "в блоке остались наши пути к файлам"
-    assert html.count('src="ФОТО-') == 6, "обложек должно быть шесть"
+    need = sum(len(v) for v in C.PRICE["packages"].values())
+    assert html.count('src="ФОТО-') == need, "обложек должно быть %d" % need
     return html
 
 
@@ -896,8 +911,9 @@ def main():
             print("   ", x)
     else:
         print("\n  Путей к нашим файлам в блоках нет.")
-    print("  Мест под фотографию: %d — кадр на контактах и шесть обложек "
-          "пакетов. Галереи и портрет ставятся родными блоками Tilda." % slots)
+    print("  Мест под фотографию: %d — кадр на контактах и %d обложек "
+          "пакетов. Галереи и портрет ставятся родными блоками Tilda."
+          % (slots, sum(len(v) for v in C.PRICE["packages"].values())))
 
     print("Done.")
 

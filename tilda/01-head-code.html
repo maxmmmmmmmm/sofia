@@ -858,6 +858,22 @@
   color: var(--sf-ink-faint);
 }
 
+/* Строка вместо суммы — у концепт-съёмки цена собирается под замысел.
+   Стоит там же, где у остальных пакетов дополнения, и набрана тем же
+   гротеском прописными, что и название, — но мельче: это условие, а не
+   заголовок. Цвет полный, не сноска: кроме неё, о цене в блоке ничего
+   не сказано. */
+.sf-pack__terms {
+  margin-top: 1.9em;
+  font-family: var(--sf-sans);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sf-ink);
+}
+
 /* На телефоне пакет не распадается на кадр и подпись под ним: кадр уходит в
    левый край экрана, условия стоят справа от него, а дополнения ложатся во всю
    ширину под обоими. Вертикальные отступы здесь кратны одной величине —
@@ -930,7 +946,8 @@
   .sf-pack__list   { grid-area: list; margin-top: calc(var(--sf-rhythm) * 2); }
   .sf-pack__list li { font-size: 13px; line-height: 1.7; }
   .sf-pack__list li + li { margin-top: var(--sf-rhythm); }
-  .sf-pack__extras {
+  .sf-pack__extras,
+  .sf-pack__terms {
     grid-area: extras;
     max-width: none;
     margin-top: calc(var(--sf-rhythm) * 3);

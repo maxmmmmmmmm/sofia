@@ -248,4 +248,6 @@ PRICE_SHOTS = {
     "moscow-studio":    BASE + "price/moscow-studio.jpg",
     "moscow-walk":      BASE + "price/moscow-walk.jpg",
     "moscow-loveStory": BASE + "price/moscow-love.jpg",
+    "lisbon-concept":   BASE + "price/lisbon-concept.jpg",
+    "moscow-concept":   BASE + "price/moscow-concept.jpg",
 }

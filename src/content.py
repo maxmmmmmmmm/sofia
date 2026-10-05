@@ -223,6 +223,22 @@ PRICE = {
                     "ru": "Дополнительный час +€70 · Экспресс-ретушь +€60 · Съёмка на рассвете +€50",
                 },
             },
+            {
+                # Единственный пакет без суммы: цена собирается под замысел.
+                # Поэтому вместо строки с ценой под названием — строка внизу
+                # блока, на месте, где у остальных стоят дополнения.
+                "shot": "lisbon-concept",
+                "name": {"en": "Concept photoshoot", "ru": "Концепт-съёмка"},
+                "items": [
+                    {"en": "Creative concept development", "ru": "Разработка творческой концепции"},
+                    {"en": "Location, team and styling — all included", "ru": "Подбор локации, команды и образов — всё включено"},
+                    {"en": "Retouching and color grading of images selected and approved by you", "ru": "Ретушь и цветокоррекция согласованных с вами кадров"},
+                ],
+                "terms": {
+                    "en": "Price — calculated individually",
+                    "ru": "Стоимость — рассчитывается индивидуально",
+                },
+            },
         ],
         "moscow": [
             {
@@ -267,6 +283,22 @@ PRICE = {
                 "extras": {
                     "en": "Extra hour +6 000 ₽ · Express retouching +4 000 ₽ · Studio paid separately",
                     "ru": "Дополнительный час +6 000 ₽ · Экспресс-ретушь +4 000 ₽ · Студия оплачивается отдельно",
+                },
+            },
+            {
+                # Единственный пакет без суммы: цена собирается под замысел.
+                # Поэтому вместо строки с ценой под названием — строка внизу
+                # блока, на месте, где у остальных стоят дополнения.
+                "shot": "moscow-concept",
+                "name": {"en": "Concept photoshoot", "ru": "Концепт-съёмка"},
+                "items": [
+                    {"en": "Creative concept development", "ru": "Разработка творческой концепции"},
+                    {"en": "Location, team and styling — all included", "ru": "Подбор локации, команды и образов — всё включено"},
+                    {"en": "Retouching and color grading of images selected and approved by you", "ru": "Ретушь и цветокоррекция согласованных с вами кадров"},
+                ],
+                "terms": {
+                    "en": "Price — calculated individually",
+                    "ru": "Стоимость — рассчитывается индивидуально",
                 },
             },
         ],
