@@ -448,21 +448,30 @@ def tilda_price():
 
     Платим за это тем, что шесть обложек меняются не перетаскиванием, а
     вставкой адреса: загрузили кадр в библиотеку Tilda, скопировали адрес,
-    подставили вместо метки. Метки названы по городу и пакету, чтобы не
-    перепутать."""
-    html = price_block()
+    подставили вместо метки. Метки названы по городу и пакету.
+
+    Собираем подменой самого справочника кадров, а не поиском путей в
+    готовой разметке: пока два города показывают один и тот же снимок,
+    поиск по пути легко ошибся бы местом."""
+    names = {p["shot"]: p["name"]["ru"] for packs in C.PRICE["packages"].values()
+             for p in packs}
+    city_of = {"lisbon": "ЛИССАБОН", "moscow": "МОСКВА"}
+    slots = {}
     for city, packs in C.PRICE["packages"].items():
         for pack in packs:
-            path = sm(P.PRICE_SHOTS[pack["shot"]])
-            slot = "ФОТО-%s-%s" % (
-                {"lisbon": "ЛИССАБОН", "moscow": "МОСКВА"}[city],
-                pack["name"]["ru"].upper().replace(" ", "-"),
-            )
-            # Каждый путь встречается дважды, по разу на город: подменяем
-            # первое вхождение, чтобы метки у городов вышли разные.
-            assert path in html, "кадр пакета не найден в разметке: " + path
-            html = html.replace('src="%s"' % path, 'src="%s"' % slot, 1)
+            slots[pack["shot"]] = "ФОТО-%s-%s" % (
+                city_of[city], names[pack["shot"]].upper().replace(" ", "-"))
+    assert len(slots) == len(set(slots.values())), "метки обложек повторяются"
+
+    real, P.PRICE_SHOTS = P.PRICE_SHOTS, slots
+    try:
+        html = price_block()
+    finally:
+        P.PRICE_SHOTS = real
+    # sm() дописывает «@sm» к пути — у меток он не нужен.
+    html = html.replace("@sm\"", "\"")
     assert P.BASE not in html, "в блоке остались наши пути к файлам"
+    assert html.count('src="ФОТО-') == 6, "обложек должно быть шесть"
     return html
 
 

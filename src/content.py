@@ -172,7 +172,7 @@ PRICE = {
     "packages": {
         "lisbon": [
             {
-                "shot": "walk",
+                "shot": "lisbon-walk",
                 "name": {"en": "Photo walk", "ru": "Фотопрогулка"},
                 "cost": "€250",
                 "items": [
@@ -191,7 +191,7 @@ PRICE = {
                 },
             },
             {
-                "shot": "loveStory",
+                "shot": "lisbon-loveStory",
                 "name": {"en": "Love story", "ru": "Парная съёмка"},
                 "cost": "€300",
                 "items": [
@@ -210,7 +210,7 @@ PRICE = {
                 },
             },
             {
-                "shot": "studio",
+                "shot": "lisbon-studio",
                 "name": {"en": "Studio portrait", "ru": "Студийный портрет"},
                 "cost": "€270",
                 "items": [
@@ -226,7 +226,7 @@ PRICE = {
         ],
         "moscow": [
             {
-                "shot": "studio",
+                "shot": "moscow-studio",
                 "name": {"en": "Studio portrait", "ru": "Студийный портрет"},
                 "cost": "20 000 ₽",
                 "items": [
@@ -240,7 +240,7 @@ PRICE = {
                 },
             },
             {
-                "shot": "walk",
+                "shot": "moscow-walk",
                 "name": {"en": "Street session", "ru": "Стрит-фотосессия"},
                 "cost": "15 000 ₽",
                 "items": [
@@ -255,7 +255,7 @@ PRICE = {
                 },
             },
             {
-                "shot": "loveStory",
+                "shot": "moscow-loveStory",
                 "name": {"en": "Couple shoot", "ru": "Парная съёмка"},
                 "cost": "25 000 ₽",
                 "items": [

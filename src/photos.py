@@ -229,9 +229,18 @@ BEST = [
     "love/06.jpg",      "street/04.jpg",   "portraits/13.jpg", "love/02.jpg",
 ]
 
-# Package illustrations on the price page.
+# Обложки пакетов на странице цен — по одной на пакет, своя у каждого города.
+# Раньше кадра было три на шесть пакетов: Лиссабон и Москва показывали одни и
+# те же снимки, только в разном порядке.
+#
+# МЕСТО ДЛЯ НОВЫХ КАДРОВ. Пока здесь стоят прежние три, продублированные на
+# оба города, — страница выглядит как раньше. Чтобы поставить свой снимок,
+# замените путь в нужной строке: он отсчитывается от assets/img/.
 PRICE_SHOTS = {
-    "studio":    BASE + PORTRAITS[4][0],
-    "walk":      BASE + STREET[5][0],
-    "loveStory": BASE + LOVE[8][0],
+    "lisbon-walk":      BASE + STREET[5][0],
+    "lisbon-loveStory": BASE + LOVE[8][0],
+    "lisbon-studio":    BASE + PORTRAITS[4][0],
+    "moscow-studio":    BASE + PORTRAITS[4][0],
+    "moscow-walk":      BASE + STREET[5][0],
+    "moscow-loveStory": BASE + LOVE[8][0],
 }
