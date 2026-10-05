@@ -376,17 +376,22 @@ def price_block():
     def pack(p):
         """Пакет. Три части необязательны, и каждая отсутствует осмысленно.
 
-        Сумма: у концепт-съёмки её нет — цена собирается под замысел. Пустую
-        строку в этом месте не оставляем, иначе под названием повиснет отбивка
-        от несуществующей цены.
+        Сумма: у концепт-съёмки её нет — цена собирается под замысел, и на
+        месте цифры стоит условие. Пустой строки в этом месте не остаётся ни
+        в одном из двух случаев.
 
         Дополнения: тоже только у пакетов с фиксированной суммой.
 
         Сноска: про дорогу к океану — в студию ехать никуда не нужно."""
         body = [tb(p["name"], "h2", "sf-pack__name")]
 
+        # Строка вместо суммы — тот же элемент на том же месте, что цена:
+        # под названием. Отличается только кеглем, его задаёт модификатор.
         if p.get("cost"):
             body.append('<p class="sf-pack__price">%s</p>' % t(p["cost"]))
+        elif p.get("terms"):
+            body.append('<p class="sf-pack__price sf-pack__price--request">%s<br>%s</p>'
+                        % (t(p["terms"]["lead"]), t(p["terms"]["rest"])))
 
         body.append('<ul class="sf-pack__list">\n%s\n        </ul>'
                     % "\n".join("          <li>%s</li>" % t(it) for it in p["items"]))
@@ -396,11 +401,6 @@ def price_block():
                     if p.get("note") else "")
             body.append('<div class="sf-pack__extras">\n          <strong>%s</strong>\n          %s%s\n        </div>'
                         % (t(UI["extras"]), extras(p["extras"]), note))
-
-        # Строка вместо суммы: стоит там же, где у остальных дополнения, —
-        # замыкает блок, а не спорит с ценами соседей.
-        if p.get("terms"):
-            body.append(tb(p["terms"], "p", "sf-pack__terms"))
 
         return """    <article class="sf-pack">
       <div class="sf-pack__media">

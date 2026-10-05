@@ -234,9 +234,11 @@ PRICE = {
                     {"en": "Location, team and styling — all included", "ru": "Подбор локации, команды и образов — всё включено"},
                     {"en": "Retouching and color grading of images selected and approved by you", "ru": "Ретушь и цветокоррекция согласованных с вами кадров"},
                 ],
+                # Две части — это две строки: перенос стоит после тире
+                # всегда, а не там, куда его занесёт ширина колонки.
                 "terms": {
-                    "en": "Price — calculated individually",
-                    "ru": "Стоимость — рассчитывается индивидуально",
+                    "lead": {"en": "Price —", "ru": "Стоимость —"},
+                    "rest": {"en": "calculated individually", "ru": "рассчитывается индивидуально"},
                 },
             },
         ],
@@ -296,9 +298,11 @@ PRICE = {
                     {"en": "Location, team and styling — all included", "ru": "Подбор локации, команды и образов — всё включено"},
                     {"en": "Retouching and color grading of images selected and approved by you", "ru": "Ретушь и цветокоррекция согласованных с вами кадров"},
                 ],
+                # Две части — это две строки: перенос стоит после тире
+                # всегда, а не там, куда его занесёт ширина колонки.
                 "terms": {
-                    "en": "Price — calculated individually",
-                    "ru": "Стоимость — рассчитывается индивидуально",
+                    "lead": {"en": "Price —", "ru": "Стоимость —"},
+                    "rest": {"en": "calculated individually", "ru": "рассчитывается индивидуально"},
                 },
             },
         ],
