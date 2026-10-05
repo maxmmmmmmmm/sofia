@@ -173,7 +173,7 @@ PRICE = {
         "lisbon": [
             {
                 "shot": "lisbon-walk",
-                "name": {"en": "Photo walk", "ru": "Фотопрогулка"},
+                "name": {"en": "Street session", "ru": "Стрит-фотосессия"},
                 "cost": "€250",
                 "items": [
                     {"en": "Help with preparing for the photoshoot", "ru": "Помощь в подготовке к съёмке"},
@@ -256,7 +256,7 @@ PRICE = {
             },
             {
                 "shot": "moscow-loveStory",
-                "name": {"en": "Couple shoot", "ru": "Парная съёмка"},
+                "name": {"en": "Love story", "ru": "Парная съёмка"},
                 "cost": "25 000 ₽",
                 "items": [
                     {"en": "2 hours of shooting", "ru": "2 часа съёмки"},
