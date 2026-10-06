@@ -69,6 +69,24 @@ def asset_version(rel):
         return rel
 
 
+def strip_comments(css):
+    """Стили без комментариев — только для Tilda.
+
+    У поля «HTML-код внутрь HEAD» жёсткий предел 65 535 байт: ровно столько
+    держит текстовое поле в базе. Наши стили с комментариями весят 74 КБ, и
+    Tilda молча обрезала их посреди селектора — страница при этом выглядит
+    почти нормально, и заметить это можно не сразу.
+
+    Комментарии — две трети файла. Без них остаётся 27 КБ, и вместе со
+    шрифтами и скриптом всё умещается с запасом вдвое. В исходнике
+    assets/css/style.css комментарии остаются: правят стили там, а не здесь.
+    """
+    css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    css = re.sub(r"[ \t]+\n", "\n", css)
+    css = re.sub(r"\n{3,}", "\n\n", css)
+    return css.strip() + "\n"
+
+
 def sm(path):
     """Grid-sized variant beside the full one: love/03.jpg → love/03@sm.jpg.
     Written by tools/fetch_photos.py."""
@@ -850,7 +868,7 @@ def main():
     # Everything after the @tilda-cut sentinel is standalone-only html/body
     # styling that would fight Tilda's own page chrome.
     css = open(os.path.join(ROOT, "assets/css/style.css"), encoding="utf-8").read()
-    tilda_css = css.split("/* @tilda-cut")[0]
+    tilda_css = strip_comments(css.split("/* @tilda-cut")[0])
 
     write("tilda/01-head-code.html",
           banner("01", "Шрифты + стили",
@@ -964,6 +982,25 @@ def main():
             print("   ", x)
     else:
         print("\n  Путей к нашим файлам в блоках нет.")
+    # Поля для кода в Tilda держат 65 535 байт и обрезают молча.
+    TILDA_FIELD_LIMIT = 65535
+    too_big = []
+    for name in sorted(os.listdir(tilda_dir)):
+        if name == "README-TILDA.md":
+            continue
+        n = os.path.getsize(os.path.join(tilda_dir, name))
+        if n >= TILDA_FIELD_LIMIT:
+            too_big.append((name, n))
+    if too_big:
+        print("\n  ВНИМАНИЕ: не влезет в поле Tilda (предел %d байт):" % TILDA_FIELD_LIMIT)
+        for name, n in too_big:
+            print("    %s — %d байт" % (name, n))
+    else:
+        big = max((os.path.getsize(os.path.join(tilda_dir, n)), n)
+                  for n in os.listdir(tilda_dir) if n != "README-TILDA.md")
+        print("  Все куски влезают в поле Tilda: самый большой %s, %d из %d байт."
+              % (big[1], big[0], TILDA_FIELD_LIMIT))
+
     print("  Мест под фотографию: %d — портрет в «Обо мне», кадр на контактах "
           "и %d обложек пакетов. Галереи и сетка на главной ставятся родными "
           "блоками Tilda." % (slots, sum(len(v) for v in C.PRICE["packages"].values())))
