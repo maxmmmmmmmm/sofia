@@ -852,7 +852,7 @@ def main():
 
     write("tilda/01-head-code.html",
           banner("01", "Шрифты + стили",
-                 "Настройки сайта → Ещё → HTML-код для вставки внутрь HEAD")
+                 "Настройки сайта → Вставка кода → HTML-код для вставки внутрь HEAD")
           + FONTS + "\n<style>\n" + tilda_css.rstrip() + "\n</style>\n")
 
     write("tilda/02-header.html", block(
@@ -934,7 +934,7 @@ def main():
     js = open(os.path.join(ROOT, "assets/js/main.js"), encoding="utf-8").read()
     write("tilda/11-foot-code.html",
           banner("11", "Скрипт поведения",
-                 "Настройки сайта → Ещё → HTML-код для вставки внутрь BODY (в самый низ)")
+                 "Настройки сайта → Вставка кода → HTML-код для вставки внутрь BODY, в самый низ страницы")
           + "<script>\n" + js.rstrip() + "\n</script>\n")
 
     # -------------------------------------------- проверка: картинок нет
