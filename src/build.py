@@ -204,11 +204,15 @@ def social_row(extra=""):
     return "\n".join(out)
 
 
-def footer(extra_class=""):
+def footer(extra_class="", social=True):
+    """Футер. На контактах иконки соцсетей не нужны: прямо над ними уже стоят
+    те же каналы, крупно. На сайте их прячет правило по соседству с кадром,
+    но в Tilda футер — отдельный блок, и дотянуться до него селектором
+    неоткуда. Поэтому для той страницы собирается отдельный файл."""
+    icons = (indent(social_row("sf-footer__social"), "  ") + "\n") if social else ""
     return """<footer class="sf-footer%s">
-%s
-  <div class="sf-footer__legal">© %d %s</div>
-</footer>""" % (extra_class, indent(social_row("sf-footer__social"), "  "), SITE["year"], SITE["wordmark"])
+%s  <div class="sf-footer__legal">© %d %s</div>
+</footer>""" % (extra_class, icons, SITE["year"], SITE["wordmark"])
 
 
 ARROW = (
@@ -835,7 +839,9 @@ def main():
     # Each block gets its own .sf-root so the design tokens and the scoped
     # reset reach it. Several .sf-root elements on one page is fine.
     def block(num, what, where, html):
-        return banner(num, what, where) + '<div class="sf-root">\n%s\n</div>\n' % indent(
+        # data-lang="en" — то же, что в разметке сайта: до загрузки скрипта
+        # должен быть виден один язык, а не оба сразу.
+        return banner(num, what, where) + '<div class="sf-root" data-lang="en">\n%s\n</div>\n' % indent(
             tilda_links(html), "  "
         )
 
@@ -915,6 +921,13 @@ def main():
         "блоком под кадром: на сайте футер лежит поверх фотографии, но там "
         "он держится обвязкой страницы, а её в Tilda отдаёт сама Tilda.",
         footer()))
+
+    write("tilda/10b-footer-contact.html", block(
+        "10b", "Футер для страницы контактов",
+        "Блок T123 внизу /contact — вместо обычного футера 10. Отличается "
+        "одним: в нём нет иконок соцсетей. Прямо над ними стоят те же каналы, "
+        "крупно, и на сайте иконки там спрятаны.",
+        footer(social=False)))
 
     write("tilda/10-native-blocks.css", tilda_native_css())
 
