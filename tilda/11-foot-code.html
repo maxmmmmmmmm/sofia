@@ -1,6 +1,6 @@
 <!-- ==========================================================
      11 — Скрипт поведения
-     Куда: Настройки сайта → Вставка кода → HTML-код для вставки внутрь BODY, в самый низ страницы
+     Куда: Настройки сайта → Вставка кода → HTML-код для вставки внутрь HEAD, следом за кодом из 01-head-code.html. Поля для конца BODY у Tilda больше нет; скрипт ждёт, пока страница построится, поэтому из HEAD работает так же.
      ========================================================== -->
 <script>
 /* ==========================================================================
@@ -13,372 +13,396 @@
 (function () {
   "use strict";
 
-  var $  = function (sel, ctx) { return (ctx || document).querySelector(sel); };
-  var $$ = function (sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); };
-
-  // The standalone site has one .sf-root wrapping the page. On Tilda every
-  // pasted block is its own .sf-root, so anything that reads or writes root
-  // state has to cope with a list.
-  var roots = $$(".sf-root");
-  if (!roots.length) return;
-  var root = roots[0];
-
   /* ------------------------------------------------------------------
-     Language — RU / EN, remembered between visits
+     Когда запускаться
+
+     На сайте скрипт стоит последним в body: разметка к этому моменту уже
+     построена, и можно работать сразу. В Tilda места в конце body нет —
+     код сайта вставляется только в HEAD, а там страницы ещё не существует,
+     и всё нижеследующее не нашло бы ни одного блока.
+
+     Поэтому решение принимается по состоянию документа, а не по тому, куда
+     нас положили: не достроен — ждём, достроен — работаем сразу. Второй
+     путь важен не меньше первого: если просто подписаться на событие, а оно
+     уже прошло, скрипт не запустится никогда.
      ------------------------------------------------------------------ */
 
-  var LANG_KEY = "sf-lang";
-
-  function applyLang(lang) {
-    roots.forEach(function (r) { r.setAttribute("data-lang", lang); });
-    document.documentElement.setAttribute("lang", lang);
-    $$(".sf-lang__btn").forEach(function (btn) {
-      btn.classList.toggle("is-active", btn.dataset.lang === lang);
-      btn.setAttribute("aria-pressed", String(btn.dataset.lang === lang));
-    });
-    try { localStorage.setItem(LANG_KEY, lang); } catch (e) { /* private mode */ }
-
-    // Язык выбирает город в прайсе: русскому посетителю показываем Москву,
-    // англоязычному — Лиссабон. Ручной выбор вкладки живёт до следующей
-    // смены языка.
-    showCity(lang === "ru" ? "moscow" : "lisbon");
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start);
+  } else {
+    start();
   }
 
-  function showCity(city) {
-    var tabs = $$(".sf-tab");
-    if (!tabs.length) return;
-    tabs.forEach(function (t) {
-      var on = t.dataset.city === city;
-      t.classList.toggle("is-active", on);
-      t.setAttribute("aria-selected", String(on));
-    });
-    $$(".sf-pricelist").forEach(function (list) {
-      list.hidden = list.dataset.city !== city;
-    });
-  }
+  function start() {
 
-  (function initLang() {
-    var saved;
-    try { saved = localStorage.getItem(LANG_KEY); } catch (e) { saved = null; }
+    var $  = function (sel, ctx) { return (ctx || document).querySelector(sel); };
+    var $$ = function (sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); };
 
-    var start;
-    if (saved === "ru" || saved === "en") {
-      start = saved;
-    } else {
-      start = (navigator.language || "").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
-    }
-    applyLang(start);
+    // The standalone site has one .sf-root wrapping the page. On Tilda every
+    // pasted block is its own .sf-root, so anything that reads or writes root
+    // state has to cope with a list.
+    var roots = $$(".sf-root");
+    if (!roots.length) return;
+    var root = roots[0];
 
-    $$(".sf-lang__btn").forEach(function (btn) {
-      btn.addEventListener("click", function () { applyLang(btn.dataset.lang); });
-    });
-  })();
+    /* ------------------------------------------------------------------
+       Language — RU / EN, remembered between visits
+       ------------------------------------------------------------------ */
 
-  /* ------------------------------------------------------------------
-     Header: shadow once scrolled, mobile drawer
-     ------------------------------------------------------------------ */
+    var LANG_KEY = "sf-lang";
 
-  (function initHeader() {
-    var burger = $(".sf-burger");
-    var drawer = $(".sf-drawer");
-    if (!burger || !drawer) return;
-
-    var setOpen = function (open) {
-      burger.classList.toggle("is-open", open);
-      drawer.classList.toggle("is-open", open);
-      burger.setAttribute("aria-expanded", String(open));
-      document.body.classList.toggle("sf-noscroll", open);
-    };
-
-    burger.addEventListener("click", function () {
-      setOpen(!drawer.classList.contains("is-open"));
-    });
-    $$(".sf-drawer__link", drawer).forEach(function (a) {
-      a.addEventListener("click", function () { setOpen(false); });
-    });
-    window.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") setOpen(false);
-    });
-    // A resize past the desktop breakpoint should not leave the body locked.
-    window.addEventListener("resize", function () {
-      if (window.innerWidth > 980) setOpen(false);
-    });
-  })();
-
-  /* ------------------------------------------------------------------
-     Price: city / currency tabs
-     ------------------------------------------------------------------ */
-
-  /* ------------------------------------------------------------------
-     Текущая страница в меню
-
-     На сайте активный пункт проставляет сборщик, прямо в разметке. В Tilda
-     блок шапки один на все страницы, и пометить пункт там некому — «Главная»
-     осталась бы подсвеченной везде. Поэтому сверяем адрес сами.
-
-     Адреса у сайта и у Tilda разные: «about.html» против «/about», корень —
-     то «/», то «/index.html». Поэтому сравниваем не строки целиком, а имя
-     страницы: хвост пути без расширения, причём «index» считаем корнем.
-     ------------------------------------------------------------------ */
-
-  (function initCurrentLink() {
-    var links = $$(".sf-header__link, .sf-drawer__link");
-    if (!links.length) return;
-
-    function slug(path) {
-      var last = String(path || "").split("?")[0].split("#")[0];
-      last = last.replace(/\/+$/, "").split("/").pop() || "";
-      last = last.replace(/\.html$/, "");
-      return last === "index" ? "" : last;
-    }
-
-    var here = slug(window.location.pathname);
-    links.forEach(function (a) {
-      a.classList.toggle("is-active", slug(a.getAttribute("href")) === here);
-    });
-  })();
-
-  (function initPriceTabs() {
-    var tabs = $$(".sf-tab");
-    if (!tabs.length) return;
-
-    tabs.forEach(function (tab) {
-      tab.addEventListener("click", function () { showCity(tab.dataset.city); });
-    });
-  })();
-
-  /* ------------------------------------------------------------------
-     Сетка на главной заканчивается полным рядом
-     ------------------------------------------------------------------ */
-
-  (function initGridTrim() {
-    var grid = $(".sf-homegrid .sf-mosaic");
-    if (!grid) return;
-    var items = $$(".sf-mosaic__item", grid);
-    if (items.length < 4) return;
-
-    function trim() {
-      items.forEach(function (i) { i.hidden = false; });
-
-      // Ряды не заданы разметкой — их складывает флексбокс, и на разной
-      // ширине они разные. Границу ряда определяем по offsetTop.
-      var rows = [], prev = null;
-      items.forEach(function (i) {
-        if (prev === null || i.offsetTop !== prev) { rows.push([]); prev = i.offsetTop; }
-        rows[rows.length - 1].push(i);
+    function applyLang(lang) {
+      roots.forEach(function (r) { r.setAttribute("data-lang", lang); });
+      document.documentElement.setAttribute("lang", lang);
+      $$(".sf-lang__btn").forEach(function (btn) {
+        btn.classList.toggle("is-active", btn.dataset.lang === lang);
+        btn.setAttribute("aria-pressed", String(btn.dataset.lang === lang));
       });
-      if (rows.length < 2) return;
+      try { localStorage.setItem(LANG_KEY, lang); } catch (e) { /* private mode */ }
 
-      var heights = rows.map(function (r) { return r[0].getBoundingClientRect().height; });
-      var rest = heights.slice(0, -1).sort(function (a, b) { return a - b; });
-      var median = rest[Math.floor(rest.length / 2)];
-
-      // Неполный ряд флексбокс растягивает по ширине, и он выходит заметно
-      // выше остальных. Это и есть признак хвоста.
-      if (heights[heights.length - 1] > median * 1.25) {
-        rows[rows.length - 1].forEach(function (i) { i.hidden = true; });
-      }
+      // Язык выбирает город в прайсе: русскому посетителю показываем Москву,
+      // англоязычному — Лиссабон. Ручной выбор вкладки живёт до следующей
+      // смены языка.
+      showCity(lang === "ru" ? "moscow" : "lisbon");
     }
 
-    trim();
-    window.addEventListener("resize", trim);
-  })();
-
-  /* ------------------------------------------------------------------
-     Lightbox
-     ------------------------------------------------------------------ */
-
-  (function initLightbox() {
-    var triggers = $$(".sf-mosaic__btn");
-    var box = $(".sf-lightbox");
-    if (!triggers.length || !box) return;
-
-    var stageImg = $(".sf-lightbox__stage img", box);
-    var counter  = $(".sf-lightbox__count", box);
-    var index    = 0;
-    var lastFocus = null;
-    var timer = null;          // показ серии по очереди
-
-    var SLIDE_MS = 3600;
-
-    function stopShow() {
-      if (timer) { window.clearInterval(timer); timer = null; }
-      box.classList.remove("is-playing");
-    }
-
-    function startShow() {
-      stopShow();
-      box.classList.add("is-playing");
-      timer = window.setInterval(function () { show(index + 1); }, SLIDE_MS);
-    }
-
-    function show(i) {
-      index = (i + triggers.length) % triggers.length;
-      var trigger = triggers[index];
-      stageImg.src = trigger.dataset.full || $("img", trigger).src;
-      stageImg.alt = trigger.dataset.alt || "";
-      if (counter) counter.textContent = (index + 1) + " / " + triggers.length;
-      if (timer) {                     // перезапуск полосы отсчёта
-        var bar = $(".sf-lightbox__bar", box);
-        if (bar) { bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = ""; }
-      }
-      preload(index + 1);
-      preload(index - 1);
-    }
-
-    function preload(i) {
-      var t = triggers[(i + triggers.length) % triggers.length];
-      if (!t) return;
-      var pre = new Image();
-      pre.src = t.dataset.full || "";
-    }
-
-    function open(i, play) {
-      lastFocus = document.activeElement;
-      show(i);
-      box.classList.add("is-open");
-      box.setAttribute("aria-hidden", "false");
-      document.body.classList.add("sf-noscroll");
-      var closeBtn = $(".sf-lightbox__close", box);
-      if (closeBtn) closeBtn.focus();
-      if (play) startShow();
-    }
-
-    function close() {
-      stopShow();
-      box.classList.remove("is-open");
-      box.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("sf-noscroll");
-      if (lastFocus && lastFocus.focus) lastFocus.focus();
-    }
-
-    triggers.forEach(function (t, i) {
-      t.addEventListener("click", function () { open(i); });
-    });
-
-
-
-    var closeBtn = $(".sf-lightbox__close", box);
-    var prevBtn  = $(".sf-lightbox__prev", box);
-    var nextBtn  = $(".sf-lightbox__next", box);
-    if (closeBtn) closeBtn.addEventListener("click", close);
-    if (prevBtn)  prevBtn.addEventListener("click", function () { stopShow(); show(index - 1); });
-    if (nextBtn)  nextBtn.addEventListener("click", function () { stopShow(); show(index + 1); });
-
-    // Click the backdrop (but not the photo or the controls) to dismiss
-    box.addEventListener("click", function (e) {
-      if (e.target === box || e.target.classList.contains("sf-lightbox__stage")) close();
-    });
-
-    window.addEventListener("keydown", function (e) {
-      if (!box.classList.contains("is-open")) return;
-      if (e.key === "Escape")     { close(); }
-      if (e.key === "ArrowLeft")  { stopShow(); show(index - 1); }
-      if (e.key === "ArrowRight") { stopShow(); show(index + 1); }
-    });
-
-    // Swipe on touch
-    var startX = null;
-    box.addEventListener("touchstart", function (e) {
-      startX = e.changedTouches[0].clientX;
-    }, { passive: true });
-    box.addEventListener("touchend", function (e) {
-      if (startX === null) return;
-      var dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 48) { stopShow(); show(index + (dx < 0 ? 1 : -1)); }
-      startX = null;
-    }, { passive: true });
-  })();
-
-  /* ------------------------------------------------------------------
-     Смена экранов: гасим страницу перед переходом
-     ------------------------------------------------------------------ */
-
-  (function initExitFade() {
-    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    var FADE_MS = 260;
-
-    $$("a[href]").forEach(function (a) {
-      var url = a.getAttribute("href");
-      if (!url) return;
-      // Якоря, внешние ссылки и мессенджеры уводят со страницы сами —
-      // гасить её под ними незачем.
-      if (url.charAt(0) === "#") return;
-      if (a.target === "_blank") return;
-      if (/^[a-z][a-z0-9+.-]*:/i.test(url)) return;
-
-      a.addEventListener("click", function (e) {
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-        e.preventDefault();
-        document.body.classList.add("sf-leaving");
-        window.setTimeout(function () { window.location.href = url; }, FADE_MS);
+    function showCity(city) {
+      var tabs = $$(".sf-tab");
+      if (!tabs.length) return;
+      tabs.forEach(function (t) {
+        var on = t.dataset.city === city;
+        t.classList.toggle("is-active", on);
+        t.setAttribute("aria-selected", String(on));
       });
-    });
+      $$(".sf-pricelist").forEach(function (list) {
+        list.hidden = list.dataset.city !== city;
+      });
+    }
 
-    // Возврат «назад» может отдать страницу из кеша уже погашенной.
-    window.addEventListener("pageshow", function () {
-      document.body.classList.remove("sf-leaving");
-    });
-  })();
+    (function initLang() {
+      var saved;
+      try { saved = localStorage.getItem(LANG_KEY); } catch (e) { saved = null; }
 
-  /* ------------------------------------------------------------------
-     Контакты: кнопка раскрывает три канала
-     ------------------------------------------------------------------ */
+      var start;
+      if (saved === "ru" || saved === "en") {
+        start = saved;
+      } else {
+        start = (navigator.language || "").toLowerCase().indexOf("ru") === 0 ? "ru" : "en";
+      }
+      applyLang(start);
 
-  (function initReach() {
-    $$(".sf-reach").forEach(function (box) {
-      var btn = $(".sf-reach__open", box);
-      var list = $(".sf-reach__list", box);
-      if (!btn || !list) return;
-      var closeBtn = $(".sf-reach__close", list);
+      $$(".sf-lang__btn").forEach(function (btn) {
+        btn.addEventListener("click", function () { applyLang(btn.dataset.lang); });
+      });
+    })();
+
+    /* ------------------------------------------------------------------
+       Header: shadow once scrolled, mobile drawer
+       ------------------------------------------------------------------ */
+
+    (function initHeader() {
+      var burger = $(".sf-burger");
+      var drawer = $(".sf-drawer");
+      if (!burger || !drawer) return;
+
+      var setOpen = function (open) {
+        burger.classList.toggle("is-open", open);
+        drawer.classList.toggle("is-open", open);
+        burger.setAttribute("aria-expanded", String(open));
+        document.body.classList.toggle("sf-noscroll", open);
+      };
+
+      burger.addEventListener("click", function () {
+        setOpen(!drawer.classList.contains("is-open"));
+      });
+      $$(".sf-drawer__link", drawer).forEach(function (a) {
+        a.addEventListener("click", function () { setOpen(false); });
+      });
+      window.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") setOpen(false);
+      });
+      // A resize past the desktop breakpoint should not leave the body locked.
+      window.addEventListener("resize", function () {
+        if (window.innerWidth > 980) setOpen(false);
+      });
+    })();
+
+    /* ------------------------------------------------------------------
+       Price: city / currency tabs
+       ------------------------------------------------------------------ */
+
+    /* ------------------------------------------------------------------
+       Текущая страница в меню
+
+       На сайте активный пункт проставляет сборщик, прямо в разметке. В Tilda
+       блок шапки один на все страницы, и пометить пункт там некому — «Главная»
+       осталась бы подсвеченной везде. Поэтому сверяем адрес сами.
+
+       Адреса у сайта и у Tilda разные: «about.html» против «/about», корень —
+       то «/», то «/index.html». Поэтому сравниваем не строки целиком, а имя
+       страницы: хвост пути без расширения, причём «index» считаем корнем.
+       ------------------------------------------------------------------ */
+
+    (function initCurrentLink() {
+      var links = $$(".sf-header__link, .sf-drawer__link");
+      if (!links.length) return;
+
+      function slug(path) {
+        var last = String(path || "").split("?")[0].split("#")[0];
+        last = last.replace(/\/+$/, "").split("/").pop() || "";
+        last = last.replace(/\.html$/, "");
+        return last === "index" ? "" : last;
+      }
+
+      var here = slug(window.location.pathname);
+      links.forEach(function (a) {
+        a.classList.toggle("is-active", slug(a.getAttribute("href")) === here);
+      });
+    })();
+
+    (function initPriceTabs() {
+      var tabs = $$(".sf-tab");
+      if (!tabs.length) return;
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () { showCity(tab.dataset.city); });
+      });
+    })();
+
+    /* ------------------------------------------------------------------
+       Сетка на главной заканчивается полным рядом
+       ------------------------------------------------------------------ */
+
+    (function initGridTrim() {
+      var grid = $(".sf-homegrid .sf-mosaic");
+      if (!grid) return;
+      var items = $$(".sf-mosaic__item", grid);
+      if (items.length < 4) return;
+
+      function trim() {
+        items.forEach(function (i) { i.hidden = false; });
+
+        // Ряды не заданы разметкой — их складывает флексбокс, и на разной
+        // ширине они разные. Границу ряда определяем по offsetTop.
+        var rows = [], prev = null;
+        items.forEach(function (i) {
+          if (prev === null || i.offsetTop !== prev) { rows.push([]); prev = i.offsetTop; }
+          rows[rows.length - 1].push(i);
+        });
+        if (rows.length < 2) return;
+
+        var heights = rows.map(function (r) { return r[0].getBoundingClientRect().height; });
+        var rest = heights.slice(0, -1).sort(function (a, b) { return a - b; });
+        var median = rest[Math.floor(rest.length / 2)];
+
+        // Неполный ряд флексбокс растягивает по ширине, и он выходит заметно
+        // выше остальных. Это и есть признак хвоста.
+        if (heights[heights.length - 1] > median * 1.25) {
+          rows[rows.length - 1].forEach(function (i) { i.hidden = true; });
+        }
+      }
+
+      trim();
+      window.addEventListener("resize", trim);
+    })();
+
+    /* ------------------------------------------------------------------
+       Lightbox
+       ------------------------------------------------------------------ */
+
+    (function initLightbox() {
+      var triggers = $$(".sf-mosaic__btn");
+      var box = $(".sf-lightbox");
+      if (!triggers.length || !box) return;
+
+      var stageImg = $(".sf-lightbox__stage img", box);
+      var counter  = $(".sf-lightbox__count", box);
+      var index    = 0;
       var lastFocus = null;
+      var timer = null;          // показ серии по очереди
 
-      function open() {
+      var SLIDE_MS = 3600;
+
+      function stopShow() {
+        if (timer) { window.clearInterval(timer); timer = null; }
+        box.classList.remove("is-playing");
+      }
+
+      function startShow() {
+        stopShow();
+        box.classList.add("is-playing");
+        timer = window.setInterval(function () { show(index + 1); }, SLIDE_MS);
+      }
+
+      function show(i) {
+        index = (i + triggers.length) % triggers.length;
+        var trigger = triggers[index];
+        stageImg.src = trigger.dataset.full || $("img", trigger).src;
+        stageImg.alt = trigger.dataset.alt || "";
+        if (counter) counter.textContent = (index + 1) + " / " + triggers.length;
+        if (timer) {                     // перезапуск полосы отсчёта
+          var bar = $(".sf-lightbox__bar", box);
+          if (bar) { bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = ""; }
+        }
+        preload(index + 1);
+        preload(index - 1);
+      }
+
+      function preload(i) {
+        var t = triggers[(i + triggers.length) % triggers.length];
+        if (!t) return;
+        var pre = new Image();
+        pre.src = t.dataset.full || "";
+      }
+
+      function open(i, play) {
         lastFocus = document.activeElement;
-        list.hidden = false;
-        // hidden снимаем раньше класса, иначе переход не проиграет: элемент
-        // появляется уже в конечном состоянии. Начальное состояние закрепляем
-        // принудительным пересчётом, а не requestAnimationFrame: в фоновой
-        // вкладке кадр может не наступить, и ссылки застряли бы на opacity 0.
-        void list.offsetWidth;
+        show(i);
         box.classList.add("is-open");
-        btn.setAttribute("aria-expanded", "true");
+        box.setAttribute("aria-hidden", "false");
         document.body.classList.add("sf-noscroll");
-        // Фокус на само окно, а не на крестик: скриптовый фокус браузер
-        // считает клавиатурным и обводит цель рамкой.
-        list.focus();
+        var closeBtn = $(".sf-lightbox__close", box);
+        if (closeBtn) closeBtn.focus();
+        if (play) startShow();
       }
 
       function close() {
+        stopShow();
         box.classList.remove("is-open");
-        // Закрытие мгновенное — как у лайтбокса: ждать выхода незачем.
-        list.hidden = true;
-        btn.setAttribute("aria-expanded", "false");
+        box.setAttribute("aria-hidden", "true");
         document.body.classList.remove("sf-noscroll");
         if (lastFocus && lastFocus.focus) lastFocus.focus();
       }
 
-      btn.addEventListener("click", open);
-      if (closeBtn) closeBtn.addEventListener("click", close);
-
-      // Клик по завесе закрывает; по самим ссылкам — уводит в мессенджер.
-      list.addEventListener("click", function (e) {
-        if (e.target === list) close();
+      triggers.forEach(function (t, i) {
+        t.addEventListener("click", function () { open(i); });
       });
 
-      // Мессенджер открывается в соседней вкладке, страница остаётся за
-      // окном. Не закрой мы его здесь — вернувшись, человек застал бы
-      // завесу на месте и заблокированную прокрутку.
-      $$(".sf-reach__link", list).forEach(function (a) {
-        a.addEventListener("click", close);
+
+
+      var closeBtn = $(".sf-lightbox__close", box);
+      var prevBtn  = $(".sf-lightbox__prev", box);
+      var nextBtn  = $(".sf-lightbox__next", box);
+      if (closeBtn) closeBtn.addEventListener("click", close);
+      if (prevBtn)  prevBtn.addEventListener("click", function () { stopShow(); show(index - 1); });
+      if (nextBtn)  nextBtn.addEventListener("click", function () { stopShow(); show(index + 1); });
+
+      // Click the backdrop (but not the photo or the controls) to dismiss
+      box.addEventListener("click", function (e) {
+        if (e.target === box || e.target.classList.contains("sf-lightbox__stage")) close();
       });
 
       window.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" && box.classList.contains("is-open")) close();
+        if (!box.classList.contains("is-open")) return;
+        if (e.key === "Escape")     { close(); }
+        if (e.key === "ArrowLeft")  { stopShow(); show(index - 1); }
+        if (e.key === "ArrowRight") { stopShow(); show(index + 1); }
       });
-    });
-  })();
+
+      // Swipe on touch
+      var startX = null;
+      box.addEventListener("touchstart", function (e) {
+        startX = e.changedTouches[0].clientX;
+      }, { passive: true });
+      box.addEventListener("touchend", function (e) {
+        if (startX === null) return;
+        var dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 48) { stopShow(); show(index + (dx < 0 ? 1 : -1)); }
+        startX = null;
+      }, { passive: true });
+    })();
+
+    /* ------------------------------------------------------------------
+       Смена экранов: гасим страницу перед переходом
+       ------------------------------------------------------------------ */
+
+    (function initExitFade() {
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      var FADE_MS = 260;
+
+      $$("a[href]").forEach(function (a) {
+        var url = a.getAttribute("href");
+        if (!url) return;
+        // Якоря, внешние ссылки и мессенджеры уводят со страницы сами —
+        // гасить её под ними незачем.
+        if (url.charAt(0) === "#") return;
+        if (a.target === "_blank") return;
+        if (/^[a-z][a-z0-9+.-]*:/i.test(url)) return;
+
+        a.addEventListener("click", function (e) {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+          e.preventDefault();
+          document.body.classList.add("sf-leaving");
+          window.setTimeout(function () { window.location.href = url; }, FADE_MS);
+        });
+      });
+
+      // Возврат «назад» может отдать страницу из кеша уже погашенной.
+      window.addEventListener("pageshow", function () {
+        document.body.classList.remove("sf-leaving");
+      });
+    })();
+
+    /* ------------------------------------------------------------------
+       Контакты: кнопка раскрывает три канала
+       ------------------------------------------------------------------ */
+
+    (function initReach() {
+      $$(".sf-reach").forEach(function (box) {
+        var btn = $(".sf-reach__open", box);
+        var list = $(".sf-reach__list", box);
+        if (!btn || !list) return;
+        var closeBtn = $(".sf-reach__close", list);
+        var lastFocus = null;
+
+        function open() {
+          lastFocus = document.activeElement;
+          list.hidden = false;
+          // hidden снимаем раньше класса, иначе переход не проиграет: элемент
+          // появляется уже в конечном состоянии. Начальное состояние закрепляем
+          // принудительным пересчётом, а не requestAnimationFrame: в фоновой
+          // вкладке кадр может не наступить, и ссылки застряли бы на opacity 0.
+          void list.offsetWidth;
+          box.classList.add("is-open");
+          btn.setAttribute("aria-expanded", "true");
+          document.body.classList.add("sf-noscroll");
+          // Фокус на само окно, а не на крестик: скриптовый фокус браузер
+          // считает клавиатурным и обводит цель рамкой.
+          list.focus();
+        }
+
+        function close() {
+          box.classList.remove("is-open");
+          // Закрытие мгновенное — как у лайтбокса: ждать выхода незачем.
+          list.hidden = true;
+          btn.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("sf-noscroll");
+          if (lastFocus && lastFocus.focus) lastFocus.focus();
+        }
+
+        btn.addEventListener("click", open);
+        if (closeBtn) closeBtn.addEventListener("click", close);
+
+        // Клик по завесе закрывает; по самим ссылкам — уводит в мессенджер.
+        list.addEventListener("click", function (e) {
+          if (e.target === list) close();
+        });
+
+        // Мессенджер открывается в соседней вкладке, страница остаётся за
+        // окном. Не закрой мы его здесь — вернувшись, человек застал бы
+        // завесу на месте и заблокированную прокрутку.
+        $$(".sf-reach__link", list).forEach(function (a) {
+          a.addEventListener("click", close);
+        });
+
+        window.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && box.classList.contains("is-open")) close();
+        });
+      });
+    })();
+
+  }
 
 })();
 </script>
