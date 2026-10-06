@@ -870,10 +870,16 @@ def main():
     css = open(os.path.join(ROOT, "assets/css/style.css"), encoding="utf-8").read()
     tilda_css = strip_comments(css.split("/* @tilda-cut")[0])
 
+    # Стили и скрипт — одним куском: оба уходят в одно и то же поле Tilda,
+    # а две вставки подряд в один редактор — лишний повод промахнуться.
+    # Скрипт ждёт, пока страница построится, поэтому из HEAD работает так же,
+    # как работал из конца body: поля для конца body у Tilda больше нет.
+    js = open(os.path.join(ROOT, "assets/js/main.js"), encoding="utf-8").read()
     write("tilda/01-head-code.html",
-          banner("01", "Шрифты + стили",
+          banner("01", "Шрифты, стили и скрипт — одной вставкой",
                  "Настройки сайта → Вставка кода → HTML-код для вставки внутрь HEAD")
-          + FONTS + "\n<style>\n" + tilda_css.rstrip() + "\n</style>\n")
+          + FONTS + "\n<style>\n" + tilda_css.rstrip() + "\n</style>\n"
+          + "\n<script>\n" + js.rstrip() + "\n</script>\n")
 
     write("tilda/02-header.html", block(
         "02", "Хедер + мобильное меню",
@@ -950,15 +956,6 @@ def main():
         footer(social=False)))
 
     write("tilda/10-native-blocks.css", tilda_native_css())
-
-    js = open(os.path.join(ROOT, "assets/js/main.js"), encoding="utf-8").read()
-    write("tilda/11-foot-code.html",
-          banner("11", "Скрипт поведения",
-                 "Настройки сайта → Вставка кода → HTML-код для вставки внутрь HEAD, "
-                 "следом за кодом из 01-head-code.html. Поля для конца BODY у Tilda "
-                 "больше нет; скрипт ждёт, пока страница построится, поэтому из HEAD "
-                 "работает так же.")
-          + "<script>\n" + js.rstrip() + "\n</script>\n")
 
     # -------------------------------------------- проверка: картинок нет
     leftover = []
