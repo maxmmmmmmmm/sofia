@@ -88,8 +88,8 @@ META = {
     "price": {
         "title": {"en": "Price — Sofia Filatova", "ru": "Цены — София Филатова"},
         "description": {
-            "en": "Photo session packages and prices in Lisbon and Moscow — studio portraits, street sessions, love stories.",
-            "ru": "Пакеты и цены на съёмку в Лиссабоне и Москве: студийный портрет, стрит-фотосессия, парная съёмка.",
+            "en": "Photo session packages and prices in Lisbon and Moscow — studio portraits, street sessions, love stories and concept shoots.",
+            "ru": "Пакеты и цены на съёмку в Лиссабоне и Москве: студийный портрет, стрит-фотосессия, парная и концепт-съёмка.",
         },
     },
     "contact": {
