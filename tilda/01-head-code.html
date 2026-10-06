@@ -1200,6 +1200,27 @@
 
   .sf-lightbox__bar { background: rgba(244, 243, 241, 0.3); }
 }
+
+@media (min-width: 900px) {
+  body:not(.sf-body).sf-body--fit .sf-split {
+    width: calc(100% + var(--sf-pad-x));
+    max-width: none;
+    margin-left: calc(-1 * var(--sf-pad-x));
+    margin-right: 0;
+    grid-template-columns: 44.5% 1fr;
+    align-items: stretch;
+  }
+  body:not(.sf-body).sf-body--fit .sf-split__body { align-self: center; }
+  body:not(.sf-body).sf-body--fit .sf-split__media { height: 76vh; }
+  body:not(.sf-body).sf-body--fit .sf-split__media img {
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+
+    object-position: 55% 38%;
+  }
+}
 </style>
 
 <script>
