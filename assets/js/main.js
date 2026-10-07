@@ -153,6 +153,15 @@
       links.forEach(function (a) {
         a.classList.toggle("is-active", slug(a.getAttribute("href")) === here);
       });
+
+      // Название раздела в середине шапки на телефоне — копия подписи
+      // текущего пункта меню: они и так совпадают дословно. Копируем
+      // разметкой, а не текстом: внутри лежат оба перевода, и переключатель
+      // языка работает с ними сам. Показывает это название CSS, и только
+      // на галереях и цене.
+      var name = $(".sf-pagename");
+      var active = $(".sf-header__link.is-active");
+      if (name && active) name.innerHTML = active.innerHTML;
     })();
 
     (function initPriceTabs() {

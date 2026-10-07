@@ -908,11 +908,11 @@
 
 .sf-contactpage__phone { display: none; }
 .sf-root[data-lang="ru"] .sf-contactpage__phone { display: block; }
-.sf-main:has(.sf-contactpage) + .sf-footer {
+.sf-root:has(.sf-contactpage) .sf-footer {
   padding: 10px var(--sf-pad-x) 12px;
   gap: 6px;
 }
-.sf-main:has(.sf-contactpage) + .sf-footer .sf-footer__social { display: none; }
+.sf-root:has(.sf-contactpage) .sf-footer__social { display: none; }
 .sf-footer.sf-footer--contact {
   min-height: 50px;
   padding: 0 var(--sf-pad-x);
@@ -931,7 +931,7 @@
   color: #fff;
   text-shadow: 0 1px 10px rgba(20, 18, 16, 0.45);
 }
-.sf-main:has(.sf-contactpage) + .sf-footer.sf-footer--contact {
+.sf-root:has(.sf-contactpage) .sf-footer.sf-footer--contact {
   padding: 0 var(--sf-pad-x);
   gap: 0;
 }
@@ -946,6 +946,19 @@
   .sf-main:has(.sf-contactpage) { display: flex; min-height: 0; }
 
   .sf-main:has(.sf-contactpage) > .sf-contactpage { flex: 1; min-height: 0; }
+
+  body:not(.sf-body) .sf-root:has(.sf-contactpage) {
+    position: relative;
+
+    min-height: calc(100svh - var(--sf-header-h));
+    height: calc(100svh - var(--sf-header-h));
+    display: flex;
+    flex-direction: column;
+  }
+  body:not(.sf-body) .sf-root:has(.sf-contactpage) > .sf-contactpage {
+    flex: 1;
+    min-height: 0;
+  }
 
   .sf-contactpage__channels a,
   .sf-reach__list .sf-reach__link { font-size: 17.5px; }
@@ -1202,21 +1215,29 @@
 }
 
 @media (min-width: 900px) {
-
-  body:not(.sf-body).sf-body--fit .sf-sect { padding-block: clamp(16px, 3vh, 40px); }
-
+  body:not(.sf-body).sf-body--fit .sf-root:has(.sf-split) {
+    height: calc(100svh - var(--sf-header-h));
+    display: flex;
+    flex-direction: column;
+  }
+  body:not(.sf-body).sf-body--fit .sf-sect {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    padding-block: clamp(16px, 3vh, 40px);
+  }
   body:not(.sf-body).sf-body--fit .sf-split {
     width: calc(100% + var(--sf-pad-x));
     max-width: none;
     margin-left: calc(-1 * var(--sf-pad-x));
     margin-right: 0;
     grid-template-columns: 44.5% 1fr;
+    height: 100%;
     align-items: stretch;
   }
   body:not(.sf-body).sf-body--fit .sf-split__body { align-self: center; }
-  body:not(.sf-body).sf-body--fit .sf-split__media { height: 73vh; }
-
-  body:not(.sf-body).sf-body--fit .sf-footer { padding-block: 18px 22px; }
+  body:not(.sf-body).sf-body--fit .sf-split__media { min-height: 0; }
   body:not(.sf-body).sf-body--fit .sf-split__media img {
     display: block;
     height: 100%;
@@ -1224,6 +1245,12 @@
     object-fit: cover;
 
     object-position: 55% 38%;
+  }
+  body:not(.sf-body).sf-body--fit .sf-footer { padding-block: 18px 22px; }
+
+  body:not(.sf-body).sf-body--fit .sf-split__body p,
+  body:not(.sf-body).sf-body--fit .sf-split__body .sf-lead > [data-l] > p:first-child {
+    font-size: clamp(14px, 1.9vh, 17px);
   }
 }
 </style>
@@ -1384,6 +1411,15 @@
       links.forEach(function (a) {
         a.classList.toggle("is-active", slug(a.getAttribute("href")) === here);
       });
+
+      // Название раздела в середине шапки на телефоне — копия подписи
+      // текущего пункта меню: они и так совпадают дословно. Копируем
+      // разметкой, а не текстом: внутри лежат оба перевода, и переключатель
+      // языка работает с ними сам. Показывает это название CSS, и только
+      // на галереях и цене.
+      var name = $(".sf-pagename");
+      var active = $(".sf-header__link.is-active");
+      if (name && active) name.innerHTML = active.innerHTML;
     })();
 
     (function initPriceTabs() {

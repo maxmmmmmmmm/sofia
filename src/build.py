@@ -157,14 +157,12 @@ def header(current):
     # На телефоне в середине шапки вместо имени стоит название раздела. Это
     # копия заголовка, а не сам заголовок: настоящий h1 остаётся на странице,
     # спрятанный от глаз, — иначе читалка объявляла бы название дважды.
-    if current in C.GALLERIES:
-        label = C.GALLERIES[current]["title"]
-    elif current == "price":
-        label = PAGES[current]["nav"]
-    else:
-        label = None
-    pagename = ('\n    <span class="sf-pagename" aria-hidden="true">%s</span>'
-                % t(label)) if label else ""
+    # Пустым — заполняет скрипт, копируя подпись текущего пункта меню. Они
+    # и так дословно совпадают, зато шапка перестаёт зависеть от страницы:
+    # в Tilda блок шапки один на все семь, и подставить туда название было
+    # некому. Показывает его CSS — только на телефоне и только на галереях
+    # и цене.
+    pagename = '\n    <span class="sf-pagename" aria-hidden="true"></span>' 
 
     return """<header class="sf-header">
   <nav class="sf-header__nav" aria-label="%s">
@@ -528,7 +526,9 @@ def tilda_about():
     html = about_block()
     old = 'src="%s"' % P.SELF_PORTRAIT
     assert html.count(old) == 1, "разметка портрета изменилась"
-    return html.replace(old, 'src="%s"' % PORTRAIT_SLOT)
+    # Футер внутри этого же блока — как и на контактах. Иначе блоку неоткуда
+    # узнать, сколько места занял футер, и кадр выходит выше, чем на сайте.
+    return html.replace(old, 'src="%s"' % PORTRAIT_SLOT) + "\n\n" + footer()
 
 
 def tilda_contact():
@@ -542,7 +542,11 @@ def tilda_contact():
            'assets/img/contact/bg.jpg 2400w"\n'
            '       sizes="100vw" alt=""')
     assert old in html, "разметка кадра на контактах изменилась"
-    return html.replace(old, 'src="%s" alt=""' % PHOTO_SLOT)
+    html = html.replace(old, 'src="%s" alt=""' % PHOTO_SLOT)
+    # Футер идёт внутри этого же блока. На сайте он лежит поверх кадра, и
+    # держит его обвязка страницы; в Tilda обвязки нет, а отдельный блок
+    # лёг бы под кадром обычной полосой. Внутри одного блока — ложится.
+    return html + "\n\n" + footer(" sf-footer--contact")
 
 
 def contact_block():
@@ -899,8 +903,9 @@ def main():
         home_tagline()))
 
     write("tilda/05-about.html", block(
-        "05", "Обо мне — портрет и текст",
-        "Блок T123 на /about, единственный на странице. Нужен портрет: "
+        "05", "Обо мне — вся страница целиком",
+        "Блок T123 на /about, ЕДИНСТВЕННЫЙ на странице: футер уже внутри, "
+        "отдельный блок 10 сюда не ставьте. Нужен портрет: "
         "загрузите его в Tilda и подставьте адрес вместо " + PORTRAIT_SLOT
         + ". На компьютере страница здесь не укладывается в один экран, как "
         "на сайте, — она прокручивается.",
@@ -934,11 +939,11 @@ def main():
         "сначала суммы, потом как всё устроено, в самом низу строка записи.",
         process_block()))
 
-    write("tilda/09-contact-details.html", block(
-        "09", "Контакты — кадр во весь экран и каналы связи",
-        "Блок T123 на /contact, единственный на странице. Нужна фотография: "
-        "загрузите кадр в Tilda и подставьте его адрес вместо "
-        + PHOTO_SLOT + ".",
+    write("tilda/09-contact-page.html", block(
+        "09", "Контакты — вся страница целиком",
+        "Блок T123 на /contact, ЕДИНСТВЕННЫЙ на странице: футер уже внутри, "
+        "отдельный блок 10 сюда не ставьте. Нужна фотография: загрузите кадр "
+        "в Tilda и подставьте его адрес вместо " + PHOTO_SLOT + ".",
         tilda_contact()))
 
     write("tilda/10-footer.html", block(
@@ -947,13 +952,6 @@ def main():
         "блоком под кадром: на сайте футер лежит поверх фотографии, но там "
         "он держится обвязкой страницы, а её в Tilda отдаёт сама Tilda.",
         footer()))
-
-    write("tilda/10b-footer-contact.html", block(
-        "10b", "Футер для страницы контактов",
-        "Блок T123 внизу /contact — вместо обычного футера 10. Отличается "
-        "одним: в нём нет иконок соцсетей. Прямо над ними стоят те же каналы, "
-        "крупно, и на сайте иконки там спрятаны.",
-        footer(social=False)))
 
     write("tilda/10-native-blocks.css", tilda_native_css())
 

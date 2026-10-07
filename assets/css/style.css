@@ -1211,11 +1211,11 @@
 /* Российский номер — только в русской версии. */
 .sf-contactpage__phone { display: none; }
 .sf-root[data-lang="ru"] .sf-contactpage__phone { display: block; }
-.sf-main:has(.sf-contactpage) + .sf-footer {
+.sf-root:has(.sf-contactpage) .sf-footer {
   padding: 10px var(--sf-pad-x) 12px;
   gap: 6px;
 }
-.sf-main:has(.sf-contactpage) + .sf-footer .sf-footer__social { display: none; }
+.sf-root:has(.sf-contactpage) .sf-footer__social { display: none; }
 .sf-footer.sf-footer--contact {
   min-height: 50px;
   padding: 0 var(--sf-pad-x);
@@ -1236,7 +1236,7 @@
   color: #fff;
   text-shadow: 0 1px 10px rgba(20, 18, 16, 0.45);
 }
-.sf-main:has(.sf-contactpage) + .sf-footer.sf-footer--contact {
+.sf-root:has(.sf-contactpage) .sf-footer.sf-footer--contact {
   padding: 0 var(--sf-pad-x);
   gap: 0;
 }
@@ -1263,6 +1263,25 @@
      кадр схлопывается до высоты надписей. На сайте родитель есть всегда,
      в Tilda его нет — там секция остаётся на своей высоте. */
   .sf-main:has(.sf-contactpage) > .sf-contactpage { flex: 1; min-height: 0; }
+
+  /* В Tilda обвязки страницы нет — её роль играет сам блок контактов, и
+     футер лежит внутри него же. Даём корню блока то, что на сайте даётся
+     .sf-root и .sf-main вместе: высоту экрана и колонку по флексу. Без
+     этого кадр схлопнулся бы, а футер не лёг бы на него. */
+  body:not(.sf-body) .sf-root:has(.sf-contactpage) {
+    position: relative;
+    /* Высоту шапки вычитаем: на сайте она внутри того же корня, а в Tilda
+       стоит отдельным блоком выше — без вычитания кадр уехал бы под экран
+       ровно на её высоту. */
+    min-height: calc(100svh - var(--sf-header-h));
+    height: calc(100svh - var(--sf-header-h));
+    display: flex;
+    flex-direction: column;
+  }
+  body:not(.sf-body) .sf-root:has(.sf-contactpage) > .sf-contactpage {
+    flex: 1;
+    min-height: 0;
+  }
   /* +2.5px, как и на компьютере. Тем же правилом набраны каналы в окне
      записи: это один список, и кегль у него должен быть один. */
   /* Селектор окна намеренно длиннее нужного: базовое правило .sf-reach__link
@@ -1602,39 +1621,44 @@
 /* --------------------------------------------------------------------------
    «ОБО МНЕ» БЕЗ НАШЕЙ ОБВЯЗКИ СТРАНИЦЫ — ТО ЕСТЬ В TILDA
 
-   На сайте разворот тянется по высоте экрана: кадр уходит в левый край окна
-   и становится вытянутым. Делает это правило ниже отсечки, и опирается оно
-   на .sf-main и на высоту корня — в Tilda разметку страницы отдаёт она сама,
-   ни того ни другого там нет, и кадр оставался квадратным в общих полях.
+   На сайте разворот тянется по высоте экрана: корень страницы высотой в
+   экран, внутри него секция забирает остаток после футера, а кадр — всю
+   высоту секции. Правила, которые это делают, стоят ниже отсечки и опираются
+   на .sf-main и на обвязку страницы — в Tilda её отдаёт сама Tilda.
 
-   Здесь возвращаем ему и вынос в край, и вытянутую форму. Высота взята от
-   окна, как и на сайте, поэтому на одинаковых экранах они почти совпадают:
-   на 1024×768 выходит 437×584 против 437×561.
+   Здесь та же механика, но роль корня страницы играет сам блок: футер лежит
+   внутри него, а высота шапки вычитается, потому что шапка в Tilda стоит
+   отдельным блоком выше. Высота кадра получается остатком, как на сайте, а
+   не подогнанной величиной — поэтому совпадает на любом окне.
 
-   Селектор намеренно требует отсутствия .sf-body: этот класс стоит на теге
-   body только у нас, в Tilda его нет. Так правило не попадает на сайт и не
-   спорит с тем, что ниже отсечки.
+   Селектор требует отсутствия .sf-body: этот класс стоит на теге body только
+   у нас, и правило не попадает на сайт.
    -------------------------------------------------------------------------- */
 
 @media (min-width: 900px) {
-  /* Отбивка секции — та же, что на сайте: там её срезает правило ниже
-     отсечки, здесь задаём напрямую. Без этого сверху и снизу оставалось по
-     92px общей секционной отбивки, и кадр висел в пустоте. */
-  body:not(.sf-body).sf-body--fit .sf-sect { padding-block: clamp(16px, 3vh, 40px); }
-
+  body:not(.sf-body).sf-body--fit .sf-root:has(.sf-split) {
+    height: calc(100svh - var(--sf-header-h));
+    display: flex;
+    flex-direction: column;
+  }
+  body:not(.sf-body).sf-body--fit .sf-sect {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    padding-block: clamp(16px, 3vh, 40px);
+  }
   body:not(.sf-body).sf-body--fit .sf-split {
     width: calc(100% + var(--sf-pad-x));
     max-width: none;
     margin-left: calc(-1 * var(--sf-pad-x));
     margin-right: 0;
     grid-template-columns: 44.5% 1fr;
+    height: 100%;
     align-items: stretch;
   }
   body:not(.sf-body).sf-body--fit .sf-split__body { align-self: center; }
-  body:not(.sf-body).sf-body--fit .sf-split__media { height: 73vh; }
-  /* Футер здесь поджат ровно так же, как на сайте: иначе страница вылезает
-     за экран на высоту его обычной отбивки. */
-  body:not(.sf-body).sf-body--fit .sf-footer { padding-block: 18px 22px; }
+  body:not(.sf-body).sf-body--fit .sf-split__media { min-height: 0; }
   body:not(.sf-body).sf-body--fit .sf-split__media img {
     display: block;
     height: 100%;
@@ -1643,6 +1667,12 @@
     /* Кадр квадратный, колонка вытянутая: срезаются поля по бокам, лицо
        остаётся на месте — оно чуть правее центра и выше середины. */
     object-position: 55% 38%;
+  }
+  body:not(.sf-body).sf-body--fit .sf-footer { padding-block: 18px 22px; }
+  /* Кегль абзацев привязан к высоте окна — как на сайте. */
+  body:not(.sf-body).sf-body--fit .sf-split__body p,
+  body:not(.sf-body).sf-body--fit .sf-split__body .sf-lead > [data-l] > p:first-child {
+    font-size: clamp(14px, 1.9vh, 17px);
   }
 }
 
