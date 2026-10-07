@@ -1617,6 +1617,11 @@
    -------------------------------------------------------------------------- */
 
 @media (min-width: 900px) {
+  /* Отбивка секции — та же, что на сайте: там её срезает правило ниже
+     отсечки, здесь задаём напрямую. Без этого сверху и снизу оставалось по
+     92px общей секционной отбивки, и кадр висел в пустоте. */
+  body:not(.sf-body).sf-body--fit .sf-sect { padding-block: clamp(16px, 3vh, 40px); }
+
   body:not(.sf-body).sf-body--fit .sf-split {
     width: calc(100% + var(--sf-pad-x));
     max-width: none;
@@ -1626,7 +1631,10 @@
     align-items: stretch;
   }
   body:not(.sf-body).sf-body--fit .sf-split__body { align-self: center; }
-  body:not(.sf-body).sf-body--fit .sf-split__media { height: 76vh; }
+  body:not(.sf-body).sf-body--fit .sf-split__media { height: 73vh; }
+  /* Футер здесь поджат ровно так же, как на сайте: иначе страница вылезает
+     за экран на высоту его обычной отбивки. */
+  body:not(.sf-body).sf-body--fit .sf-footer { padding-block: 18px 22px; }
   body:not(.sf-body).sf-body--fit .sf-split__media img {
     display: block;
     height: 100%;
