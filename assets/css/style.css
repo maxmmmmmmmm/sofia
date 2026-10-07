@@ -211,12 +211,6 @@
   background: var(--sf-bg);
 }
 
-/* Tilda variant. `position: sticky` cannot escape a Tilda record, so add
-   this class to the header in tilda/02-header.html and the page gets a
-   genuinely pinned bar. The padding keeps the first block clear of it. */
-.sf-header--fixed { position: fixed; top: 0; left: 0; right: 0; }
-.sf-header--fixed + * { padding-top: var(--sf-header-h); }
-
 .sf-header__nav { display: flex; gap: clamp(16px, 2.6vw, 42px); }
 
 .sf-header__link {
