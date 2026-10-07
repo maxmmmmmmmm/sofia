@@ -13,6 +13,7 @@ Both come from the same source, so what you preview locally is exactly what
 you paste into Tilda. Standard library only — nothing to install.
 """
 
+import io
 import os
 import re
 import sys
@@ -1009,6 +1010,34 @@ def main():
                        open(os.path.join(tilda_dir, n), encoding="utf-8").read()))
         for n in os.listdir(tilda_dir) if n.endswith(".html")
     )
+    # Цвет. Телефон снимает в Display P3, и если такой файл просто пересохранить,
+    # профиль теряется, а широкие числа браузер читает как узкие — кадр выходит
+    # бледнее и холоднее. Так уже случилось с концепт-съёмкой. Переводим всё в
+    # sRGB через src/srgb.py, а здесь ловим файлы, где чужой профиль уцелел:
+    # это верный признак, что кадр клали мимо этого шага.
+    чужие = []
+    for корень, _, имена in os.walk(os.path.join(ROOT, "assets/img")):
+        for имя in имена:
+            if not имя.lower().endswith((".jpg", ".jpeg", ".png")):
+                continue
+            ф = os.path.join(корень, имя)
+            try:
+                from PIL import Image, ImageCms
+                icc = Image.open(ф).info.get("icc_profile")
+                if not icc:
+                    continue
+                d = ImageCms.getProfileDescription(
+                    ImageCms.ImageCmsProfile(io.BytesIO(icc))).strip()
+                if "srgb" not in d.lower():
+                    чужие.append((os.path.relpath(ф, ROOT), d))
+            except Exception:
+                pass
+    if чужие:
+        print("\n  ВНИМАНИЕ: не в sRGB, цвет на сайте будет не тот:")
+        for ф, d in чужие:
+            print("    %s — %s" % (ф, d))
+        print("    Прогоните через: python3 src/srgb.py вход выход")
+
     # Отступ под закреплённую шапку в 10-native-blocks.css прописан числом:
     # в Tilda он живёт в другом файле и про переменную ничего не знает.
     # Если высоту шапки поменяют в style.css — предупредим, иначе первый блок
